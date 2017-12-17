@@ -1,0 +1,23 @@
+{
+  "name": "mot",
+  "version": "1.0.0",
+  "description": "mot.moe",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jtheck/mot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jtheck/mot/issues"
+  },
+  "homepage": "https://github.com/jtheck/mot#readme",
+  "keywords": [],
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
