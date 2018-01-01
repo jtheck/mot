@@ -1,0 +1,48 @@
+
+<html>
+  <head>
+    <title>Mot.Moe</title>
+
+    <style>
+      body {background-image: url("images/panda.jpg"); background-size: cover;}
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="css/app.css"/>
+
+    <script src="js/app.js"></script>
+    <script src="js/mot.js"></script>
+  </head>
+
+  <body>
+    <button id="ignition" data-state="OFF" onclick="ignite();">START</button>
+    <div id="state" class="hud"></div>
+    <div id="clock" class="hud"></div>
+    <br>
+
+    <div>BINARY SWEETCH</div>
+    <div>TRINARY SWEETCH</div>
+
+    <br>
+    <div>
+      <h1>Yo, it's me big Mot.Moe</h1>
+      Righteous revery and slow burns, bro.
+    </div>
+
+
+    <div id="vitals" class="vitals">
+      <div id="vitals_title"><br>Mot.Moe</div>
+      <div id="vitals_log"></div>
+    </div>
+
+    <form>
+      <textarea name="notion" rows="4"></textarea>
+      <button type="submit">SEND</button>
+    </form>
+
+
+  </body>
+
+  <script>
+    (function() { init(); })();
+  </script>
+</html>

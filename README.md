@@ -1,5 +1,5 @@
-# mot
-mot.moe
+# Mot
+Mot.Moe
 
 
 
@@ -12,4 +12,4 @@ mot.moe
 
 
 
-©2017 mot.moe
+©2017 Mot.Moe
