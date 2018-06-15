@@ -8,12 +8,17 @@
 
 (function(mot) {
 
+  // machine states
   const ON = "Power On";
-  const PAUSED = "Waiting";
-  const AWAKE = "Running";
-  const IDLE = "Idle";
-  const ALERT = "Attentive";
+  const OFF = "Power Off";
   const SLEEP = "Sleeping";
+  const PAUSED = "Waiting";
+  const IDLE = "Idle";
+  const AWAKE = "Running";
+  const ALERT = "Attentive";
+
+  var state = OFF;
+  var reportState;
 
 
   // timing
@@ -24,23 +29,20 @@
   var accum = 0; // accumulator
   var dt = 0; // delta time
   var raf;
+
   var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                         window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
   var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 
-
-  var state = ON;
-  var reportState;
-
-  var start;
+  var start = false;
   var clock = 0;
   var reportClock;
 
 
-
+  // stores
+  var senses = [];
   var knowledge = [];
 
-  var senses = [];
 
 
   mot.self = self();
@@ -63,61 +65,79 @@
 
 
 
-  mot.mot = function() {
+  mot.mot = function(content, start) {
 
-    this.start = performance.now();
-    this.end = 0;
+    this.content = content;
 
-
+    this.beginning = start;
+    this.end = performance.now();
 
     return true;
   };
 
 
 
-  mot.sense = function(name, hook, states) {
+  mot.sense = function(name, hook) {
 
     this.name = name;
     this.hook = hook;
-    this.kStates = [];
+    this.knownStates = [];
 
+    this.listening = false;
 
     return true;
   };
 
 
-  mot.getSense = function(name, hook, states) {
+
+
+
+  //////////////////////////////////////////////////////////
+
+
+
+
+
+  mot.setSense = function(name, hook) {
     var found = senses.findIndex(function(key){return key.name == name})
     // senses.filter(function(key) { return key.name === name; });
 
     if (found == -1) {
-      var newSense = new mot.sense(name, hook, states);
+      var newSense = new mot.sense(name, hook);
       senses.push(newSense);
     }
 
     return true;
-
   };
 
 
-  mot.get = function(wat) {
 
-    var hrm = new mot.mot();
+  mot.init = function(){
 
-    knowledge.push(hrm);
+    // create event listeners
+    for (var i=0;  i<senses.length;  i++) {
+      tSense = senses[i];
 
-    // console.log(knowledge[knowledge.length-1].start);
-    // console.log(senses);
+      // Skip if already listening
+      if (tSense.listening == true) continue;
+
+      // Add an event listener
+      document.addEventListener(tSense.name, function(e) {
+        var mote = new mot.mot(e.detail.content, e.detail.start);
+
+        knowledge.push(mote);
+
+        console.log(knowledge);
+      });
+
+      tSense.listening = true;
+
+    }
+
+    console.log(senses);
 
     return true;
-  };
-
-
-
-
-
-
-
+  }; // end mot.init
 
 
 
@@ -132,6 +152,12 @@
 
 
       // smarts
+
+
+
+
+
+
 
 
 
@@ -154,16 +180,35 @@
 	mot.start = function() {
 		runTick = performance.now();
 		raf = requestAnimationFrame(run);
-    setState(AWAKE);
+    setState(ON);
+
+    mot.init();
+
     if (!start) start = performance.now();
     return true;
 	};
 
+
   mot.stop = function() {
     cancelAnimationFrame(raf);
+
     setState(PAUSED);
     return true;
   };
+
+
+
+
+  mot.trigger = function(sense, val) {
+    var start = performance.now();
+    if (state == PAUSED) return false;
+    // Create the event
+    var event = new CustomEvent(sense, { "detail" : {"content":val, "start":start} });
+    // Dispatch/Trigger/Fire the event
+    document.dispatchEvent(event);
+    return true;
+  }
+
 
 
 
@@ -176,11 +221,7 @@
     return state;
   };
 
-  function setState(p) {
-    state = p;
-    if (reportState) mot.readState();
-    return state;
-  };
+
 
   mot.readClock = function(id) {
     if (!id && !reportClock) return clock;
@@ -194,18 +235,23 @@
 
 
 
+
+  ///////////////////////////////////////////////
+
+
+
+
+
+  function setState(p) {
+    state = p;
+    if (reportState) mot.readState();
+    return state;
+  };
+
+
   function self() {
     return true;
   }
-
-
-
-
-
-
-
-///////////////////////////////////////////////
-
 
 
 
@@ -214,13 +260,17 @@
 
     var hh = date.getUTCHours();
     var mm = date.getUTCMinutes();
-    var ss = date.getSeconds();
+    var ss = date.getUTCSeconds();
+    var ms = date.getUTCMilliseconds();
 
+    // maintain constant width
     if (hh < 10) {hh = '0' + hh}
     if (mm < 10) {mm = '0' + mm}
     if (ss < 10) {ss = '0' + ss}
+    if (ms < 10) {ms = '0' + ms}
+    if (ms < 100) {ms = '0' + ms}
 
-    return hh + ':' + mm + ':' + ss;
+    return hh + ':' + mm + ':' + ss + ":" + ms;
   };
 
 

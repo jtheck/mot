@@ -8,6 +8,10 @@
     </style>
 
     <link rel="stylesheet" type="text/css" href="css/app.css"/>
+    <link rel="icon" type="image/png" href="/icon.png" />
+
+    <meta name="description" content="General AI">
+    <meta name="keywords" content="AI">
 
     <script src="js/app.js"></script>
     <script src="js/mot.js"></script>
@@ -19,7 +23,7 @@
     <div id="clock" class="hrtd"></div>
     <br>
 
-    <div>BINARY SWEETCH</div>
+    <div id="binary_in">BINARY SWEETCH</div>
     <div>TRINARY SWEETCH</div>
 
     <br>
@@ -30,13 +34,14 @@
 
 
     <div id="vitals" class="vitals">
+      <img src="https://www.GetFire.net/android-chrome-96x96.png" style="width: 25px;">
       <div id="vitals_title"><br>Mot.Moe</div>
       <div id="vitals_log"></div>
     </div>
 
-    <form>
-      <textarea name="notion" rows="4"></textarea>
-      <button type="submit">SEND</button>
+    <form id="text_in">
+      <textarea name="notion" rows="3"></textarea>
+      <button id="text_submit" type="submit">SEND</button>
     </form>
 
 

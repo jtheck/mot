@@ -2,45 +2,44 @@
 
 
 var init = function() {
-  var form = document.querySelector("form");
 
   mot.readState("state");
   mot.readClock("clock");
 
-  mot.getSense("Binary Switch", "bs_ui", ["ON", "OFF"]);
-  mot.getSense("Ternary Switch", "ts_ui", ["ON", "OFF", "NEUTRAL"]);
+
+  mot.setSense("Binary Switch", "bs_ui");
+  mot.setSense("Ternary Switch", "ts_ui");
+  mot.setSense("Text Input", "text_out");
 
 
 
-  form.addEventListener("submit", function(e) {
+  // text input
+  var textIn = document.querySelector("#text_in");
+  textIn.addEventListener("submit", function(e) {
+    var val = textIn.elements.notion.value;
 
-    mot.get(form.elements.notion.value);
+    mot.trigger("Text Input", val);
 
+    report("echo " + val);
+    textIn.elements.notion.value = "";
 
-    report("echo " + form.elements.notion.value);
-
-    form.elements.notion.value = "";
     e.preventDefault();
   });
 
 
+  // binary switch
+  var binaryIn = document.querySelector("#binary_in");
+  binaryIn.onclick  = function(){
+    mot.trigger("Binary Switch", "onoff");
+  };
 
 
-  // Add an event listener
-  document.addEventListener("name-of-event", function(e) {
-    console.log(e.detail); // Prints "Example of an event"
-  });
-
-  // Create the event
-  var event = new CustomEvent("name-of-event", { "detail": "Example of an event" });
-
-  // Dispatch/Trigger/Fire the event
-  document.dispatchEvent(event);
+  // trinary switch
 
 
+} // end init
 
 
-}
 
 var report = function(msg){
   var vm = document.getElementById("vitals_log");
