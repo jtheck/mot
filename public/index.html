@@ -3,10 +3,6 @@
   <head>
     <title>Mot.Moe</title>
 
-    <style>
-      body {background-image: url("images/panda.jpg"); background-size: cover;}
-    </style>
-
     <link rel="stylesheet" type="text/css" href="css/app.css"/>
     <link rel="icon" type="image/png" href="/icon.png" />
 
@@ -15,21 +11,28 @@
 
     <script src="js/app.js"></script>
     <script src="js/mot.js"></script>
+
+    <style>
+      body {background-image: url("images/panda.jpg"); background-size: cover;}
+    </style>
   </head>
 
   <body>
-    <button id="ignition" data-state="OFF" onclick="ignite();">START</button>
-    <div id="state" class="hud"></div>
-    <div id="clock" class="hrtd"></div>
-    <br>
+    <!-- <img src="power.svg" style="width: 25px;"> -->
 
-    <div id="binary_in">BINARY SWEETCH</div>
-    <div>TRINARY SWEETCH</div>
+    <button id="ignition" data-state="OFF" onclick="ignite();"><b>꡷</b>&nbsp;▶</button>
+    <div id="state" class="hud"></div>
+    <div id="clock" class="hud"></div>
+    <br>
+    <br>
+    <div id="ternary_in"><span id="ti_off" data-val="OFF">off</span><span id="ti_neutral" data-val="NIL">nil</span><span id="ti_on" data-val="ON">on</span></div>
+    <br><br>
+    <div id="slider_w"><input id="slider_in" type="range" min="0" max="100" step="10"></div>
 
     <br>
     <div>
-      <h1>Yo, it's me big Mot.Moe</h1>
-      Righteous revery and slow burns, bro.
+      <h2>Yo, it's me big Mot.Moe</h2>
+      <h3>Righteous revery and slow burns, bro.</h3>
     </div>
 
 
@@ -37,13 +40,15 @@
       <img src="https://www.GetFire.net/android-chrome-96x96.png" style="width: 25px;">
       <div id="vitals_title"><br>Mot.Moe</div>
       <div id="vitals_log"></div>
+      <div id="mot_out"></div>
     </div>
 
+    <div id="text_in_w">
+    </div>
     <form id="text_in">
-      <textarea name="notion" rows="3"></textarea>
+      <textarea name="notion" rows="2"></textarea>
       <button id="text_submit" type="submit">SEND</button>
     </form>
-
 
   </body>
 

@@ -7,8 +7,8 @@ var init = function() {
   mot.readClock("clock");
 
 
-  mot.setSense("Binary Switch", "bs_ui");
-  mot.setSense("Ternary Switch", "ts_ui");
+  mot.setSense("Range Slider", "range_ui");
+  mot.setSense("Ternary Switch", "switch_ui");
   mot.setSense("Text Input", "text_out");
 
 
@@ -18,45 +18,46 @@ var init = function() {
   textIn.addEventListener("submit", function(e) {
     var val = textIn.elements.notion.value;
 
-    mot.trigger("Text Input", val);
+    mot.triggerSense("Text Input", val);
 
-    report("echo " + val);
     textIn.elements.notion.value = "";
 
     e.preventDefault();
   });
 
 
-  // binary switch
-  var binaryIn = document.querySelector("#binary_in");
-  binaryIn.onclick  = function(){
-    mot.trigger("Binary Switch", "onoff");
+  // range slider
+  var sliderIn = document.querySelector("#slider_in");
+  sliderIn.onchange  = function(){
+    mot.triggerSense("Range Slider", this.value);
   };
 
 
   // trinary switch
+  var ternaryIn = document.querySelector("#ternary_in");
+  ternaryIn.onclick  = function(e){
+    var val = e.path[0].getAttribute("data-val");
+    if (!val) return;
+    mot.triggerSense("Ternary Switch", val);
+  };
 
+  mot.init();
 
 } // end init
 
 
 
-var report = function(msg){
-  var vm = document.getElementById("vitals_log");
-  vm.innerHTML = "<br>" + msg + vm.innerHTML;
-}
-
 var ignite = function(){
   var butt = document.getElementById("ignition");
   if (butt.getAttribute("data-state") == "OFF") {
     butt.setAttribute("data-state", "ON");
-    butt.innerHTML = "STOP";
+    butt.innerHTML = "<b>꡷</b>&nbsp;▶";
     butt.style.backgroundColor = "red";
 
     mot.start();
   } else {
     butt.setAttribute("data-state", "OFF");
-    butt.innerHTML = "START";
+    butt.innerHTML = "<b>꡷</b>&nbsp;▶";
     butt.style.backgroundColor = "#0d0";
 
     mot.stop();

@@ -9,17 +9,18 @@
 (function(mot) {
 
   // machine states
-  const ON = "Power On";
   const OFF = "Power Off";
-  const SLEEP = "Sleeping";
+  const ON = "Power On";
   const PAUSED = "Waiting";
-  const IDLE = "Idle";
   const AWAKE = "Running";
+  const ASLEEP = "Sleeping";
+  const IDLE = "Idle";
   const ALERT = "Attentive";
 
   var state = OFF;
   var reportState;
 
+  var initialized = false;
 
   // timing
   var fps = 30;
@@ -41,23 +42,11 @@
 
   // stores
   var senses = [];
-  var knowledge = [];
+  var knowledge = []; // all motes
+  // experiences
+  // memories
 
-
-
-  mot.self = self();
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
+  var tQueue = []; //temporal motes
 
 
 
@@ -65,11 +54,32 @@
 
 
 
-  mot.mot = function(content, start) {
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+  mot.mot = function(sense, content) {
+
+    this.sense = sense;
 
     this.content = content;
 
-    this.beginning = start;
+    this.echo = 0;
+
+    this.lead = [];
+    this.trail = [];
+
+    this.start = performance.now();
     this.end = performance.now();
 
     return true;
@@ -81,20 +91,172 @@
 
     this.name = name;
     this.hook = hook;
-    this.knownStates = [];
+    this.kStates = []; // known states
 
-    this.listening = false;
+    this.potentialRevisions = [];
+
+
 
     return true;
   };
 
 
 
+  mot.self = function() {
+
+    this.charge = 0;
 
 
-  //////////////////////////////////////////////////////////
+    this.lead = 0;
 
 
+
+    this.content = 0;
+    this.contentingFactors = [];
+
+    return true;
+  };
+
+
+////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+  function procSense(e) {
+    var senseName = e.detail.sense;
+    var content = e.detail.content;
+
+    var sense = senses.find(function(sense){return sense.name == senseName});
+
+
+    // add known state to sense
+    var kState = sense.kStates.find(function(state){return state == content});
+    if (!kState) sense.kStates.push(content);
+
+
+    // build new mote
+    var mote = new mot.mot(senseName, content);
+    var prevMote;
+    if (knowledge.length > 0) {
+      prevMote = knowledge[knowledge.length - 1];
+      mote.lead.push(prevMote);
+
+      mot.self.lead = mote.start -  prevMote.start;
+    } else {
+      mot.self.lead = mote.start - start;
+    }
+
+
+    // find existing mote
+    var exMote = knowledge.find(function(mot){if (mot.sense == mote.sense && mot.content == mote.content) return mot;});
+
+    // commit new mote to knowledge
+    if (exMote) {
+      exMote.echo += 1;
+      tQueue.push(exMote);
+    } else {
+      if (prevMote) prevMote.trail.push(mote);
+      knowledge.push(mote);
+      tQueue.push(mote);
+    }
+
+    report(content);
+    // console.log(knowledge);
+  };
+
+
+
+
+
+	function run() {
+		tNow = performance.now();
+		dt = tNow - runTick;
+		runTick = tNow;
+		accum += dt;
+	 	while(accum > ts) {
+      clock += dt;
+
+
+      // smarts
+
+      if (mot.self.lead > 0) {
+        mot.self.lead -= dt;
+      }
+      if (mot.self.lead <= 0) {
+        mot.self.lead = 0;
+        mot.self.charge = 1;
+      }
+
+      // console.log(mot.self.lead);
+
+      if (mot.self.charge == 1 && tQueue.length > 0) {
+
+        console.log(tQueue);
+        while(tQueue.length > 0) {
+
+          tQueue.shift();
+
+        }
+
+        var utter = "arf";
+        report("> " + utter);
+        mot.self.charge = 0;
+      }
+
+
+
+
+
+      if (reportClock) mot.readClock();
+
+			accum -= dt;
+	  }
+		raf = requestAnimationFrame(run);
+	};
+
+
+
+
+
+  ////////////////////////////////////////////////////////////////////
+
+
+  mot.init = function(){
+    // Sense listener
+    document.addEventListener('sense', function(e) {
+      procSense(e);
+    });
+
+    initialized = true;
+
+    return true;
+  }; // end mot.init
+
+
+
+	mot.start = function() {
+    if (!initialized) mot.init();
+
+		runTick = performance.now();
+		raf = requestAnimationFrame(run);
+    setState(ON);
+    setState(AWAKE);
+
+    if (!start) start = performance.now();
+    return true;
+	};
+
+
+  mot.stop = function() {
+    cancelAnimationFrame(raf);
+
+    setState(PAUSED);
+
+    return true;
+  };
 
 
 
@@ -112,103 +274,15 @@
 
 
 
-  mot.init = function(){
-
-    // create event listeners
-    for (var i=0;  i<senses.length;  i++) {
-      tSense = senses[i];
-
-      // Skip if already listening
-      if (tSense.listening == true) continue;
-
-      // Add an event listener
-      document.addEventListener(tSense.name, function(e) {
-        var mote = new mot.mot(e.detail.content, e.detail.start);
-
-        knowledge.push(mote);
-
-        console.log(knowledge);
-      });
-
-      tSense.listening = true;
-
-    }
-
-    console.log(senses);
-
-    return true;
-  }; // end mot.init
-
-
-
-
-	function run() {
-		tNow = performance.now();
-		dt = tNow - runTick;
-		runTick = tNow;
-		accum += dt;
-	 	while(accum > ts) {
-      clock += dt;
-
-
-      // smarts
-
-
-
-
-
-
-
-
-
-      if (reportClock) mot.readClock();
-
-			accum -= dt;
-	  }
-		raf = requestAnimationFrame(run);
-	};
-
-
-
-
-
-
-
-
-
-
-	mot.start = function() {
-		runTick = performance.now();
-		raf = requestAnimationFrame(run);
-    setState(ON);
-
-    mot.init();
-
-    if (!start) start = performance.now();
-    return true;
-	};
-
-
-  mot.stop = function() {
-    cancelAnimationFrame(raf);
-
-    setState(PAUSED);
-    return true;
-  };
-
-
-
-
-  mot.trigger = function(sense, val) {
-    var start = performance.now();
-    if (state == PAUSED) return false;
+  mot.triggerSense = function(sense, val) {
+    // var start = performance.now();
+    if (state == PAUSED || state == OFF) return false;
     // Create the event
-    var event = new CustomEvent(sense, { "detail" : {"content":val, "start":start} });
-    // Dispatch/Trigger/Fire the event
+    var event = new CustomEvent('sense', { "detail" : {"sense":sense, "content":val} });
+    // Fire the event
     document.dispatchEvent(event);
     return true;
   }
-
 
 
 
@@ -227,8 +301,8 @@
     if (!id && !reportClock) return clock;
     if (!reportClock) reportClock = id;
     // output
-    var t = document.getElementById(reportClock);
-    t.innerHTML = dateObjFormatter(clock);
+    var $t = document.getElementById(reportClock);
+    $t.innerHTML = dateObjFormatter(clock);
     return clock;
   };
 
@@ -236,9 +310,22 @@
 
 
 
-  ///////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////
 
 
+  function report(msg) {
+    var $c = document.getElementById("mot_out");
+    if (!$c) {
+      console.log(msg || "_");
+      return false;
+    } else {
+      var $i = document.createElement("div");
+      $i.setAttribute("class", "mo_item");
+      $i.append(msg || "_");
+      $c.prepend($i);
+    }
+    return true;
+  };
 
 
 
@@ -247,11 +334,6 @@
     if (reportState) mot.readState();
     return state;
   };
-
-
-  function self() {
-    return true;
-  }
 
 
 
