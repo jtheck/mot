@@ -1,0 +1,145 @@
+
+
+
+
+
+
+
+
+/*//////////////////////////////
+// GetFire.net Chat API
+//////////////////////////////*/
+
+
+
+
+#getfire_icon {
+  position: absolute;
+  bottom: 7px;
+  right: 7px;
+  width: 42px;
+  height: 42px;
+  stroke:#fff;
+  cursor: pointer;
+  -webkit-filter: drop-shadow(1px 1px 1px #000);
+  filter: drop-shadow(1px 1px 1px #000);
+}
+#getfire_icon:hover {
+  stroke: #ff00d2;
+}
+#getfire_icon:active {
+  transform: scale(1.1);
+}
+#getfire_icon .ftb_fill {
+  fill: #fff;
+}
+#getfire_icon:hover .ftb_fill {
+  fill: #000;
+}
+#getfire_icon:active .ftb_fill {
+  fill: #fff;
+}
+
+
+
+#getfire_wrapper {
+  position: fixed;
+  z-index: 9;
+  bottom: 0px;
+  right: 0px;
+  font-family: georgia, verdana, sans-serif;
+  user-select: none;
+}
+
+
+#getfire_topic {
+  overflow: hidden;
+
+}
+
+
+#gf_topic_head {
+  font-size: 1.4em;
+  font-weight: bold;
+  font-style: italic;
+  cursor: pointer;
+}
+#gf_topic_head:hover {
+  color: #f30;
+}
+#gf_topic_head:active {
+  color: #dd0000;
+}
+
+
+
+#gf_card {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+
+  width: 125px;
+  height: 50px;
+
+  color: #fff;
+  font-size: .9em;
+  text-shadow: 1px 1px 1px #333;
+
+  background: rgba(0,0,0,.8);
+  border: 1px solid #777;
+  cursor: pointer;
+}
+#gf_card:hover {
+  border-color: #fff;
+}
+
+#gf_tsb {
+  position: absolute;
+  right: 137px;
+  top: 30px;
+  z-index: 1;
+  cursor: pointer;
+  font-size: 1em;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+}
+#gf_tsb:hover {
+  color: #ff00d2;
+
+  -webkit-transform: rotate(270deg);
+      transform: rotate(270deg);
+}
+#gf_tsb:active {
+  color: yellow;
+  font-weight: bold;
+}
+
+
+
+#gf_topic_content {
+  background: rgba(0,0,0,.5);
+  /* background: orange; */
+  width: 100%;
+  height: 100%;
+  border: 1px solid #777;
+  font-family: verdana, sans-serif;
+
+}
+#gf_topic_content:hover {
+  border-color: #fff;
+}
+
+
+
+#gf_settings {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.84);
+  width: 60%;
+  border-left: 1px solid #333;
+  padding: 9px;
+  /* display: none; */
+}

@@ -13,14 +13,6 @@ var init = function() {
 
 
 
-  // GetFire
-  var fire = document.querySelector("#getfire");
-  fire.onclick  = function(e){
-    // alert("get");
-
-      mot.chat.connect();
-
-  };
 
   mot.chat = CHAT({topic: "Mot Moe"});
 
@@ -54,6 +46,7 @@ var init = function() {
   };
 
   mot.init();
+
 
 } // end init
 
