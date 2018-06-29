@@ -19,11 +19,12 @@
     var heightDefault = config.height || "full";
     // var width = config.width || "";
 
-    CHAT.id;
 
     var width;
     var height;
 
+
+    CHAT.id;
 
 
     win.addEventListener("resize", resize);
@@ -62,31 +63,27 @@
     CHAT.$topic.appendChild($content);
 
     // settings
-
-
+    $settings = newDiv({id:"gf_settings"});
+    $content.appendChild($settings);
 
 
 
     // pub sub
-    var pubpk = "pub-c-1792f899-2843-41fa-bb31-28d7190cee7a";
-  	var pubsk = "sub-c-8835c7da-7a67-11e4-b197-02ee2ddab7fe";
+    var pubk = "pub-c-1792f899-2843-41fa-bb31-28d7190cee7a";
+  	var subk = "sub-c-8835c7da-7a67-11e4-b197-02ee2ddab7fe";
   	CHAT.pn = new PubNub({
-  	 	subscribeKey: pubsk,
-  	 	publishKey: pubpk,
+  	 	subscribeKey: subk,
+  	 	publishKey: pubk,
   	 	ssl: true
   	});
 
-    // fire.initPubSub = function() {
-      // set custom uuid for user
-      // if (fire.userID) {
-        var uuid;
-        if (document.cookie.indexOf("gfa_pn_uuid=") >= 0) {
-          uuid = getCookie("gfa_pn_uuid");
-        } else {
-          uuid = setCookie("gfa_pn_uuid", Math.random().toString(36).substring(2, 15) + "GetFire_API" + Math.random().toString(36).substring(2, 15));
-        }
-        CHAT.pn.uuid = uuid;
-      // }
+    var uuid;
+    if (document.cookie.indexOf("gfa_pn_uuid=") >= 0) {
+      uuid = getCookie("gfa_pn_uuid");
+    } else {
+      uuid = setCookie("gfa_pn_uuid", Math.random().toString(36).substring(2, 15) + "GetFire_API" + Math.random().toString(36).substring(2, 15));
+    }
+    CHAT.pn.uuid = uuid;
 
 
       CHAT.pn.addListener({
@@ -96,25 +93,10 @@
         message: function(m) {
           // console.log(m.message);
 
+          // CHAT.receiveMessage();
           $content.innerHTML += m.message.content.content + "<br>";
 
-          // var type = m.channel.slice(0,2);
-          // var id = m.channel.slice(3);
-          // // dispatch the message based on type
-          // switch (type) {
-          //   case "fc":
-          //     fireContact.recieveMessage(id, m.message);
-          //   break;
-          //   case "ft":
-          //     fireTopic.recieveMessage(id, m.message);
-          //   break;
-          //   case "fu":
-          //     fireUser.recieveMessage(m.message);
-          //   break;
-          //   case "fa":
-          //     fireTopic.recieveTempMessage(id, m.message);
-            // break;
-          // }
+
         }
       });
 
@@ -162,95 +144,78 @@
       // var params = "topic=Mot_Moe";
       var params = JSON.stringify({name:"test"});
 
-      // xhr.open("post", "http://localhost:3000/api/v1/index", true);
       xhr.open("post", "https://getfire.net/api/v1/index", true);
+      // xhr.open("post", "http://localhost:3000/api/v1/index", true);
       xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
       xhr.onload = function(){
-          //do something
-          if (xhr.status === 200) {
-              // alert('User\'s name is ' + xhr.responseText);
-        // console.log(xhr.responseText);
-        var data = JSON.parse(xhr.responseText).data;
-// console.log(data.hashish);
-
-CHAT.id = data.hashish;
-
-
-        CHAT.pn.subscribe({
-          channels : ["ft-" + CHAT.id]
-        });
-
-          }
-          else {
-              console.log('Request failed: ' + xhr.status);
-          }
+        // success
+        if (xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText).data;
+          CHAT.id = data.hashish;
+          CHAT.pn.subscribe({
+            channels : ["ft-" + CHAT.id]
+          });
+        } else {
+          // failure
+          console.log('Request failed: ' + xhr.status);
+        }
       };
 
-      console.log(params);
-
+      // console.log(params);
       xhr.send(params);
 
-
-
-
     }
+
 
 
     CHAT.connect = function() {
 
       request();
 
-      // alert("merp "+topic);
-
-
-
 
     }
-
-
-
 
 
     CHAT.rules = function() {
       alert("be a baws");
     };
 
+
+
+
+
+
+
+
+
+    function resize() {
+      var width = Math.min(Math.max(win.innerWidth/3, 320), win.innerWidth);
+      var height = win.innerHeight;
+
+      CHAT.$topic.style.width = width;
+      CHAT.$topic.style.height = height;
+
+    }
+
+
+    function getCookie(name) {
+      match = document.cookie.match(new RegExp(name + '=([^;]+)'));
+      if (match) return match[1];
+    }
+
+
+    function setCookie(name, value) {
+    	var cookie = name + "=" + encodeURIComponent(value);
+    	cookie += "; max-age=" + (4*365*24*60*60);
+    	cookie += "; path=/";
+    	//cookie += "; domain=.getfire.net";
+
+    	document.cookie = cookie;
+    }
+
+
     return CHAT;
   };
-
-
-
-  function resize() {
-    var width = Math.max(win.innerWidth/3, 320);
-    var height = win.innerHeight;
-
-    CHAT.$topic.style.width = width;
-    CHAT.$topic.style.height = height;
-
-    console.log()
-
-  }
-
-
-
-
-
-  function getCookie(name) {
-    match = document.cookie.match(new RegExp(name + '=([^;]+)'));
-    if (match) return match[1];
-  }
-
-
-  function setCookie(name, value) {
-  	var cookie = name + "=" + encodeURIComponent(value);
-  	cookie += "; max-age=" + (4*365*24*60*60);
-  	cookie += "; path=/";
-  	//cookie += "; domain=.getfire.net";
-
-  	document.cookie = cookie;
-  }
-
-
 })(window);
 
 
