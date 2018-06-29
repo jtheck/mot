@@ -7,7 +7,7 @@
 
 
 /*//////////////////////////////
-// GetFire.net Chat API
+// GetFire.net chat applet
 //////////////////////////////*/
 
 
@@ -59,6 +59,9 @@
 
 
 #gf_topic_head {
+  padding-left: 9px;
+  padding-right: 16px;
+  padding-top: 3px;
   font-size: 1.4em;
   font-weight: bold;
   font-style: italic;
@@ -132,6 +135,55 @@
 
 
 
+#gf_message_entry {
+  font-family: inherit;
+  font-size: .9em;
+  position: absolute;
+  padding-left: 3px;
+  padding-top: 2px;
+  padding-right: 3px;
+  width: 76%;
+  left: 1px;
+  bottom: 1px;
+  height: 1.4em;
+  float: left;
+  color: #fff;
+  background-color: #000;
+  border: 1px solid #555;
+  border-radius: 3px;
+  resize: none;
+  z-index: 1;
+}
+
+
+#gf_submit {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 20%;
+  height: 23px;
+  color: #fff;
+  background-color: #000;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+
+#gf_preview {
+  margin-right: 2px;
+  margin-bottom: 2px;
+  height: 80px;
+  display: none;
+
+  background: rgba(0,0,0,.5);
+  border: 1px solid #777;
+  font-family: verdana, sans-serif;
+}
+
+
+
+
+
 #gf_settings {
   position: absolute;
   right: 0px;
@@ -142,5 +194,5 @@
   width: 60%;
   border-left: 1px solid #333;
   padding: 9px;
-  /* display: none; */
+  display: none;
 }
