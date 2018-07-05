@@ -14,7 +14,7 @@ var init = function() {
 
 
 
-  mot.chat = CHAT({topic: "Mot Moe"});
+  mot.chat = CHAT({topic: "TESt"});
 
 
   // text input
