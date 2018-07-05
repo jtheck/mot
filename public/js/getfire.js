@@ -21,8 +21,8 @@
     var width;
     var height;
 
-    // var uri = "https://getfire.net/api/v1";
-    var uri = "http://localhost:3000/api/v1";
+    var uri = "https://getfire.net/api/v1";
+    // var uri = "http://localhost:3000/api/v1";
 
 
 
