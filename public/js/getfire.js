@@ -106,6 +106,7 @@
     $tsb.onclick = function() {
       fullHeight = fullHeight ? false : true;
       resize();
+      CHAT.$messages.scrollTop = CHAT.$messages.scrollHeight;
     };
 
     // content
@@ -215,10 +216,9 @@
             $head.innerHTML = $pName.innerHTML = data.name;
 //TODO: sharing links, watching count
 
-            var messages = JSON.parse(xhr.responseText).messages;
-  // console.log(messages);
 
             // render messages
+            var messages = JSON.parse(xhr.responseText).messages;
             for (var i=0; i<messages.length; i++) {
               renderMessage(messages[i]);
             }
@@ -257,19 +257,10 @@
           if (status.error) {
               // console.log(status);
           } else {
-
+            // successful publish
             // clear message entry
             $input.value = "";
 
-            // var message = <%= raw @message %>;
-            // <% if current_user %>
-            // 	$("#me_<%= @topic.hashish %>").find(".message_entry_content").val("");
-            // <% else %>
-            // 	$(".pcw_me").val("");
-            // <% end %>
-
-            // renderMessage()
-            // console.log(response);
           }
       });
     };
@@ -326,7 +317,7 @@
       $tMsg.prepend($name);
 
       CHAT.$messages.append($tMsg);
-      CHAT.$messages.scrollTo(0, CHAT.$messages.scrollHeight);
+      CHAT.$messages.scrollTop = CHAT.$messages.scrollHeight;
 
 
       renderPreview(m.content);
@@ -343,7 +334,6 @@
 
 
     function renderPreview(m) {
-
       var pCount = $pContent.getElementsByClassName("gf_pMsg").length;
       if (pCount == 0) $pContent.innerHTML = "";
 
@@ -358,13 +348,15 @@
 
     // global click handler
     function hClick(e) {
+      var path = e.path;
+
       // click is inside applet
-      if (e.path.includes($wrapper)) {
+      if (path.includes($wrapper)) {
         // click is not in settings
-        if (!e.path.includes($settings) && !e.path.includes($card)) $settings.style.display = "none";
+        if (!path.includes($settings) && !path.includes($card)) $settings.style.display = "none";
       } else {
         // click is not inside applet
-        if (!fullHeight && $icon.style.display == "none") {
+        if ($icon.style.display == "none") {
           CHAT.$topic.style.display = "none";
           CHAT.$preview.style.display = "block";
         }
@@ -387,9 +379,10 @@
     function resize() {
       var width = Math.min(Math.max(win.innerWidth/3, 316), win.innerWidth);
       var height = win.innerHeight;
+      var halfHeight = height < 316 ? height : 316;
 
       CHAT.$topic.style.width = width;
-      CHAT.$topic.style.height = fullHeight ? height : 316;
+      CHAT.$topic.style.height = fullHeight ? height : halfHeight;
 
       return true;
     };
@@ -436,11 +429,170 @@
 
 
 
-//  for(i = 0; i < images.length; i++) {
-// var images = document.querySelectorAll(".preview-image");
-//   (function(i){
-//     images[i].addEventListener('click', function () {
-//         // function code here
-//     });
-//   })(i)
-// }
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////
+// Polyfills (mostly for ie/safari)
+////////////////////////////////////////////////////////////////
+
+// click event path (for firefox)
+if (!("path" in Event.prototype))
+Object.defineProperty(Event.prototype, "path", {
+  get: function() {
+    var path = [];
+    var currentElem = this.target;
+    while (currentElem) {
+      path.push(currentElem);
+      currentElem = currentElem.parentElement;
+    }
+    if (path.indexOf(window) === -1 && path.indexOf(document) === -1)
+      path.push(document);
+    if (path.indexOf(window) === -1)
+      path.push(window);
+    return path;
+  }
+});
+
+// https://tc39.github.io/ecma262/#sec-array.prototype.findIndex
+if (!Array.prototype.findIndex) {
+  Object.defineProperty(Array.prototype, 'findIndex', {
+    value: function(predicate) {
+      if (this == null) {
+        throw new TypeError('"this" is null or not defined');
+      }
+      var o = Object(this);
+      var len = o.length >>> 0;
+      if (typeof predicate !== 'function') {
+        throw new TypeError('predicate must be a function');
+      }
+      var thisArg = arguments[1];
+      var k = 0;
+      while (k < len) {
+        var kValue = o[k];
+        if (predicate.call(thisArg, kValue, k, o)) {
+          return k;
+        }
+        k++;
+      }
+      return -1;
+    },
+    configurable: true,
+    writable: true
+  });
+}
+
+// https://tc39.github.io/ecma262/#sec-array.prototype.includes
+if (!Array.prototype.includes) {
+  Object.defineProperty(Array.prototype, 'includes', {
+    value: function(searchElement, fromIndex) {
+      if (this == null) {
+        throw new TypeError('"this" is null or not defined');
+      }
+      var o = Object(this);
+      var len = o.length >>> 0;
+      if (len === 0) {
+        return false;
+      }
+      var n = fromIndex | 0;
+      var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+      function sameValueZero(x, y) {
+        return x === y || (typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y));
+      }
+      while (k < len) {
+        if (sameValueZero(o[k], searchElement)) {
+          return true;
+        }
+        k++;
+      }
+      return false;
+    }
+  });
+}
+
+// .includes
+if (!String.prototype.includes) {
+  String.prototype.includes = function(search, start) {
+    'use strict';
+    if (typeof start !== 'number') {
+      start = 0;
+    }
+    if (start + search.length > this.length) {
+      return false;
+    } else {
+      return this.indexOf(search, start) !== -1;
+    }
+  };
+}
+
+// Source: https://github.com/jserz/js_piece/blob/master/DOM/ParentNode/append()/append().md
+(function (arr) {
+  arr.forEach(function (item) {
+    if (item.hasOwnProperty('append')) {
+      return;
+    }
+    Object.defineProperty(item, 'append', {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: function append() {
+        var argArr = Array.prototype.slice.call(arguments),
+          docFrag = document.createDocumentFragment();
+        argArr.forEach(function (argItem) {
+          var isNode = argItem instanceof Node;
+          docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
+        });
+        this.appendChild(docFrag);
+      }
+    });
+  });
+})([Element.prototype, Document.prototype, DocumentFragment.prototype]);
+
+// Source: https://github.com/jserz/js_piece/blob/master/DOM/ParentNode/prepend()/prepend().md
+(function (arr) {
+  arr.forEach(function (item) {
+    if (item.hasOwnProperty('prepend')) {
+      return;
+    }
+    Object.defineProperty(item, 'prepend', {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: function prepend() {
+        var argArr = Array.prototype.slice.call(arguments),
+          docFrag = document.createDocumentFragment();
+        argArr.forEach(function (argItem) {
+          var isNode = argItem instanceof Node;
+          docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
+        });
+        this.insertBefore(docFrag, this.firstChild);
+      }
+    });
+  });
+})([Element.prototype, Document.prototype, DocumentFragment.prototype]);
+
+// from:https://github.com/jserz/js_piece/blob/master/DOM/ChildNode/remove()/remove().md
+(function (arr) {
+  arr.forEach(function (item) {
+    if (item.hasOwnProperty('remove')) {
+      return;
+    }
+    Object.defineProperty(item, 'remove', {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: function remove() {
+        if (this.parentNode !== null)
+          this.parentNode.removeChild(this);
+      }
+    });
+  });
+})([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
