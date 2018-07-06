@@ -64,9 +64,10 @@
   /* background: rgba(0,0,0,.5); */
   /* border: 1px solid #777; */
   font-family: verdana, sans-serif;
+stroke: #fff;
 }
-#gf_preview:hover {border-color: #fff;}
-#gf_preview:hover  #gf_pname{color: #ff00d2;}
+#gf_preview:active {stroke: #ff00d2;}
+/* #gf_preview:hover  #gf_pname{color: #ff00d2;} */
 
 #gf_pname {
   position: absolute;

@@ -15,7 +15,7 @@
 
     var name = config.topic || "Fire";
     var fullHeight = config.fullHeight || false;
-    var startOpen = config.startOpen || true;
+    var startOpen = config.startOpen || false;
 
 
     var width;
@@ -63,7 +63,7 @@
     };
 
     // preview
-    var previewSVG = '<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" version="1.1" viewBox="0 0 90 60">    	<style>    	.s0{    		fill-opacity:0.5;    		fill:#000;    		stroke:#fff;     		stroke-width:3;    	}    	</style>          <g transform="translate(29.95447,-990.73741)">        <g transform="matrix(0.32337,0,0,0.32337,-186.23,917.75996)" class="s0">          <path d="m507.3 255c-10.9 6.6-18.8 83 2 105.7 15.7 19.4 210-15.6 210 35.7 12-18.3 1.5-18.5 16.3-32.1 21.5-22.1 15.1-101.2-1.2-109.2-11.8-10.4-209.7-12.8-226.9 0.1z"/>        </g>      </g>    </svg>';
+    var previewSVG = '<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" version="1.1" viewBox="0 0 90 60"><style>.s0{fill-opacity:0.5;fill:#000;stroke-width:3;}</style><g transform="translate(29.95447,-990.73741)"><g transform="matrix(0.32337,0,0,0.32337,-186.23,917.75996)" class="s0"><path d="m507.3 255c-10.9 6.6-18.8 83 2 105.7 15.7 19.4 210-15.6 210 35.7 12-18.3 1.5-18.5 16.3-32.1 21.5-22.1 15.1-101.2-1.2-109.2-11.8-10.4-209.7-12.8-226.9 0.1z"/></g></g></svg>';
     CHAT.$preview = newDiv({id:"gf_preview", content:previewSVG});
     $wrapper.append(CHAT.$preview);
     CHAT.$preview.onclick = function() {
