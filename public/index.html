@@ -29,31 +29,51 @@
 
   <body>
     <div id="bg"></div>
-    <!-- <img src="power.svg" style="width: 25px;"> -->
 
-    <button id="ignition" data-state="OFF" onclick="ignite();"><b>꡷</b>&nbsp;▶</button>
-    <div id="state" class="hud"></div>
-    <div id="clock" class="hud"></div>
+    <div id="ignition" data-state="OFF" onclick="ignite();" title="power"></div>
+    <div id="state" class="hud" title="machine state"></div>
+    <div id="clock" class="hud" title="run time"></div>
     <br>
     <br>
-    <div id="ternary_in"><span id="ti_off" data-val="OFF">off</span><span id="ti_neutral" data-val="NIL">nil</span><span id="ti_on" data-val="ON">on</span></div>
+    <div id="controls">
+      <div id="ternary_in" title="ternary switch">
+        <span id="ti_off" data-val="OFF">off</span>
+        <span id="ti_neutral" data-val="NIL">nil</span>
+        <span id="ti_on" data-val="ON">on</span>
+      </div>
     <br><br>
-    <div id="slider_w"><input id="slider_in" type="range" min="0" max="100" step="10"></div>
-
+      <div id="slider_w" title="range slider">
+        <input id="slider_in" type="range" min="0" max="100" step="10">
+      </div>
+    <br><br>
+      <div id="directional_pad" title="directional pad">
+        <div class="mm_ph"></div>
+        <div class="mm_in" data-val="UP"></div>
+        <div class="mm_ph"></div>
+        <br>
+        <div class="mm_in" data-val="LEFT"></div>
+        <div class="mm_in" data-val="CENTER"></div>
+        <div class="mm_in" data-val="RIGHT"></div>
+        <br>
+        <div class="mm_ph"></div>
+        <div class="mm_in" data-val="DOWN"></div>
+        <div class="mm_ph"></div>
+      </div>
+    </div>
     <br>
     <br>
 
 
     <div id="vitals" class="vitals">
-      <div id="vitals_title"><br>Mot.Moe ai</div>
+      <div id="vitals_title" title="Mot.Moe ai"><br>Mot.Moe ai</div>
       <div id="vitals_log"></div>
       <div id="mot_out"></div>
     </div>
 
     <div id="text_in_w">
     </div>
-    <form id="text_in">
-      <textarea name="notion" rows="2"></textarea>
+    <form id="text_in" title="text entry">
+      <textarea name="notion"></textarea>
       <button id="text_submit" type="submit">SEND</button>
     </form>
 

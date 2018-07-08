@@ -1,4 +1,7 @@
 
+
+
+
 body {
   color:#fff;
   text-shadow: 1px 1px 1px #000;
@@ -17,10 +20,36 @@ body {
   background-size: 50px 50px;
 }
 
+#controls {
+  position: fixed;
+  z-index: 1;
+user-select: none;
+    transform: scale(.72);
+}
 
-textarea {background-color: rgba(0,0,0,.255); z-index: 8; color: #fff; font-family: cursive; font-size: 2em; padding: 10px; position: absolute; resize: none; width: 90%; left: 5%; bottom: 10px; text-shadow: 1px 1px 1px #000; }
-textarea:hover {background-color: rgba(0,0,0,.911);}
-textarea:focus {background-color: rgba(0,0,0,.911);}
+textarea {
+  background: rgba(255,255,255,.1);
+  z-index: 8;
+  color: #fff;
+  font-family: cursive;
+  font-size: 1.1em;
+  padding: 10px;
+  position: absolute;
+  resize: none;
+  max-width: 75%;
+  left: 16%;
+  bottom: 10px;
+  text-shadow: 1px 1px 3px #000;
+  height: 1.2em;
+}
+textarea:hover {
+  height: 3em;
+  background: rgba(255,255,255,.5);
+}
+textarea:focus {
+  height: 5em;
+  background: rgba(255,255,255,.5);
+}
 
 
 #text_in_w {
@@ -29,10 +58,6 @@ textarea:focus {background-color: rgba(0,0,0,.911);}
   right: 0px;
   width: 70%;
 }
-/* #text_in {
-  width: 100%;
-  height: 100%;
-} */
 #text_in_w textarea {
   background-color: rgba(0,0,0,.255);
   color: #fff;
@@ -42,8 +67,6 @@ textarea:focus {background-color: rgba(0,0,0,.911);}
   position: absolute;
   resize: none;
   width: 100%;
-  /* left: 5%;
-  bottom: 10px; */
 
 }
 
@@ -67,73 +90,111 @@ textarea:focus {background-color: rgba(0,0,0,.911);}
   z-index: 8;
 }
 
-/* button {position: absolute; z-index: 9; right: 10px; bottom: 10px; font-size: 2em;} */
 #vitals {
-  position: absolute;
-  z-index: 8;
-  /* bottom: 0px; */
-  margin: 10px;
-  background-color: rgba(0,0,0,.5);
-  /* right: 0px; */
-  width: 40px;
-  height: 40px;
-  border: 3px solid #fff;
-  border-radius: 40px;
-  height: 30%;
-  width: 300px;
-  border-radius: 0px;
-  border: 0px;
-  margin: 0px;
   font-family: monospace;
 }
 
-/* #vitals:hover #vitals_main {display: block;} */
 #vitals_title {
-  position: absolute;
+  position: fixed;
   top: 10px;
   width: 100%;
   text-align: center;
+  pointer-events: none;
 }
 
-#mot_out {font-size: .9em; display: block; position: absolute; top: 80px; bottom: 0px; width: 99%; text-align: center; overflow-x: hidden; overflow-y: auto; white-space: nowrap;}
+#mot_out {
+  background-color: rgba(0,0,0,.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+padding-top: 22px;
+
+  font-size: .9em;
+  display: block;
+  width: 69%;
+  height: 69%;
+  text-align: center;
+  overflow-x: hidden;
+  overflow-y: auto;z
+  white-space: nowrap;
+}
 
 #ignition {
-  font-size: 1.3em;
-  width: 60px;
-  background-color: #0d0;
+  width: 42px;
+  height: 42px;
+  position: absolute;
+  right: 0px;
+  padding: 8px;
+  stroke: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+#ignition:hover {
+  stroke: #ff0;
 }
 
 .hud {
   display: inline;
-  padding: 6px;
+  float: right;
+  padding-right: 52px;
   font-family: monospace;
   font-size: 1.2em;
+  cursor: default;
+}
+
+.mm_in {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  padding: 5px;
+  border: 2px solid green;
+background: rgba(255,255,255,.2);
+  cursor: pointer;
+}
+.mm_in:hover {
+  border-color: red;
+}
+.mm_in:active {
+  background: rgba(255,255,255,.6);
+}
+.mm_ph {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  padding: 5px;
+  border: 2px solid rgba(0,0,0,0);
 }
 
 #slider_w {
   padding: 5px;
   border: 2px solid green;
   display: inline-block;
+background: rgba(255,255,255,.2);
 }
-
 #slider_w:hover {
 border: 2px solid red;
+}
+#slider_w:active {
+background: rgba(255,255,255,.6);
 }
 
 #ternary_in {
   font-size: 2em;
   display: inline;
-  user-select: none;
+
 }
 
 #ternary_in span {
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
   cursor: pointer;
   border: 2px solid green;
-  /* border: 1px solid rgba(0,0,0,0); */
+background: rgba(255,255,255,.2);
 }
-
 #ternary_in span:hover {
   border: 2px solid red;
+}
+#ternary_in span:active {
+  background: rgba(255,255,255,.6);
 }

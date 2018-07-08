@@ -323,6 +323,7 @@
       $i.setAttribute("class", "mo_item");
       $i.append(msg || "_");
       $c.prepend($i);
+      $c.scrollTop = 0;
     }
     return true;
   };

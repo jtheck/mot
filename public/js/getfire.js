@@ -40,8 +40,8 @@
 
     CHAT.preview = [];
 
-    win.addEventListener("resize", resize);
-    win.addEventListener("click", hClick);
+    win.addEventListener("resize", gfResize);
+    win.addEventListener("click", gfClick);
 
 
 
@@ -63,16 +63,21 @@
     };
 
     // preview
-    var previewSVG = '<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" version="1.1" viewBox="0 0 90 60"><style>.s0{fill-opacity:0.5;fill:#000;stroke-width:3;}</style><g transform="translate(29.95447,-990.73741)"><g transform="matrix(0.32337,0,0,0.32337,-186.23,917.75996)" class="s0"><path d="m507.3 255c-10.9 6.6-18.8 83 2 105.7 15.7 19.4 210-15.6 210 35.7 12-18.3 1.5-18.5 16.3-32.1 21.5-22.1 15.1-101.2-1.2-109.2-11.8-10.4-209.7-12.8-226.9 0.1z"/></g></g></svg>';
+    var previewSVG = '<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" version="1.1" viewBox="0 0 90 60"><style>#gf_preview_svg{fill-opacity:0.5;fill:#000;stroke-width:3;}</style><g transform="translate(29.95447,-990.73741)"><g transform="matrix(0.32337,0,0,0.32337,-186.23,917.75996)" id="gf_preview_svg"><path d="m507.3 255c-10.9 6.6-18.8 83 2 105.7 15.7 19.4 210-15.6 210 35.7 12-18.3 1.5-18.5 16.3-32.1 21.5-22.1 15.1-101.2-1.2-109.2-11.8-10.4-209.7-12.8-226.9 0.1z"/></g></g></svg>';
     CHAT.$preview = newDiv({id:"gf_preview", content:previewSVG});
     $wrapper.append(CHAT.$preview);
-    CHAT.$preview.onclick = function() {
+    $previewSVG = document.querySelector("#gf_preview_svg");
+    $previewSVG.onclick = function() {
       CHAT.$topic.style.display = "block";
       CHAT.$preview.style.display = "none";
     };
     // preview name
     $pName = newDiv({id:"gf_pname", content: name});
     CHAT.$preview.append($pName);
+    $pName.onclick = function() {
+      CHAT.$topic.style.display = "block";
+      CHAT.$preview.style.display = "none";
+    };
     // preview content
     $pContent = newDiv({id:"gf_pcontent", content: "<BR><BR>Awaiting comment..."});
     CHAT.$preview.append($pContent);
@@ -105,7 +110,7 @@
     CHAT.$topic.append($tsb);
     $tsb.onclick = function() {
       fullHeight = fullHeight ? false : true;
-      resize();
+      gfResize();
       CHAT.$messages.scrollTop = CHAT.$messages.scrollHeight;
     };
 
@@ -179,7 +184,7 @@
 
     subscribe();
 
-    resize();
+    gfResize();
 
     if (startOpen) {
       CHAT.$topic.style.display = "block";
@@ -345,9 +350,21 @@
       return true;
     };
 
+    function newDiv(div) {
+      var $div = document.createElement('div');
+
+      $div.id = div.id || "";
+      $div.className = div.className || "";
+      $div.setAttribute('title', (div.title || ""));
+      $div.innerHTML = div.content || "";
+
+      return $div;
+    };
+
+
 
     // global click handler
-    function hClick(e) {
+    function gfClick(e) {
       var path = e.path;
 
       // click is inside applet
@@ -364,19 +381,7 @@
     };
 
 
-    function newDiv(div) {
-      var $div = document.createElement('div');
-
-      $div.id = div.id || "";
-      $div.className = div.className || "";
-      $div.setAttribute('title', (div.title || ""));
-      $div.innerHTML = div.content || "";
-
-      return $div;
-    };
-
-
-    function resize() {
+    function gfResize() {
       var width = Math.min(Math.max(win.innerWidth/3, 316), win.innerWidth);
       var height = win.innerHeight;
       var halfHeight = height < 316 ? height : 316;
