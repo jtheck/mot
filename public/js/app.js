@@ -61,6 +61,13 @@ var init = function() {
   };
 
 
+  // space button
+  var sb = document.querySelector("#space_b");
+  sb.onclick  = function(e){
+    window.location.href = "/3d.html";
+  };
+
+
 
   mot.init();
 

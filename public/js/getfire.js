@@ -217,9 +217,29 @@
               channels : ["ft-" + CHAT.id]
             });
 
-            $settings.innerHTML += data.summary;
-            $head.innerHTML = $pName.innerHTML = data.name;
-//TODO: sharing links, watching count
+
+            // name
+            name = $head.innerHTML = $pName.innerHTML = data.name;
+
+            // ideal
+            $ideal = newDiv({id:"gf_ideal", content:data.summary || "No topic ideal."});
+            $settings.append($ideal);
+
+            // share
+            var urlName = name.replace(/ /g,"_");
+            $tshare = document.createElement('a');
+            $fshare = document.createElement('a');
+            $tshare.innerHTML = "t";
+            $fshare.innerHTML = "f";
+            $tshare.id = "gf_tshare";
+            $fshare.id = "gf_fshare";
+            $tshare.title = "Share on Twitter!";
+            $fshare.title = "Share on facebook!";
+            $tshare.href = "https://twitter.com/home?status=GetFire.net/" + urlName;
+            $fshare.href = "https://www.facebook.com/sharer/sharer.php?u=GetFire.net/" + urlName;
+            $settings.append($tshare);
+            $settings.append($fshare);
+
 
 
             // render messages

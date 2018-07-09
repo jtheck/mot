@@ -163,7 +163,7 @@
       tQueue.push(mote);
     }
 
-    report(content);
+    report(content, false);
     // console.log(knowledge);
   };
 
@@ -202,7 +202,7 @@
         }
 
         var utter = "arf";
-        report("> " + utter);
+        report(utter, true);
         mot.self.charge = 0;
       }
 
@@ -313,15 +313,20 @@
   //////////////////////////////////////////////////////////////////
 
 
-  function report(msg) {
+  function report(msg, self) {
     var $c = document.getElementById("mot_out");
     if (!$c) {
       console.log(msg || "_");
       return false;
     } else {
+      if (!msg) msg = "_";
       var $i = document.createElement("div");
       $i.setAttribute("class", "mo_item");
-      $i.append(msg || "_");
+      if (!self) {
+        $i.setAttribute("class", "mi_left");
+        msg = "t/s> " + msg;
+      }
+      $i.append(msg);
       $c.prepend($i);
       $c.scrollTop = 0;
     }
