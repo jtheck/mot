@@ -47,7 +47,7 @@ textarea {
   left: 16%;
   bottom: 10px;
   text-shadow: 1px 1px 3px #000;
-  height: 1.2em;
+  height: 3em;
 }
 textarea:hover {
   height: 3em;

@@ -132,7 +132,7 @@ stroke: #ff00d2;
   font-size: 1.4em;
   font-weight: bold;
   font-style: italic;
-  text-shadow: 2px 2px 0px black;
+  text-shadow: 2px 2px 1px black;
   cursor: pointer;
 }
 #gf_topic_head:hover {color: #dd0000;}
@@ -154,6 +154,12 @@ stroke: #ff00d2;
   cursor: pointer;
 }
 #gf_card:hover {border-color: #fff;}
+
+#gf_card_name {
+  position: absolute;
+  bottom: 1px;
+  right: 3px;
+}
 
 
 #gf_tsb {

@@ -316,7 +316,7 @@
   function report(msg, self) {
     var $c = document.getElementById("mot_out");
     if (!$c) {
-      console.log(msg || "_");
+      console.log(msg);
       return false;
     } else {
       if (!msg) msg = "_";
