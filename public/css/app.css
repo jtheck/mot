@@ -29,9 +29,9 @@ text-align: left;
   position: fixed;
   z-index: 1;
   right: -19px;
-    top: 29px;
-user-select: none;
-    transform: scale(.72);
+  top: 15px;
+  user-select: none;
+  transform: scale(.72);
 }
 
 textarea {
@@ -216,5 +216,25 @@ background: rgba(255,255,255,.5);
   border: 2px solid red;
 }
 #ternary_in span:active {
+  background: rgba(255,255,255,.3);
+}
+
+#binary_in {
+  font-size: 2em;
+  display: inline;
+  padding: 12px;
+}
+
+#binary_in span {
+  padding-left: 3px;
+  padding-right: 3px;
+  cursor: pointer;
+  border: 2px solid green;
+background: rgba(255,255,255,.5);
+}
+#binary_in span:hover {
+  border: 2px solid red;
+}
+#binary_in span:active {
   background: rgba(255,255,255,.3);
 }

@@ -42,6 +42,7 @@
 
   // stores
   var senses = [];
+  var entities= []; // independent discreet sources
   var knowledge = []; // all motes
   // experiences
   // memories
@@ -76,11 +77,14 @@
 
     this.echo = 0;
 
-    this.lead = [];
-    this.trail = [];
+    this.lead = []; // preceding motes
+    this.trail = []; // following motes
 
     this.start = performance.now();
     this.end = performance.now();
+
+    this.source = mot.entity(); // origin (single entity, potentially a composit entity)
+    this.destination = []; // intended audience (one to many entities)
 
     return true;
   };
@@ -100,8 +104,18 @@
     return true;
   };
 
+  mot.entity = function() {
+
+    this.knowledge = []; // motes of source == this
+
+    this.name = "user";
+    this.aliases = [];
 
 
+    return true;
+  };
+
+  // a special entity
   mot.self = function() {
 
     this.charge = 0;
@@ -124,12 +138,12 @@
 
 
 
-
+// TODO: send to percept() then intuit() then act()
   function procSense(e) {
     var senseName = e.detail.sense;
     var content = e.detail.content;
-
     var sense = senses.find(function(sense){return sense.name == senseName});
+    // var source = entity
 
 
     // add known state to sense
@@ -138,6 +152,7 @@
 
 
     // build new mote
+    // TODO: incl. source
     var mote = new mot.mot(senseName, content);
     var prevMote;
     if (knowledge.length > 0) {
@@ -164,8 +179,9 @@
     }
 
     report(content, false);
+    return true;
     // console.log(knowledge);
-  };
+  }; // end procSense
 
 
 
@@ -209,13 +225,19 @@
 
 
 
+      // check percept queue
+      // intuit
+      // act (from queue)
+
+
+
 
       if (reportClock) mot.readClock();
 
 			accum -= dt;
 	  }
 		raf = requestAnimationFrame(run);
-	};
+	}; // end run
 
 
 

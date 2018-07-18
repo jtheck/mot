@@ -42,6 +42,8 @@
   cursor: pointer;
   -webkit-filter: drop-shadow(1px 1px 1px #000);
   filter: drop-shadow(1px 1px 1px #000);
+  transition-duration: .05s;
+
 }
 #getfire_icon:hover {
   stroke: #ff00d2;
@@ -304,13 +306,23 @@ stroke: #ff00d2;
 
 .gf_msg {
   /* border: 1px dashed red; */
+  position: relative;
   padding: 1px;
   word-break: break-word;
   padding-left: 13px;
+  padding-right: 7px;
   text-indent: -8px;
 }
 .gf_msg:hover {
   background-color: rgba(255,255,255,.25);
+}
+
+.gf_msg a{
+  text-decoration: none;
+  font-size: .9em;
+}
+.gf_msg a:hover{
+  color: #ff00d2;
 }
 
 .gf_pMsg {
@@ -321,11 +333,88 @@ stroke: #ff00d2;
   padding-bottom: 1px;
 }
 
+.gf_mResponse {
+  text-align: right;
+}
+
+.gf_mName {
+  cursor: pointer;
+}
+
+#gf_mControls {
+  position: absolute;
+  top: -10px;
+  right: 0px;
+
+  /* border: 1px dotted red; */
+}
+
+#gf_mTime {
+  color: #00ffa3;
+  font-size: 0.9em;
+  float: right;
+  padding-right: 44px;
+}
+
+#gf_mRespond {
+  text-align: right;
+  position: absolute;
+  right: 0px;
+  top: -16px;
+  padding: 4px;
+  -webkit-transition: all 0.22s;
+  transition: all 0.22s;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  fill: #fff;
+  -webkit-filter: drop-shadow(1px 1px 1px #000);
+  filter: drop-shadow(1px 1px 1px #000);
+  -webkit-backface-visibility: hidden;
+}
+#gf_mRespond:hover {
+  fill: #ff00d2;
+  -webkit-transform: rotate(360deg);
+  transform: rotate(360deg);
+}
+#gf_mRespond:active {
+  fill: yellow;
+}
+
+
+#gf_responding {
+  position: absolute;
+  display: none;
+  bottom: 48px;
+  left: 15px;
+  background: black;
+}
+
 #gf_tw {
   font:.9em Arial;
   white-space: nowrap;
   visibility: hidden;
 }
+
+
+
+#gf_ava {
+  position: absolute;
+  display:none;
+  width: 150px;
+  height: 60px;
+  z-index: 9;
+  background-color: rgba(0, 0, 0, 0.9);
+  border: 1px solid #fff;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+#gf_ava:active {
+  border-color: #ff00d2 !important;
+}
+
+
+
 
 .gf_scroll::-webkit-scrollbar {
   width: 9px;
