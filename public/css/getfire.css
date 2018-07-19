@@ -21,6 +21,8 @@
   right: 2px;
   font-family: georgia, verdana, sans-serif;
   user-select: none;
+
+
 }
 
 
@@ -209,6 +211,9 @@ stroke: #ff00d2;
   display: none;
 }
 
+#gf_watching {
+  font-size: .8em;
+}
 
 #gf_ideal {
   position: absolute;
@@ -303,6 +308,11 @@ stroke: #ff00d2;
   overflow-x: hidden;
 }
 
+.gf_am {
+  text-align: center;
+  padding: 6px;
+}
+
 
 .gf_msg {
   /* border: 1px dashed red; */
@@ -320,9 +330,10 @@ stroke: #ff00d2;
 .gf_msg a{
   text-decoration: none;
   font-size: .9em;
+  color: #00FFDD;
 }
 .gf_msg a:hover{
-  color: #ff00d2;
+  color: #ff3300;
 }
 
 .gf_pMsg {
@@ -332,7 +343,10 @@ stroke: #ff00d2;
   font-size: .9em;
   padding-bottom: 1px;
 }
-
+.gf_pMsg a {
+  color: #00FFDD;
+  text-decoration: none;
+}
 .gf_mResponse {
   text-align: right;
 }
@@ -342,6 +356,7 @@ stroke: #ff00d2;
 }
 
 #gf_mControls {
+  display: none;
   position: absolute;
   top: -10px;
   right: 0px;
@@ -354,6 +369,7 @@ stroke: #ff00d2;
   font-size: 0.9em;
   float: right;
   padding-right: 44px;
+  white-space: nowrap;
 }
 
 #gf_mRespond {
@@ -370,7 +386,7 @@ stroke: #ff00d2;
   fill: #fff;
   -webkit-filter: drop-shadow(1px 1px 1px #000);
   filter: drop-shadow(1px 1px 1px #000);
-  -webkit-backface-visibility: hidden;
+
 }
 #gf_mRespond:hover {
   fill: #ff00d2;

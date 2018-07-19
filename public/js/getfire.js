@@ -24,15 +24,15 @@
     var width;
     var height;
 
-    // var uri = "http://localhost:3000/api/v1";
-    // var ssl = true;
-    // var s3 = "dev";
-    var uri = "https://getfire.net/api/v1";
-    var ssl = document.location.protocol == "https:";
-    var s3 = "prod";
+    var uri = "http://localhost:3000/api/v1";
+    var ssl = true;
+    var env = "dev";
+    // var uri = "https://getfire.net/api/v1";
+    // var ssl = document.location.protocol == "https:";
+    // var env = "prod";
 
 
-var ta = timeago();
+    var ta = timeago();
 
 
     GETFIRE.ready = false;
@@ -65,9 +65,13 @@ var ta = timeago();
     GETFIRE.$topic = newDiv({id:"getfire_topic"});
     $wrapper.append(GETFIRE.$topic);
 
+    // content
+    $content = newDiv({id:"gf_topic_content"});
+    GETFIRE.$topic.append($content);
+
     // responding
     var $responding = newDiv({id:"gf_responding", content:"RESPOND"});
-    $wrapper.append($responding);
+    GETFIRE.$topic.append($responding);
 
     // respond
     var respondSVG = '<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" version="1.1"><g transform="translate(0,-952.36216)"><g transform="matrix(0.94629746,0,0,0.94629746,2.2019428,51.284124)"><path d="m57.4 977.2q-2.8-0.5-5.5-0.5-4.9 0-9.4 1.7-4.5 1.6-8.2 4.6-3.6 3-6.2 7.2-2.6 4.2-3.5 9.3l-16.8 0q1.7-9.2 5.9-16.3 4.3-7.1 10.1-12 5.9-4.9 13.1-7.4 7.2-2.5 14.9-2.5 2.2 0 4.3 0.2 2.2 0.2 4.4 0.6 6.1 1.2 11.4 3.9 5.4 2.7 9.7 6.8l0-19.9 11.8 11.2 0 31.8-31.7 0-11.5-11.6 21.2 0q-2.9-2.7-6.4-4.5-3.5-1.8-7.5-2.6zm-13.9 55.9q2.8 0.5 5.5 0.5 4.9 0 9.4-1.6 4.6-1.7 8.3-4.6 3.7-3 6.2-7.1 2.6-4.1 3.6-9.2l16.9 0q-1.7 9.1-6 16.2-4.2 7.1-10.1 11.9-5.9 4.8-13.1 7.4-7.1 2.5-14.8 2.5-4.5 0-8.9-0.9-5.9-1.2-11.3-3.9-5.3-2.7-9.7-6.7l0 19.7-11.6-11.1 0-31.6 31.5 0 11.5 11.2-21.4 0q2.9 2.6 6.4 4.5 3.5 1.9 7.5 2.6z"/></g></g></svg>';
@@ -128,6 +132,10 @@ var ta = timeago();
       GETFIRE.$preview.style.display = "block";
     };
 
+    // settings
+    var $settings = newDiv({id:"gf_settings"});
+    $content.append($settings);
+
     // card
     var $card = newDiv({id:"gf_card"});
     GETFIRE.$topic.append($card);
@@ -148,10 +156,6 @@ var ta = timeago();
       gfResize();
       GETFIRE.$messages.scrollTop = GETFIRE.$messages.scrollHeight;
     };
-
-    // content
-    $content = newDiv({id:"gf_topic_content"});
-    GETFIRE.$topic.append($content);
 
     // messages
     GETFIRE.$messages = newDiv({id:"gf_messages", content:"<BR><BR>"});
@@ -187,11 +191,6 @@ var ta = timeago();
     });
 
 
-
-
-    // settings
-    var $settings = newDiv({id:"gf_settings"});
-    $content.append($settings);
 
     // FORM
     var $form = document.createElement("form");
@@ -283,13 +282,13 @@ var ta = timeago();
         if (xhr.status === 200) {
           var data = JSON.parse(xhr.responseText).data;
           if (data) {
+
             // prepare topic
             GETFIRE.id = data.hashish;
             GETFIRE.pn.subscribe({
               channels : ["ft-" + GETFIRE.id]
             });
 
-// console.log(data);
             // name
             name = $head.innerHTML = $pName.innerHTML = data.name;
 
@@ -312,7 +311,10 @@ var ta = timeago();
             $settings.append($tshare);
             $settings.append($fshare);
 
-
+            // watching
+            var watching = JSON.parse(xhr.responseText).watching;
+            $watching = newDiv({id:"gf_watching", content:watching+" watching"});
+            $settings.append($watching);
 
             // render messages
             var messages = JSON.parse(xhr.responseText).messages;
@@ -396,7 +398,7 @@ var ta = timeago();
 
 
     GETFIRE.rules = function() {
-      alert("be a baws<br>dont be trash");
+      alert("be a baws<br>dont be traj");
       return true;
     };
 
@@ -405,40 +407,45 @@ var ta = timeago();
       if (!m) return false;
 // console.log(m);
       // message
-      var $tMsg = newDiv({className: "gf_msg gf_hcmod", content: parseMessage(m.content)});
+      var mContent = parseMessage(m.content);
+      var $tMsg = newDiv({className: "gf_msg gf_hcmod", content: mContent});
+      $tMsg.setAttribute("data-time", m.created_at);
+      $tMsg.setAttribute("data-id", m.user_id);
+      $tMsg.setAttribute("data-name", m.name);
       // name
       var $name =document.createElement("span");
       $name.classList.add("gf_mName");
       $name.classList.add("gf_hcmod");
       $name.style.color = m.color;
 
-      // normal message
-      if (m.response_to == "null") {
-        $name.innerHTML = m.name+"‧ ";
-        $tMsg.prepend($name);
-      } else {
-        // response message
-        $name.innerHTML = " ‧"+m.name;
-        $tMsg.append($name);
-        $tMsg.classList.add("gf_mResponse");
-      }
+      renderPreview(mContent);
 
-      $tMsg.setAttribute("data-time", m.created_at);
-      $tMsg.setAttribute("data-id", m.user_id);
-      $tMsg.setAttribute("data-name", m.name);
-
-
-      GETFIRE.$messages.append($tMsg);
-      GETFIRE.$messages.scrollTop = GETFIRE.$messages.scrollHeight;
-
-
-      renderPreview(m.content);
-
-
+      // alert
       if (GETFIRE.$topic.style.display == "none" && GETFIRE.$preview.style.display == "none") {
         GETFIRE.$preview.style.display = "block";
         $icon.style.display = "none";
       }
+
+      // normal message
+      if (m.response_to == "null") {
+        $name.innerHTML = m.name+"‧ ";
+        $tMsg.prepend($name);
+        GETFIRE.$messages.append($tMsg);
+      } else {
+        // admin message
+        if (m.response_to == "ADMIN") {
+          var $am = newDiv({className:"gf_am", content: mContent});
+          GETFIRE.$messages.append($am);
+        } else {
+          // response message
+          $name.innerHTML = " ‧"+m.name;
+          $tMsg.append($name);
+          $tMsg.classList.add("gf_mResponse");
+          GETFIRE.$messages.append($tMsg);
+        }
+      }
+
+      GETFIRE.$messages.scrollTop = GETFIRE.$messages.scrollHeight;
 
       return true;
     };
@@ -494,7 +501,7 @@ var ta = timeago();
 
         // open or close popup
         var foundPopup = false;
-        for (i=0; i< path.length; path++) if (path[i].classList.value.includes("gf_mName")) foundPopup = path[i];
+        for (i=0; i< path.length; path++) if (path[i].classList.value && path[i].classList.value.includes("gf_mName")) foundPopup = path[i];
         if (foundPopup == false) {
           $popup.style.display = "none";
         } else {
@@ -502,7 +509,7 @@ var ta = timeago();
           var px = Math.max(1, Math.min(e.clientX-75, window.innerWidth-156));
           var py = Math.max(4, (e.clientY-75));
           var id = $tMsg.getAttribute("data-id");
-          var iurl = "https://s3.amazonaws.com/getfire-paperclip-"+s3+"/avatars/"+id+"/half.jpg";
+          var iurl = "https://s3.amazonaws.com/getfire-paperclip-"+env+"/avatars/"+id+"/half.jpg";
           if (id.slice(0,4) == "NOID") iurl = "";
           var name = $tMsg.getAttribute("data-name");
 
@@ -752,9 +759,9 @@ if (!String.prototype.includes) {
   });
 })([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
 
-
-
-
+// classList
+/*! @source http://purl.eligrey.com/github/classList.js/blob/master/classList.js */
+"document"in self&&("classList"in document.createElement("_")&&(!document.createElementNS||"classList"in document.createElementNS("http://www.w3.org/2000/svg","g"))||!function(t){"use strict";if("Element"in t){var e="classList",n="prototype",i=t.Element[n],s=Object,r=String[n].trim||function(){return this.replace(/^\s+|\s+$/g,"")},o=Array[n].indexOf||function(t){for(var e=0,n=this.length;n>e;e++)if(e in this&&this[e]===t)return e;return-1},c=function(t,e){this.name=t,this.code=DOMException[t],this.message=e},a=function(t,e){if(""===e)throw new c("SYNTAX_ERR","The token must not be empty.");if(/\s/.test(e))throw new c("INVALID_CHARACTER_ERR","The token must not contain space characters.");return o.call(t,e)},l=function(t){for(var e=r.call(t.getAttribute("class")||""),n=e?e.split(/\s+/):[],i=0,s=n.length;s>i;i++)this.push(n[i]);this._updateClassName=function(){t.setAttribute("class",this.toString())}},u=l[n]=[],h=function(){return new l(this)};if(c[n]=Error[n],u.item=function(t){return this[t]||null},u.contains=function(t){return~a(this,t+"")},u.add=function(){var t,e=arguments,n=0,i=e.length,s=!1;do t=e[n]+"",~a(this,t)||(this.push(t),s=!0);while(++n<i);s&&this._updateClassName()},u.remove=function(){var t,e,n=arguments,i=0,s=n.length,r=!1;do for(t=n[i]+"",e=a(this,t);~e;)this.splice(e,1),r=!0,e=a(this,t);while(++i<s);r&&this._updateClassName()},u.toggle=function(t,e){var n=this.contains(t),i=n?e!==!0&&"remove":e!==!1&&"add";return i&&this[i](t),e===!0||e===!1?e:!n},u.replace=function(t,e){var n=a(t+"");~n&&(this.splice(n,1,e),this._updateClassName())},u.toString=function(){return this.join(" ")},s.defineProperty){var f={get:h,enumerable:!0,configurable:!0};try{s.defineProperty(i,e,f)}catch(p){void 0!==p.number&&-2146823252!==p.number||(f.enumerable=!1,s.defineProperty(i,e,f))}}else s[n].__defineGetter__&&i.__defineGetter__(e,h)}}(self),function(){"use strict";var t=document.createElement("_");if(t.classList.add("c1","c2"),!t.classList.contains("c2")){var e=function(t){var e=DOMTokenList.prototype[t];DOMTokenList.prototype[t]=function(t){var n,i=arguments.length;for(n=0;i>n;n++)t=arguments[n],e.call(this,t)}};e("add"),e("remove")}if(t.classList.toggle("c3",!1),t.classList.contains("c3")){var n=DOMTokenList.prototype.toggle;DOMTokenList.prototype.toggle=function(t,e){return 1 in arguments&&!this.contains(t)==!e?e:n.call(this,t)}}"replace"in document.createElement("_").classList||(DOMTokenList.prototype.replace=function(t,e){var n=this.toString().split(" "),i=n.indexOf(t+"");~i&&(n=n.slice(i),this.remove.apply(this,n),this.add(e),this.add.apply(this,n.slice(1)))}),t=null}());
 
 
 
