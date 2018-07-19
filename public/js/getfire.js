@@ -24,12 +24,12 @@
     var width;
     var height;
 
-    var uri = "http://localhost:3000/api/v1";
-    var ssl = true;
-    var env = "dev";
-    // var uri = "https://getfire.net/api/v1";
-    // var ssl = document.location.protocol == "https:";
-    // var env = "prod";
+    // var uri = "http://localhost:3000/api/v1";
+    // var ssl = true;
+    // var env = "dev";
+    var uri = "https://getfire.net/api/v1";
+    var ssl = document.location.protocol == "https:";
+    var env = "prod";
 
 
     var ta = timeago();
