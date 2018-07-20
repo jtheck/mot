@@ -24,10 +24,10 @@
     var width;
     var height;
 
-    // var uri = "http://localhost:3000/api/v1";
+    // var uri = "http://localhost:3000/";
     // var ssl = true;
     // var env = "dev";
-    var uri = "https://getfire.net/api/v1";
+    var uri = "https://getfire.net/";
     var ssl = document.location.protocol == "https:";
     var env = "prod";
 
@@ -78,7 +78,8 @@
     var $respondB = newDiv({id:"gf_mRespond", className: "gf_hcmod", content: respondSVG});
     $respondB.onclick = function() {
       $responding.style.display = "block";
-      // alert("merp");
+      $responding.setAttribute("data-id", $respondB.getAttribute("data-id"));
+      $responding.innerHTML = "Responding to " + $respondB.getAttribute("data-name") + "!";
     };
 
     // icon
@@ -122,6 +123,12 @@
     // avatar popup
     var $popup = newDiv({id:"gf_ava"});
     document.body.append($popup);
+    $popup.onclick = function() {
+        var id = $popup.getAttribute("data-id");
+        var name = $popup.getAttribute("data-name");
+        var target = window.location.hostname.includes("getfire.net") ? "_top" : "_blank";
+        window.open(uri+"users/show_by_card/"+id+"?name="+name, target);
+    };
 
 
     // head
@@ -177,16 +184,35 @@
 
       // console.log(e.target.className);
       if ($t.className.includes("gf_msg")) {
+        // clear responding highlight
+        var $og = document.querySelector(".gf_mHovermod");
+        if ($og) $og.classList.remove("gf_mHovermod");
+
         $t.append($mControls);
         $mTime.setAttribute("datetime", $t.getAttribute("data-time"));
         var timeagoNodes = document.querySelectorAll('.timeago');
         ta.render(timeagoNodes);
 
+        $respondB.setAttribute("data-id", $t.getAttribute("data-msg-id"));
+        $respondB.setAttribute("data-name", $t.getAttribute("data-name"));
         $mControls.style.display="block";
+
+        if ($t.getAttribute("data-response-id")) {
+          var $og = document.querySelector("[data-msg-id='"+$t.getAttribute("data-response-id")+"']");
+          if ($og) {
+            $og.classList.add("gf_mHovermod");
+
+          } else {
+            // console.log("older");
+          }
+          // console.log($og);
+        }
       }
       if (!$t.className.includes("gf_hcmod")) $mControls.style.display="none";
     });
+
     $wrapper.addEventListener('mouseleave', function(e){
+      $respondB.setAttribute("data-id",null);
       $mControls.style.display="none";
     });
 
@@ -213,7 +239,7 @@
         color: GETFIRE.uColor,
         user: GETFIRE.user,
         name: GETFIRE.uName,
-        response_to: $input
+        response_to: $responding.getAttribute("data-id")
       });
       return false; // prevent default form submission
     };
@@ -275,7 +301,7 @@
       var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
       var params = JSON.stringify({name: name});
 
-      xhr.open("post", uri+"/index", true);
+      xhr.open("post", uri+"api/v1/index", true);
       xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
       xhr.onload = function(){
         // success
@@ -370,9 +396,9 @@
       if (!GETFIRE.ready) return false;
 
       var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-      var params = JSON.stringify({content: msg.content, topic_id: msg.topic, color: msg.color, user_id: msg.user, name: msg.name, response_to:"null"});
+      var params = JSON.stringify({content: msg.content, topic_id: msg.topic, color: msg.color, user_id: msg.user, name: msg.name, response_to: msg.response_to});
 
-      xhr.open("post", uri+"/message", true);
+      xhr.open("post", uri+"api/v1/message", true);
       xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
       xhr.onload = function(){
         // success
@@ -412,6 +438,7 @@
       $tMsg.setAttribute("data-time", m.created_at);
       $tMsg.setAttribute("data-id", m.user_id);
       $tMsg.setAttribute("data-name", m.name);
+      $tMsg.setAttribute("data-msg-id", m.hashish);
       // name
       var $name =document.createElement("span");
       $name.classList.add("gf_mName");
@@ -441,6 +468,7 @@
           $name.innerHTML = " ‧"+m.name;
           $tMsg.append($name);
           $tMsg.classList.add("gf_mResponse");
+          $tMsg.setAttribute("data-response-id", m.response_to);
           GETFIRE.$messages.append($tMsg);
         }
       }
@@ -495,13 +523,13 @@
       var path = e.path;
 
       // click is inside applet
-      if (path.includes($wrapper)) {
+      if (path.includes($wrapper) || path.includes($popup)) {
         // close settings
         if (!path.includes($settings) && !path.includes($card)) $settings.style.display = "none";
 
         // open or close popup
         var foundPopup = false;
-        for (i=0; i< path.length; path++) if (path[i].classList.value && path[i].classList.value.includes("gf_mName")) foundPopup = path[i];
+        for (var i=0; i< path.length; i++) if (path[i].classList && path[i].classList.value.includes("gf_mName")) foundPopup = path[i];
         if (foundPopup == false) {
           $popup.style.display = "none";
         } else {
@@ -518,10 +546,17 @@
           $popup.style.borderColor = foundPopup.style.color;
           $popup.style.left = px;
           $popup.style.top = py;
-          $popup.setAttribute("data", id);
-          $popup.setAttribute("uName", name);
+          $popup.setAttribute("data-id", id);
+          $popup.setAttribute("data-name", name);
           $popup.style.backgroundImage = "url("+iurl+")";
         }
+
+        // clear responding notifier
+        if (!path.includes($responding) && !path.includes($input) && !path.includes($submit) && !path.includes($respondB)) {
+          $responding.style.display = "none";
+          $responding.setAttribute("data-id", null);
+        }
+
       } else {
         // click is not inside applet
         $popup.style.display = "none";
@@ -603,7 +638,7 @@
 
 
 ////////////////////////////////////////////////////////////////
-// Polyfills (mostly for ie/safari)
+// Polyfills (mostly) for ie/safari
 ////////////////////////////////////////////////////////////////
 
 // click event path (for firefox)

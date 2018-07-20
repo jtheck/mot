@@ -212,6 +212,7 @@ stroke: #ff00d2;
 }
 
 #gf_watching {
+  padding-top: 23px;
   font-size: .8em;
 }
 
@@ -355,6 +356,24 @@ stroke: #ff00d2;
   cursor: pointer;
 }
 
+.gf_mHovermod {
+  background: rgba(255,255,255,.25);
+}
+
+.gf_mDupe {
+  position: absolute;
+  bottom: 100%;
+  width: 80%;
+  left: -15px;
+}
+.gf_mDupe .gf_msg {
+background-color: black;
+  /*
+  border-color: yellow;
+  pointer-events: none;*/
+}
+
+
 #gf_mControls {
   display: none;
   position: absolute;
@@ -402,8 +421,10 @@ stroke: #ff00d2;
   position: absolute;
   display: none;
   bottom: 48px;
-  left: 15px;
+  left: 5px;
   background: black;
+  padding: 2px;
+  border: 1px solid #0de;
 }
 
 #gf_tw {
