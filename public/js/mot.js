@@ -6,8 +6,7 @@
 
 
 
-(function(mot) {
-
+(function(MOT) {
 
 
   // machine states
@@ -15,9 +14,10 @@
   const ON = "Power On";
   const PAUSED = "Waiting";
   const AWAKE = "Running";
-  const ASLEEP = "Sleeping";
-  const IDLE = "Idle";
   const ALERT = "Attentive";
+  const ASLEEP = "Sleeping";
+  const DREAM = "Dreaming";
+  const IDLE = "Idle";
 
   var state = OFF;
   var reportState;
@@ -41,13 +41,23 @@
   var clock = 0;
   var reportClock;
 
-
-  // stores
+  // special stores
   var senses = [];
-  var entities= []; // independent discreet sources
-  var knowledge = []; // all motes
-  // experiences
-  // memories
+  // sensibilities
+
+  // mot stores
+  var motes = [];
+  // utterances
+  // exchanges
+  // concepts
+  // works
+
+  // entity stores
+  var entities= [];
+  // individuals
+  // collectives
+
+
 
   var tQueue = []; //temporal motes
 
@@ -71,7 +81,8 @@
 
 
 
-  mot.mot = function(sense, content) {
+  MOT.mot = function(sense, content) {
+    this.start = performance.now();
 
     this.sense = sense;
 
@@ -82,18 +93,17 @@
     this.lead = []; // preceding motes
     this.trail = []; // following motes
 
-    this.start = performance.now();
+
+    this.source = MOT.entity(); // origin (single entity, potentially a collective or individual
+    this.target = []; // intended audience (zero to many entities)
+
     this.end = performance.now();
-
-    this.source = mot.entity(); // origin (single entity, potentially a composit entity)
-    this.destination = []; // intended audience (one to many entities)
-
-    return true;
+    return this;
   };
 
 
 
-  mot.sense = function(name, hook) {
+  MOT.sense = function(name, hook) {
 
     this.name = name;
     this.hook = hook;
@@ -106,9 +116,9 @@
     return true;
   };
 
-  mot.entity = function() {
+  MOT.entity = function() {
 
-    this.knowledge = []; // motes of source == this
+    this.motes = []; // motes of source == this
 
     this.name = "user";
     this.aliases = [];
@@ -118,7 +128,7 @@
   };
 
   // a special entity
-  mot.self = function() {
+  MOT.self = function() {
 
     this.charge = 0;
 
@@ -142,47 +152,48 @@
 
 // TODO: send to percept() then intuit() then act()
   function procSense(e) {
-    var senseName = e.detail.sense;
-    var content = e.detail.content;
+    var mot = e.detail;
+    var senseName = mot.sense;
+    var content = mot.content;
     var sense = senses.find(function(sense){return sense.name == senseName});
     // var source = entity
-
 
     // add known state to sense
     var kState = sense.kStates.find(function(state){return state == content});
     if (!kState) sense.kStates.push(content);
 
 
-    // build new mote
-    // TODO: incl. source
-    var mote = new mot.mot(senseName, content);
-    var prevMote;
-    if (knowledge.length > 0) {
-      prevMote = knowledge[knowledge.length - 1];
-      mote.lead.push(prevMote);
+    // build new mote (percept)
+    // mot.source =
+    mot = new MOT.mot(mot);
+    console.log(mot);
+    var prevMot;
+    if (motes.length > 0) {
+      prevMot = motes[motes.length - 1];
+      mot.lead.push(prevMot);
 
-      mot.self.lead = mote.start -  prevMote.start;
+      mot.lead = mot.start -  prevMot.start;
     } else {
-      mot.self.lead = mote.start - start;
+      mot.lead = mot.start - start;
     }
 
 
     // find existing mote
-    var exMote = knowledge.find(function(mot){if (mot.sense == mote.sense && mot.content == mote.content) return mot;});
+    var exMot = motes.find(function(mote){if (mote.sense == mot.sense && mote.content == mot.content) return mote;});
 
-    // commit new mote to knowledge
-    if (exMote) {
-      exMote.echo += 1;
-      tQueue.push(exMote);
+    // commit new mote to motes
+    if (exMot) {
+      exMot.echo += 1;
+      tQueue.push(exMot);
     } else {
-      if (prevMote) prevMote.trail.push(mote);
-      knowledge.push(mote);
-      tQueue.push(mote);
+      if (prevMot) prevMot.trail.push(mot);
+      motes.push(mot);
+      tQueue.push(mot);
     }
 
     report(content, false);
     return true;
-    // console.log(knowledge);
+    // console.log(motes);
   }; // end procSense
 
 
@@ -200,17 +211,17 @@
 
       // smarts
 
-      if (mot.self.lead > 0) {
-        mot.self.lead -= dt;
+      if (MOT.self.lead > 0) {
+        MOT.self.lead -= dt;
       }
-      if (mot.self.lead <= 0) {
-        mot.self.lead = 0;
-        mot.self.charge = 1;
+      if (MOT.self.lead <= 0) {
+        MOT.self.lead = 0;
+        MOT.self.charge = 1;
       }
 
-      // console.log(mot.self.lead);
+      console.log(MOT.self.lead);
 
-      if (mot.self.charge == 1 && tQueue.length > 0) {
+      if (MOT.self.charge == 1 && tQueue.length > 0) {
 
         console.log(tQueue);
         while(tQueue.length > 0) {
@@ -220,8 +231,13 @@
         }
 
         var utter = "arf";
-        report(utter, true);
-        mot.self.charge = 0;
+var utterance = function() {
+var utter = "aroo";
+  return utter;
+};
+
+        report(utterance, true);
+        MOT.self.charge = 0;
       }
 
 
@@ -234,7 +250,7 @@
 
 
 
-      if (reportClock) mot.readClock();
+      if (reportClock) MOT.readClock();
 
 			accum -= dt;
 	  }
@@ -248,7 +264,7 @@
   ////////////////////////////////////////////////////////////////////
 
 
-  mot.init = function(){
+  MOT.init = function(){
     // Sense listener
     document.addEventListener('sense', function(e) {
       procSense(e);
@@ -257,12 +273,12 @@
     initialized = true;
 
     return true;
-  }; // end mot.init
+  }; // end MOT.init
 
 
 
-	mot.start = function() {
-    if (!initialized) mot.init();
+	MOT.start = function() {
+    if (!initialized) MOT.init();
 
 		runTick = performance.now();
 		raf = requestAnimationFrame(run);
@@ -274,7 +290,7 @@
 	};
 
 
-  mot.stop = function() {
+  MOT.stop = function() {
     cancelAnimationFrame(raf);
 
     setState(PAUSED);
@@ -284,12 +300,12 @@
 
 
 
-  mot.setSense = function(name, hook) {
+  MOT.setSense = function(name, hook) {
     var found = senses.findIndex(function(key){return key.name == name})
     // senses.filter(function(key) { return key.name === name; });
 
     if (found == -1) {
-      var newSense = new mot.sense(name, hook);
+      var newSense = new MOT.sense(name, hook);
       senses.push(newSense);
     }
 
@@ -298,19 +314,20 @@
 
 
 
-  mot.triggerSense = function(sense, val) {
+  MOT.triggerSense = function(mot) {
     // var start = performance.now();
     if (state == PAUSED || state == OFF) return false;
     // Create the event
-    var event = new CustomEvent('sense', { "detail" : {"sense":sense, "content":val} });
+    var event = new CustomEvent('sense', { "detail" : mot });
     // Fire the event
     document.dispatchEvent(event);
+    // add source
     return true;
   }
 
 
 
-  mot.readState = function(id) {
+  MOT.readState = function(id) {
     if (!id && !reportState) return state;
     if (!reportState) reportState = id;
     // output
@@ -321,7 +338,7 @@
 
 
 
-  mot.readClock = function(id) {
+  MOT.readClock = function(id) {
     if (!id && !reportClock) return clock;
     if (!reportClock) reportClock = id;
     // output
@@ -361,7 +378,7 @@
 
   function setState(p) {
     state = p;
-    if (reportState) mot.readState();
+    if (reportState) MOT.readState();
     return state;
   };
 
@@ -386,4 +403,4 @@
   };
 
 
-}(window.mot = window.mot || {}));
+}(window.MOT = window.MOT || {}));

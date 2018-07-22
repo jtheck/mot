@@ -1,22 +1,22 @@
 
 
-
+var moe = window.MOT;
 var init = function() {
 
 
-  mot.readState("state");
-  mot.readClock("clock");
+  moe.readState("state");
+  moe.readClock("clock");
 
 
-  mot.setSense("Range Slider", "range_ui");
-  mot.setSense("Binary Switch", "binary_ui");
-  mot.setSense("Ternary Switch", "switch_ui");
-  mot.setSense("Directional Pad", "directional_pad");
-  mot.setSense("Text Input", "text_out");
+  moe.setSense("Range Slider", "range_ui");
+  moe.setSense("Binary Switch", "binary_ui");
+  moe.setSense("Ternary Switch", "switch_ui");
+  moe.setSense("Directional Pad", "directional_pad");
+  moe.setSense("Text Input", "text_out");
 
 
 
-  var chat = GETFIRE({topicName: "mot moe", startOpen: true, fullHeight: false});
+  var chat = GETFIRE({topicName: "mot moe", startOpen: true, fullHeight: false, devMode: true});
 
 
   var powerIcon = '<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" x="0" y="0" width="100%" height="100%" viewBox="-0.8 -0.5 177 202" xml:space="preserve">  <path fill="none" stroke-width="30" stroke-linecap="round" d="M33.7 64.3C22.1 77.2 15 94.3 15 113c0 40.1 32.5 72.7 72.7 72.7 40.1 0 72.7-32.5 72.7-72.7 0-18.7-7.1-35.8-18.7-48.7"/>  <line fill="none" stroke-width="30" stroke-linecap="round" x1="87.8" y1="15" x2="87.8" y2="113"/></svg>';
@@ -28,7 +28,8 @@ var init = function() {
   var textIn = document.querySelector("#text_in");
   textIn.addEventListener("submit", function(e) {
     var val = textIn.elements.notion.value.replace(/\r?\n|\r/g,'');
-    mot.triggerSense("Text Input", val);
+    var mot={sense: "Text Input", source: "bobby", content: val};
+    moe.triggerSense(mot);
 
     textIn.elements.notion.value = "";
 
@@ -37,7 +38,8 @@ var init = function() {
   textIn.addEventListener("keyup", function(e) {
     if (e.key === "Enter") {
       var val = textIn.elements.notion.value.replace(/\r?\n|\r/g,'');
-      mot.triggerSense("Text Input", val);
+      var mot={sense: "Text Inpugt", source: "bobby", content: val};
+      moe.triggerSense(mot);
 
       textIn.elements.notion.value = "";
     }
@@ -48,7 +50,8 @@ var init = function() {
   // range slider
   var sliderIn = document.querySelector("#slider_in");
   sliderIn.onchange  = function(){
-    mot.triggerSense("Range Slider", this.value);
+    var mot={sense: "Range Slider", source: "bobby", content: this.value};
+    moe.triggerSense(mot);
   };
 
 
@@ -57,7 +60,8 @@ var init = function() {
     binaryIn.onclick  = function(e){
       var val = e.path[0].getAttribute("data-val");
       if (!val) return;
-      mot.triggerSense("Binary Switch", val);
+      var mot={sense: "Binary Switch", source: "bobby", content: val};
+      moe.triggerSense(mot);
     };
 
 
@@ -66,7 +70,8 @@ var init = function() {
   ternaryIn.onclick  = function(e){
     var val = e.path[0].getAttribute("data-val");
     if (!val) return;
-    mot.triggerSense("Ternary Switch", val);
+    var mot={sense: "Ternary Switch", source: "bobby", content: val};
+    moe.triggerSense(mot);
   };
 
 
@@ -75,7 +80,8 @@ var init = function() {
   dPad.onclick  = function(e){
     var val = e.path[0].getAttribute("data-val");
     if (!val) return;
-    mot.triggerSense("Directional Pad", val);
+    var mot={sense: "Directional Pad", source: "bobby", content: val};
+    moe.triggerSense(mot);
   };
 
 
@@ -87,7 +93,7 @@ var init = function() {
 
 
 
-  mot.init();
+  moe.init();
 
 
 } // end init
@@ -100,11 +106,11 @@ var ignite = function(){
     butt.setAttribute("data-state", "ON");
     butt.style.stroke = "#0f0";
 
-    mot.start();
+    moe.start();
   } else {
     butt.setAttribute("data-state", "OFF");
     butt.style.stroke = "#f00";
 
-    mot.stop();
+    moe.stop();
   }
 }
