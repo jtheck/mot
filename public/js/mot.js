@@ -13,11 +13,11 @@
   const OFF = "Power Off";
   const ON = "Power On";
   const PAUSED = "Waiting";
-  const AWAKE = "Running";
-  const ALERT = "Attentive";
+  const ALERT = "Alert";
+  const AWAKE = "Attentive";
+  const IDLE = "Idle";
   const ASLEEP = "Sleeping";
   const DREAM = "Dreaming";
-  const IDLE = "Idle";
 
   var state = OFF;
   var reportState;
@@ -63,7 +63,7 @@
 
 
 
-
+var lapse = 0;
 
 
 
@@ -123,25 +123,43 @@
     this.name = "user";
     this.aliases = [];
 
+this.lead = 0;
+this.charge = 0;
 
     return true;
   };
 
-  // a special entity
-  MOT.self = function() {
 
-    this.charge = 0;
+  MOT.self = new MOT.entity();
+
+//   // a special entity
+//   MOT.self = function() {
+//
+//     this.charge = 0;
+//
+//
+//     this.lead = 0;
+//
+// // cadence (pace)
+//
+//     this.content = 0;
+//     this.contentingFactors = [];
+//
+//     return true;
+//   };
 
 
-    this.lead = 0;
 
-// cadence (pace)
+  MOT.utterance = function() {
 
-    this.content = 0;
-    this.contentingFactors = [];
+
+
+    this.content = '';
 
     return true;
   };
+
+
 
 
 ////////////////////////////////////////////////////////////////////
@@ -166,7 +184,7 @@
     // build new mote (percept)
     // mot.source =
     mot = new MOT.mot(mot);
-    console.log(mot);
+    // console.log(mot);
     var prevMot;
     if (motes.length > 0) {
       prevMot = motes[motes.length - 1];
@@ -177,11 +195,14 @@
       mot.lead = mot.start - start;
     }
 
+lapse = 0;
 
     // find existing mote
     var exMot = motes.find(function(mote){if (mote.sense == mot.sense && mote.content == mot.content) return mote;});
 
+
     // commit new mote to motes
+    // reinforce existing mote
     if (exMot) {
       exMot.echo += 1;
       tQueue.push(exMot);
@@ -208,9 +229,9 @@
 	 	while(accum > ts) {
       clock += dt;
 
-
+      lapse += dt;
       // smarts
-
+      // MOT.self.lead += dt;
       if (MOT.self.lead > 0) {
         MOT.self.lead -= dt;
       }
@@ -219,35 +240,46 @@
         MOT.self.charge = 1;
       }
 
-      console.log(MOT.self.lead);
+// lead -> charge
+// lag -> get
 
-      if (MOT.self.charge == 1 && tQueue.length > 0) {
+      // console.log(MOT.self.lead);
 
-        console.log(tQueue);
+      // if (MOT.self.charge == 1 && tQueue.length > 0) {
+      if (tQueue.length > 0) {
+        setState(AWAKE);
+if (lapse < 1000) setState(ALERT);
+        if (lapse > 1500) {
+        console.log(lapse);
+        var utter = utter || new MOT.utterance();
         while(tQueue.length > 0) {
+
+
+
+
+
+
+          utter.content += "arf";
+          if (utter.content.length > 3*3) utter.content = "arooo";
+
 
           tQueue.shift();
 
+
         }
+        report(utter.content, true);
+        lapse = 0;
 
-        var utter = "arf";
-var utterance = function() {
-var utter = "aroo";
-  return utter;
-};
-
-        report(utterance, true);
         MOT.self.charge = 0;
       }
+      }
 
-
-
+if (lapse > 9000) setState(IDLE);
+if (lapse > 18000) setState(ASLEEP);
 
       // check percept queue
       // intuit
       // act (from queue)
-
-
 
 
       if (reportClock) MOT.readClock();

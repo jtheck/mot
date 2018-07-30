@@ -1,6 +1,9 @@
 
 
 var moe = window.MOT;
+var joe = window.MOT;
+
+
 var init = function() {
 
 
@@ -15,8 +18,11 @@ var init = function() {
   moe.setSense("Text Input", "text_out");
 
 
+  // joe.setSense("Text Input", "text_out");
 
-  var chat = GETFIRE({topicName: "mot moe", startOpen: true, fullHeight: false, devMode: false});
+
+
+  var chat = GETFIRE({topicName: "mot moe", startOpen: false, fullHeight: false, devMode: false});
 
 
   var powerIcon = '<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" x="0" y="0" width="100%" height="100%" viewBox="-0.8 -0.5 177 202" xml:space="preserve">  <path fill="none" stroke-width="30" stroke-linecap="round" d="M33.7 64.3C22.1 77.2 15 94.3 15 113c0 40.1 32.5 72.7 72.7 72.7 40.1 0 72.7-32.5 72.7-72.7 0-18.7-7.1-35.8-18.7-48.7"/>  <line fill="none" stroke-width="30" stroke-linecap="round" x1="87.8" y1="15" x2="87.8" y2="113"/></svg>';
@@ -28,8 +34,9 @@ var init = function() {
   var textIn = document.querySelector("#text_in");
   textIn.addEventListener("submit", function(e) {
     var val = textIn.elements.notion.value.replace(/\r?\n|\r/g,'');
-    var mot={sense: "Text Input", source: "bobby", content: val};
-    moe.triggerSense(mot);
+    var percept = {sense: "Text Input", source: "bobby", content: val};
+    moe.triggerSense(percept);
+    // joe.triggerSense(percept);
 
     textIn.elements.notion.value = "";
 
@@ -37,11 +44,17 @@ var init = function() {
   });
   textIn.addEventListener("keyup", function(e) {
     if (e.key === "Enter") {
-      var val = textIn.elements.notion.value.replace(/\r?\n|\r/g,'');
-      var mot={sense: "Text Inpugt", source: "bobby", content: val};
-      moe.triggerSense(mot);
+      var submit = document.querySelector("#text_submit");
+      submit.click();
 
-      textIn.elements.notion.value = "";
+    // textIn.submit();
+    // e.preventDefault();
+    // alert("barf");
+    //   var val = textIn.elements.notion.value.replace(/\r?\n|\r/g,'');
+    //   var percept = {sense: "Text Inpugt", source: "bobby", content: val};
+    //   moe.triggerSense(percept);
+    //
+    //   textIn.elements.notion.value = "";
     }
   });
 
@@ -50,8 +63,8 @@ var init = function() {
   // range slider
   var sliderIn = document.querySelector("#slider_in");
   sliderIn.onchange  = function(){
-    var mot={sense: "Range Slider", source: "bobby", content: this.value};
-    moe.triggerSense(mot);
+    var percept = {sense: "Range Slider", source: "bobby", content: this.value};
+    moe.triggerSense(percept);
   };
 
 
@@ -60,8 +73,8 @@ var init = function() {
     binaryIn.onclick  = function(e){
       var val = e.path[0].getAttribute("data-val");
       if (!val) return;
-      var mot={sense: "Binary Switch", source: "bobby", content: val};
-      moe.triggerSense(mot);
+      var percept = {sense: "Binary Switch", source: "bobby", content: val};
+      moe.triggerSense(percept);
     };
 
 
@@ -70,8 +83,8 @@ var init = function() {
   ternaryIn.onclick  = function(e){
     var val = e.path[0].getAttribute("data-val");
     if (!val) return;
-    var mot={sense: "Ternary Switch", source: "bobby", content: val};
-    moe.triggerSense(mot);
+    var percept = {sense: "Ternary Switch", source: "bobby", content: val};
+    moe.triggerSense(percept);
   };
 
 
@@ -80,8 +93,8 @@ var init = function() {
   dPad.onclick  = function(e){
     var val = e.path[0].getAttribute("data-val");
     if (!val) return;
-    var mot={sense: "Directional Pad", source: "bobby", content: val};
-    moe.triggerSense(mot);
+    var percept = {sense: "Directional Pad", source: "bobby", content: val};
+    moe.triggerSense(percept);
   };
 
 
