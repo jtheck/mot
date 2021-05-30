@@ -103,17 +103,25 @@ textarea:focus {
 
 #vitals_title {
   position: fixed;
-  top: 10px;
-  width: 100%;
+  top: 14px;
+  left: 10px;
+  right: 10px;
   text-align: center;
   pointer-events: none;
+}
+#vital_1 {
+  position: absolute;
+  left: 0px;
+  width: 100%;
+  height: 9px;
+  background-color: green;
 }
 
 #mot_out {
   background-color: rgba(0,0,0,.5);
   position: absolute;
   top: 52%;
-  left: 44%;
+  left: 35%;
   transform: translate(-50%, -50%);
 padding-top: 22px;
 
@@ -123,7 +131,8 @@ padding-top: 22px;
   height: 69%;
   text-align: center;
   overflow-x: hidden;
-  overflow-y: auto;z
+  overflow-y: auto;
+  border-bottom-right-radius: 56px;
   white-space: nowrap;
 }
 
@@ -144,12 +153,22 @@ padding-top: 22px;
   stroke: #ff0;
 }
 
-.hud {
+.hud_l {
   display: inline;
-  float: right;
-  padding-right: 52px;
+  float: left;
+  padding-left: 12px;
   font-family: monospace;
   font-size: 1.2em;
+  cursor: default;
+}
+
+.hud_r {
+  display: inline;
+  float: right;
+  padding-right: 48px;
+  font-family: monospace;
+  font-size: 1.3em;
+  font-weight: 900;
   cursor: default;
 }
 
@@ -163,13 +182,32 @@ padding-top: 22px;
   padding: 4px;
 }
 
+#symbol_set {
+  padding: 9px;
+  width: 138px;
+  max-height: 240px;
+  overflow-x: auto;
+  border: 2px solid green;
+  display: inline-block;
+  background: rgba(255,255,255,.5);
+}
+.sym {
+  display: inline-block;
+  padding: 9px;
+  border: 2px solid green;
+  cursor: pointer;
+}
+.sym:hover {
+  border-color: red;
+}
+
 .mm_in {
   display: inline-block;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   padding: 5px;
   border: 2px solid green;
-background: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.5);
   cursor: pointer;
 }
 .mm_in:hover {
@@ -180,23 +218,23 @@ background: rgba(255,255,255,.5);
 }
 .mm_ph {
   display: inline-block;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   padding: 5px;
   border: 2px solid rgba(0,0,0,0);
 }
 
 #slider_w {
-  padding: 5px;
+  padding: 9px;
   border: 2px solid green;
   display: inline-block;
-background: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.5);
 }
 #slider_w:hover {
-border: 2px solid red;
+  border: 2px solid red;
 }
 #slider_w:active {
-background: rgba(255,255,255,.3);
+  background: rgba(255,255,255,.3);
 }
 
 #ternary_in {
@@ -206,11 +244,10 @@ background: rgba(255,255,255,.3);
 }
 
 #ternary_in span {
-  padding-left: 3px;
-  padding-right: 3px;
+  padding: 3px;
   cursor: pointer;
   border: 2px solid green;
-background: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.5);
 }
 #ternary_in span:hover {
   border: 2px solid red;
@@ -226,11 +263,10 @@ background: rgba(255,255,255,.5);
 }
 
 #binary_in span {
-  padding-left: 3px;
-  padding-right: 3px;
+  padding: 3px;
   cursor: pointer;
   border: 2px solid green;
-background: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.5);
 }
 #binary_in span:hover {
   border: 2px solid red;

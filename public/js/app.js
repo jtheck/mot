@@ -15,10 +15,27 @@ var init = function() {
   moe.setSense("Binary Switch", "binary_ui");
   moe.setSense("Ternary Switch", "switch_ui");
   moe.setSense("Directional Pad", "directional_pad");
+  moe.setSense("Symbol Set", "symbol_set");
   moe.setSense("Text Input", "text_out");
 
 
   // joe.setSense("Text Input", "text_out");
+
+
+  // onKeydown(e) {
+  //   const { toggleSidebar, next, previous } = this.props;
+  
+  //   const keyMapping = new Map([
+  //     [ 83, toggleSidebar ],  // user presses the s button
+  //     [ 37, next          ],  // user presses the right arrow
+  //     [ 39, previous      ]   // user presses the left arrow
+  //   ]);
+  
+  //   if (keyMapping.has(e.which)) {
+  //     e.preventDefault();
+  //     keyMapping.get(e.which)();
+  //   }
+  // }
 
   
 // Check compatibility for the browser we're running this in
@@ -54,6 +71,13 @@ if ("serviceWorker" in navigator) {
     moe.triggerSense(percept);
     // joe.triggerSense(percept);
 
+
+
+
+
+
+
+
     textIn.elements.notion.value = "";
 
     e.preventDefault();
@@ -76,6 +100,9 @@ if ("serviceWorker" in navigator) {
 
 
 
+
+  // SENSES
+
   // range slider
   var sliderIn = document.querySelector("#slider_in");
   sliderIn.onchange  = function(){
@@ -84,14 +111,14 @@ if ("serviceWorker" in navigator) {
   };
 
 
-    // binary switch
-    var binaryIn = document.querySelector("#binary_in");
-    binaryIn.onclick  = function(e){
-      var val = e.path[0].getAttribute("data-val");
-      if (!val) return;
-      var percept = {sense: "Binary Switch", source: "bobby", content: val};
-      moe.triggerSense(percept);
-    };
+  // binary switch
+  var binaryIn = document.querySelector("#binary_in");
+  binaryIn.onclick  = function(e){
+    var val = e.path[0].getAttribute("data-val");
+    if (!val) return;
+    var percept = {sense: "Binary Switch", source: "bobby", content: val};
+    moe.triggerSense(percept);
+  };
 
 
   // ternary switch
@@ -110,6 +137,18 @@ if ("serviceWorker" in navigator) {
     var val = e.path[0].getAttribute("data-val");
     if (!val) return;
     var percept = {sense: "Directional Pad", source: "bobby", content: val};
+    moe.triggerSense(percept);
+  };
+
+
+  // symbol set
+  var symSet = document.querySelector("#symbol_set");
+  symSet.onclick  = function(e)
+  {
+    // console.log(e)
+    var val = e.path[0].getAttribute("data-val");
+    if (!val) return;
+    var percept = {sense: "Symbol Set", source: "bobby", content: val};
     moe.triggerSense(percept);
   };
 

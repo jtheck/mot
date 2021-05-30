@@ -51,8 +51,8 @@
     <div id="bg"></div>
 
     <div id="ignition" data-state="OFF" onclick="ignite();" title="power"></div>
-    <div id="state" class="hud" title="machine state"></div>
-    <div id="clock" class="hud" title="run time"></div>
+    <div id="state" class="hud_r" title="machine state"></div>
+    <div id="clock" class="hud_l" title="run time"></div>
     <br>
     <br>
     <div id="controls">
@@ -66,23 +66,29 @@
         <span id="ti_neutral" data-val="NIL">nil</span>
         <span id="ti_on" data-val="ON">on</span>
       </div>
-    <br><br>
+      <br><br>
       <div id="slider_w" title="range slider">
         <input id="slider_in" type="range" min="0" max="100" step="10">
       </div>
-    <br><br>
+      <br><br>
       <div id="directional_pad" title="directional pad">
         <div class="mm_ph"></div>
-        <div class="mm_in" data-val="UP"></div>
-        <div class="mm_ph"></div>
+        <div class="mm_in" data-val="FORWARD"></div>
+        <div class="mm_in" data-val='UP' style='margin-bottom: 16px; margin-left: 4px;'></div>
         <br>
         <div class="mm_in" data-val="LEFT"></div>
         <div class="mm_in" data-val="CENTER"></div>
         <div class="mm_in" data-val="RIGHT"></div>
         <br>
+        <div class="mm_in" data-val='DOWN' style='vertical-align: middle;'></div>
+        <div class="mm_in" data-val="BACK"></div>
         <div class="mm_ph"></div>
-        <div class="mm_in" data-val="DOWN"></div>
-        <div class="mm_ph"></div>
+      </div>
+      <br><br>
+      <div id='symbol_set' title='symbol set'>
+        <div class='sym' data-val='+'>+</div>
+        <div class='sym' data-val='-'>-</div>
+        <div class='sym' data-val='='>=</div>
       </div>
     </div>
     <br>
@@ -91,7 +97,10 @@
     <div id="space_b">æ</div>
 
     <div id="vitals" class="vitals">
-      <div id="vitals_title" title="Mot.Moe ai"><br>Mot.Moe ai</div>
+      <div id="vitals_title" title="Mot.Moe ai">
+        <br>Mot.Moe ai<br>
+        <div id='vital_1'></div>
+      </div>
       <div id="vitals_log"></div>
       <div id="mot_out"></div>
     </div>

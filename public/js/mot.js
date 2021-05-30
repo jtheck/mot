@@ -169,6 +169,7 @@ this.charge = 0;
 
 
 // TODO: send to percept() then intuit() then act()
+
   function procSense(e) {
     var mot = e.detail;
     var senseName = mot.sense;
