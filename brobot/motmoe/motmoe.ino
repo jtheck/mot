@@ -14,29 +14,70 @@
 
 
 
+
+
 // LCD
 // 5v
 // Pin 3 - SCK
 // Pin 5 - Clock/SCL
 // Pin 6 - Data Enable/ SER
 LiquidCrystal_SR lcd(6, 5, 3);
+String page = "HELLO";
+
 
 // Gyro
 // 3v/5v
 // SCL/SDA
 MPU6050 mpu(Wire);
+struct Vec{
+    float x, y, z;
+  };
+struct Vec torsoPlane{0,0,0};
+struct Vec hipPlane{0,0,0};
+
 
 // Servos
 // 3v/5v + 5-12v
 // SCL/SDA
 #define PWM_FREQ 50 // PWM Frequency (hz)
-#define PWM_MIN 650 // minimum pulse width (1ms?)
-#define PWM_MAX 2350 // maximum pulse width (2ms?)
+#define PWM_MIN 750 // minimum pulse width (1ms?)
+#define PWM_MAX 2250 // maximum pulse width (2ms?)
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
-int controlA = A0; // manual servo knob
-int motorA = 15;
-int controlB = 300;
-int motorB = 7;
+int controlA = 300; // manual servo knob
+int controlB = 90;
+int controlC, controlD;
+
+const int MOTOR_COUNT = 9;
+int motoActive = 0; // ux active motor
+
+struct Moto {
+    char name[16];
+    int pin;
+    int min;
+    int zero;
+    int max;
+    int pos;
+    short vel;
+    short acc;
+    bool ccw;
+    bool live;
+  };  
+
+
+struct Moto motoArr[MOTOR_COUNT] = 
+  {{"Lateral",6,15,90,165,90,0,0,true,false},
+   {"Forward",5,15,90,165,90,0,0,true},
+   {"Rotation",4,15,90,165,90,0,0,true},
+   
+   {"LFoot",15,15,90,165,90,0,0,true},
+   {"LKnee",14,15,90,165,90,0,0,true},
+   {"LHip",13,15,90,165,90,0,0,true},
+
+   {"RFoot",0,15,90,165,90,0,0,true},
+   {"RKnee",1,15,90,165,90,0,0,true},
+   {"RHip",2,15,90,165,90,0,0,true}};
+
+
 
 // Remote
 // 3.3v
@@ -44,17 +85,24 @@ int motorB = 7;
 IRrecv receiver(4);
 String button, buttonPrev;
 
+
 // Timing
 unsigned long timer = 0;
+
 
 // Memory
 int agePt = 0;
 int age;
 
-// Misc
+
+
+// Reset Arduino
 void(* resetFunc) (void) = 0; // reset function
 
 
+
+
+// Initialize
 void setup() {
 
   // Memory
@@ -73,199 +121,175 @@ void setup() {
   
   // LCD
   lcd.begin(16,2);
-  lcd.setCursor(13,0);
-  lcd.print(age);
-  lcd.setCursor(1,2);
-  lcd.print("hello mot.moe");
-
+  renderPage();
+  page = "DEFAULT";
+  
   // Gyro
+  lcd.setCursor(0,0);
+  lcd.print("Orienting");
   byte gyro = mpu.begin();
   while(gyro!=0){ } // Wait for successful connection (0)
   mpu.calcOffsets();
 
   // Servo
+  lcd.setCursor(0,0);
+  lcd.print("Oscillating");
+//  Serial.print(MOTO);
   pwm.begin();
-  pwm.setOscillatorFrequency(27000000); // 27MHz
+//  pwm.setOscillatorFrequency(14000000); // 27MHz
   pwm.setPWMFreq(PWM_FREQ); // 
+  
+  for (int i=0; i<MOTOR_COUNT; i++){
+    struct Moto &tMoto = motoArr[i];
+    tMoto.pos = tMoto.zero;
+//
+Serial.println(tMoto.name);
+      
+    int degWidth = map(tMoto.pos, 0, 180, PWM_MIN, PWM_MAX); // degrees to pulse width
+    int tick = int(float(degWidth) / 1000000 * PWM_FREQ * 4096); // tick to end pulse
+
+    pwm.setPWM(tMoto.pin, 0, tick);
+    delay(50);
+  }
+
+  
 
   // Remote
+  lcd.setCursor(0,0);
+  lcd.print("Receiving");
   receiver.enableIRIn();
 
   // Ready
   delay(333);
   lcd.clear();
   
-}
+}; // end setup()
 
 
 
+
+// Main Loop
 void loop() {
 
-  // Remote
+
+  // IR Remote
   if (receiver.decode()){
     mapButton();
-    if (button == "FUNC/STOP") resetFunc(); // reset arduino
-    if (button == "POWER") EEPROM.write(agePt, 0); // clear EEPROM (age)
-    if (button != "repeat") {
+
+    int imp = 9; // impulse (td:global)
+
+    if (button != "REPEAT") {
       buttonPrev = button;
-//      lcd.setCursor(0,1);
-//      lcd.print("                ");
-//      lcd.setCursor(1,1);
-//      lcd.print(button);
       Serial.println(button);
     } else {
       button = buttonPrev;
     }
 
-    if (button == "UP") controlB += 25;
-    if (button == "DOWN") controlB -= 25;
-    if (button == "EQ") controlB = 300;
-    
+
+
+    // buttons by row
+    // Clear EEPROM (age)
+    if (button == "POWER") EEPROM.write(agePt, 0);
+    // Move Forward
+    if (button == "VOL+"){
+      motoArr[6].vel +=imp;
+      motoArr[7].vel +=imp;
+      motoArr[8].vel +=imp;
+    }
+    // Reset arduino
+    if (button == "FUNC/STOP") resetFunc();
+
+
+    // Turn left
+    if (button == "|<<"){
+      motoArr[0].vel +=imp;
+      motoArr[1].vel +=imp;
+      
+    }
+    // Stop
+    if (button == ">||"){}
+    // Turn right
+    if (button == ">>|"){
+      motoArr[0].vel -=imp;
+      motoArr[1].vel -=imp;
+    }
+
+
+    // Crouch
+    if (button == "DOWN") motoArr[motoActive].vel -= 10;
+    // Move Backward    
+    if (button == "VOL-"){
+
+      motoArr[6].vel -=imp;
+      motoArr[7].vel -=imp;
+      motoArr[8].vel -=imp;
+    }
+    // Stand
+    if (button == "UP") motoArr[motoActive].vel += 10;
+
+
+    // Reset display
+    if (button == "0") lcd.begin(16,2);
+    // Sit
+    if (button == "EQ"){
+      for (int i=0; i<MOTOR_COUNT; i++){
+        motoArr[i].pos = motoArr[i].zero;
+      }
+    }
+    // Reward
+    if (button == "ST/REPT"){}
+
+
+    // Select page
+    if (button == "1") page = "HELLO";
+    if (button == "2") page = "DEFAULT";
+    if (button == "3") page = "CONTROL";
+
+
+    // Move select motor CCW
+    if (button == "4") motoArr[motoActive].vel -= 10;
+    // Select next motor
+    if (button == "5"){
+      motoActive += 1;
+      if (motoActive >= MOTOR_COUNT) motoActive = 0;
+      delay(30);
+    }
+    // Move select motor CW
+    if (button == "6") motoArr[motoActive].vel += 10;
+
+
+    // Save select motor current position as min
+    if (button == "7") motoArr[motoActive].min = motoArr[motoActive].pos;
+    // Select previous motor
+    if (button == "8"){
+      motoActive -= 1;
+      if (motoActive < 0) motoActive = MOTOR_COUNT-1;
+      delay(30);
+    }
+    // Save select motor current position as max
+    if (button == "9")  motoArr[motoActive].max = motoArr[motoActive].pos;
+
+
     receiver.resume();
   }
   
 
-  // Gyro
-  mpu.update();
 
-  if((millis()-timer)>100){ // print data every Nms
-  
+
+  if((millis()-timer)>10){
+    // Gyro
+    mpu.update();
+    // Servos
+    motorsCycle();
+  }
+
+
+  if((millis()-timer)>305){ // print data every Nms
     // LCD
-    lcd.clear();
-    //lcd.setCursor(0,0);
-    //lcd.print("                ");
-    lcd.setCursor(0,0);
-    lcd.print(int(mpu.getAngleX()));
-    lcd.print("x");
-    lcd.setCursor(5,0);
-    lcd.print(int(mpu.getAngleY()));
-    lcd.print("y");
-    lcd.setCursor(10,0);
-    lcd.print(int(mpu.getAngleZ()));
-    lcd.print("z");
-
-
-    
-    
-  // Servo
-//  pwm.setPWM(motorA, 0, 1000);
-  int potVal, pwid, wid;
-  // Read values from potentiometer
-  potVal = analogRead(controlA);
-  pwid = map(potVal, 0, 1023, PWM_MIN, PWM_MAX);
-  wid = int(float(pwid) / 1000000 * PWM_FREQ * 4096);
-  pwm.setPWM(motorA, 0, wid);
-  lcd.setCursor(10,1);
-  lcd.print(wid);
-
-  lcd.setCursor(1,1);
-  lcd.print(controlB);
-  
-    
-    timer = millis();  
+    renderPage();
+  timer = millis();  
   }
 
-  pwm.setPWM(motorB, 0, controlB);
   
   
-  
-//  delay(100);
-
-}
-
-
-
-
-void moveMotor(int controlIn, int motorOut)
-{
-  int pulse_wide, pulse_width, potVal;
-  
-  // Read values from potentiometer
-  potVal = analogRead(controlIn);
-
-  lcd.setCursor(10,1);
-  lcd.print(potVal);
-  
-  // Convert to pulse width
-  pulse_wide = map(potVal, 0, 1023, PWM_MIN, PWM_MAX);
-  pulse_width = int(float(pulse_wide) / 1000000 * PWM_FREQ * 4096);
-  
-  //Control Motor
-  pwm.setPWM(motorOut, 0, pulse_width);
-
-}
-
-
-
-String mapButton(){
-  switch (receiver.decodedIRData.decodedRawData) {
-    case 0xBA45FF00:
-      button = "POWER";
-      break;
-    case 0xB946FF00:
-      button = "VOL+";
-      break;
-    case 0xB847FF00:
-      button = "FUNC/STOP";
-      break;
-    case 0xBB44FF00:
-      button = "|<<";
-      break;
-    case 0xBF40FF00:
-      button = ">||";
-      break ;
-    case 0xBC43FF00:
-      button = ">>|";
-      break ;
-    case 0xF807FF00:
-      button = "DOWN";
-      break ;
-    case 0xEA15FF00:
-      button = "VOL-";
-      break ;
-    case 0xF609FF00:
-      button = "UP";
-      break ;
-    case 0xE916FF00:
-      button = "0";
-      break ;
-    case 0xE619FF00:
-      button = "EQ";
-      break ;
-    case 0xF20DFF00:
-      button = "ST/REPT";
-      break ;
-    case 0xF30CFF00:
-      button = "1";
-      break ;
-    case 0xE718FF00:
-      button = "2";
-      break ;
-    case 0xA15EFF00:
-      button = "3";
-      break ;
-    case 0xF708FF00:
-      button = "4";
-      break ;
-    case 0xE31CFF00:
-      button = "5";
-      break ;
-    case 0xA55AFF00:
-      button = "6";
-      break ;
-    case 0xBD42FF00:
-      button = "7";
-      break ;
-    case 0xAD52FF00:
-      button = "8";
-      break ;
-    case 0xB54AFF00:
-      button = "9";
-      break ;
-    default:
-      button = "repeat";
-      break;
-  }
-  
-  return button;
-}
+} // end loop()
