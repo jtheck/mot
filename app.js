@@ -16,7 +16,7 @@ app.get('/', function(req, res){
 
 
 
-app.listen(port, () => {console.log('Mot.Moe listening on port '+ port +'!')});
+app.listen(port, () => {console.log('mot.moe listening on port '+ port +'!')});
 
 
 app.use(function (req, res, next) {

@@ -12,4 +12,4 @@ Mot Moe
 
 
 
-©2018 Mot.Moe
+©2018 mot.moe
