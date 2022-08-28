@@ -166,7 +166,22 @@ if ("serviceWorker" in navigator) {
 
 } // end init
 
-
+var pokeMot = function(){
+  var xhr = new XMLHttpRequest();
+  // xhr.open("GET", "http://192.168.2.3/boop");
+  xhr.open("POST", "http://192.168.2.3/boop");
+  let data = '{x:"yz", 1:23}';
+  xhr.send(data);
+  xhr.onload = function(e){
+    const data = JSON.parse(xhr.responseText);
+    // alert(xhr.status)
+    console.log(data);
+  }
+  xhr.onerror = function(e){
+    alert('its bad');
+    console.log(e);
+  }
+}
 
 var ignite = function(){
   var butt = document.getElementById("ignition");
