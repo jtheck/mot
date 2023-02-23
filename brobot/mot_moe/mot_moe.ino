@@ -3,15 +3,18 @@
  Mot.Moe command center
 *********/
 
-#define HAS_DISPLAY true
+#define HAS_DISPLAY false
 #define HAS_SERVOS false
 #define HAS_IMU false
 #define HAS_RADIO false
 #define HAS_IR false
-#define HAS_CONTROLS true
+#define HAS_WIFI false
+#define HAS_BLUETOOTH false
+#define HAS_CONTROLS false
 
-// Available Boards: ARDUINO_MICRO
-#define ARDUINO_MICRO
+// Available Boards:
+//#define ARDUINO_MICRO
+#define ARDUINO_NANO_33_BLE
 
 
 /*********
@@ -174,7 +177,7 @@ void setup()
 //sendData("AT+CIOBAUD=9600\r\n", 2000, TRUE);
 //  Serial.begin(9600);
 //  if (!driver.init())
-//    Serial.println("init !");
+    Serial.println("init !");
 
   
   // DISPLAY
@@ -193,7 +196,7 @@ void setup()
     servos.setPWMFreq(60); // ~60hz update
   #endif
 
-  #ifdef HAS_CONTROLS
+  #if HAS_CONTROLS
     pinMode(B_0, INPUT_PULLUP);
     pinMode(B_1, INPUT_PULLUP);
     pinMode(B_2, INPUT_PULLUP);
@@ -255,7 +258,7 @@ void loop()
 //  driver.send((uint8_t *)&dat, sizeof(dat));
 //  driver.waitPacketSent();
 
-  #ifdef HAS_CONTROLS
+  #if HAS_CONTROLS
     ctrl.p0 = analogRead(POT_0);
     ctrl.p1 = analogRead(POT_1);
     ctrl.p2 = analogRead(POT_2);
