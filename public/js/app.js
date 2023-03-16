@@ -55,8 +55,13 @@ if ("serviceWorker" in navigator) {
 }
 
   // Init chat
-  var chat = GETFIRE({topicName: "mot moe", defaultName: "beepboop", startOpen: false, fullHeight: false, devMode: true});
-
+  var chat = GETFIRE({topicNames: ["mot moe", "Test"],
+      defaultName: "beepboop",
+      startOpen: false,
+      startPreview: false,
+      clickAwayHide: true,
+      mouseOutFade: true,
+      devMode: (window.location.protocol != 'https:')});
 
   var powerIcon = '<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" x="0" y="0" width="100%" height="100%" viewBox="-0.8 -0.5 177 202" xml:space="preserve">  <path fill="none" stroke-width="30" stroke-linecap="round" d="M33.7 64.3C22.1 77.2 15 94.3 15 113c0 40.1 32.5 72.7 72.7 72.7 40.1 0 72.7-32.5 72.7-72.7 0-18.7-7.1-35.8-18.7-48.7"/>  <line fill="none" stroke-width="30" stroke-linecap="round" x1="87.8" y1="15" x2="87.8" y2="113"/></svg>';
   var $ignition_switch = document.querySelector("#ignition");
