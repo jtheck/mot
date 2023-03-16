@@ -3,18 +3,19 @@
  Mot.Moe command center
 *********/
 
-#define HAS_DISPLAY false
+#define HAS_DISPLAY true
 #define HAS_SERVOS false
 #define HAS_IMU false
 #define HAS_RADIO false
 #define HAS_IR false
-#define HAS_WIFI false
+#define HAS_WIFI true
 #define HAS_BLUETOOTH false
-#define HAS_CONTROLS false
+#define HAS_CONTROLS true
 
 // Available Boards:
 //#define ARDUINO_MICRO
-#define ARDUINO_NANO_33_BLE
+//#define ARDUINO_NANO_33_BLE
+#define ESP_8266
 
 
 /*********
@@ -36,6 +37,14 @@
   #endif
 #endif
 
+#ifdef ESP_8266
+  #if HAS_CONTROLS
+    const uint8_t POT_0 = A0;
+  
+    const uint8_t B_0 = 10;
+    const uint8_t B_1 = 9;
+  #endif
+#endif
 
 /*********
  Include library files
@@ -89,6 +98,11 @@ uint8_t cursorPos = 0;
 #endif
 
 
+#if HAS_WIFI
+  #include <ESP8266WiFi.h>
+  #include <ESP8266WebServer.h> // WiFi web server
+//  #include <ArduinoJson.h> // JSON Parsing
+#endif
 
 
 
@@ -123,9 +137,22 @@ uint8_t cursorPos = 0;
   int button, buttonPrev;
 #endif
 
+#if HAS_WIFI
+  const char* ssid     = "Dark Throw";
+  const char* password = "hellomotmoe";
+  ESP8266WebServer server(80);
+#endif
+
 // CONTROL (inputs)
+struct Pot {
+  int min;
+  int max;
+  int prev;
+  int actual;
+  float norm;
+};
 struct Control {
-  int p0;
+  struct Pot p0;
   int p1;
   int p2;
   int p3;
@@ -173,7 +200,7 @@ struct Timing timer =
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
 //sendData("AT+CIOBAUD=9600\r\n", 2000, TRUE);
 //  Serial.begin(9600);
 //  if (!driver.init())
@@ -199,7 +226,7 @@ void setup()
   #if HAS_CONTROLS
     pinMode(B_0, INPUT_PULLUP);
     pinMode(B_1, INPUT_PULLUP);
-    pinMode(B_2, INPUT_PULLUP);
+//    pinMode(B_2, INPUT_PULLUP);
   #endif
 
   // IR Remote
@@ -209,6 +236,26 @@ void setup()
     receiver.enableIRIn();
   #endif
 
+
+  #if HAS_WIFI
+  
+    // WIFI
+    WiFi.begin(ssid, password);
+    Serial.print("connecting");
+  //  while(WiFi.status() != WL_CONNECTED){
+  //    delay(500);
+  //    Serial.print(".");
+  //  }
+    Serial.print(" ");
+    Serial.print("IP: ");
+    Serial.println(WiFi.localIP());
+    server.on("/", h_index);
+    server.on("/boop", h_boop);
+    server.begin();
+    Serial.println("listening");
+  #endif
+
+  
   // Gyro
   #if HAS_IMU
     //    byte gyro = mpu.begin();
@@ -259,13 +306,24 @@ void loop()
 //  driver.waitPacketSent();
 
   #if HAS_CONTROLS
-    ctrl.p0 = analogRead(POT_0);
-    ctrl.p1 = analogRead(POT_1);
-    ctrl.p2 = analogRead(POT_2);
-    ctrl.p3 = analogRead(POT_3);
-    ctrl.p4 = analogRead(POT_4);
-    ctrl.p5 = analogRead(POT_5);
-    
+    ctrl.p0.prev = ctrl.p0.actual;
+    ctrl.p0.actual = analogRead(POT_0);
+    int potDif = ctrl.p0.actual - ctrl.p0.prev;
+    if (potDif > 6){
+      walkCursor(5);
+    } else if (potDif < -6){
+      walkCursorReverse(5);
+    }
+//    if (ctrl.p0.prev - ctrl.p0.actual > 10){
+//      walkCursorReverse(4);
+//    }
+//    
+//    ctrl.p1 = analogRead(POT_1);
+//    ctrl.p2 = analogRead(POT_2);
+//    ctrl.p3 = analogRead(POT_3);
+//    ctrl.p4 = analogRead(POT_4);
+//    ctrl.p5 = analogRead(POT_5);
+//    
     if (digitalRead(B_0) == LOW){
       ctrl.b0 = true;
       if (activePage == PAGE_MAIN){
@@ -311,31 +369,34 @@ void loop()
     if (digitalRead(B_1) == LOW){
       if (activePage == PAGE_MAIN){
         if (ctrl.b1 == false) {
-          if (cursorPos < 3){
-            cursorPos ++;  
-          } else {
-            cursorPos = 0;
-          }
+          walkCursor(3);
+//          if (cursorPos < 3){
+//            cursorPos ++;  
+//          } else {
+//            cursorPos = 0;
+//          }
         }      
       }
       
       if (activePage == PAGE_TRAIN){
         if (ctrl.b1 == false) {
-          if (cursorPos < 5){
-            cursorPos ++;  
-          } else {
-            cursorPos = 0;
-          }
+          walkCursor(5);
+//          if (cursorPos < 5){
+//            cursorPos ++;  
+//          } else {
+//            cursorPos = 0;
+//          }
         }      
       }
       
       if (activePage == PAGE_CALIBRATE){
         if (ctrl.b1 == false) {
-          if (cursorPos < 5){
-            cursorPos ++;  
-          } else {
-            cursorPos = 0;
-          }
+          walkCursor(5);
+//          if (cursorPos < 5){
+//            cursorPos ++;  
+//          } else {
+//            cursorPos = 0;
+//          }
         }      
       }
 
@@ -356,16 +417,16 @@ void loop()
     } else {
       ctrl.b1 = false;
     }
-
-    
-    if (digitalRead(B_2) == LOW){
-      ctrl.b2 = true;
-
-      activePage = PAGE_MAIN;
-      timer.idleClock = 0;
-    } else {
-      ctrl.b2 = false;
-    }
+//
+// if device   
+//    if (digitalRead(B_2) == LOW){
+//      ctrl.b2 = true;
+//
+//      activePage = PAGE_MAIN;
+//      timer.idleClock = 0;
+//    } else {
+//      ctrl.b2 = false;
+//    }
   #endif  
 
 

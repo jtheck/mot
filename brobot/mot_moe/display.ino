@@ -87,7 +87,7 @@ void renderPage(int page){
       display.setCursor(0, 0);
       display.print("p0:");
       display.setCursor(18, 0);
-      display.print(ctrl.p0);
+      display.print(ctrl.p0.actual);
   
       display.setCursor(0, 8);
       display.print("p1:");
