@@ -4,11 +4,11 @@
 *********/
 
 #define HAS_DISPLAY true
-#define HAS_SERVOS false
+#define HAS_SERVOS true
 #define HAS_IMU false
 #define HAS_RADIO false
 #define HAS_IR false
-#define HAS_WIFI true
+#define HAS_WIFI false
 #define HAS_BLUETOOTH false
 #define HAS_CONTROLS true
 
@@ -27,7 +27,7 @@
     const uint8_t POT_0 = A2;
     const uint8_t POT_1 = A3; 
     const uint8_t POT_2 = A4;
-    const uint8_t POT_3 = A5;  
+    const uint8_t POT_3 = A5;
     const uint8_t POT_4 = A0;
     const uint8_t POT_5 = A1;
   
