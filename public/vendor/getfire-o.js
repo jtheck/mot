@@ -7,7 +7,7 @@
 
 
 ////////////////////////////////
-// GetFire.net chat API v1.8.2
+// GetFire.net chat API v1.8.1
 ////////////////////////////////
 
 
@@ -25,7 +25,7 @@
     let topCorner = config.topCorner || false;
 
     // var fullHeight = config.fullHeight || false; // td: implement or clean
-    let isMobile = false;
+    let isMobile = false; //initiate as false
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
       isMobile = true;
     }
@@ -37,9 +37,7 @@
     let chatTopics = [];
     let chatCards = [];
 
-
-    window.addEventListener('resize', resize.debounce(150,false), false);
-    window.addEventListener('orientationchange', function() {resize.debounce(150,false)}, {once : true});
+    window.addEventListener("resize", resize);
     window.addEventListener("click", handleClickAway);
 
     // styles
@@ -58,19 +56,15 @@
     let $tWrapper = newDiv({id:"active_topics_container", className: "scrollable"});
     if (mouseOutFade) $tWrapper.classList.add('app_fade');
     $wrapper.append($tWrapper);
-    
-
 
     // icon
     let iconSVG = '<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" version="1.1" viewBox="0 0 60 60"><g transform="translate(0 -992.36)"><g transform="matrix(.32337 0 0 .32337 -186.23 919.22)"><g class="ftb_fill" transform="matrix(1.2471055,0,0,1.2471055,-127.95546,-112.95681)" style="stroke-width:7.3;stroke:none;"><ellipse rx="8.7" ry="8.1" cy="352.8" cx="609.4"></ellipse><ellipse rx="10.2" ry="9.5" cy="351.4" cx="632.2"></ellipse></g><path d="m598 261.9c-10.9 6.6-22.6 71.8-1.8 94.5 16.4 17.9 116.6-11.1 129.9 34.7 12.6-29.8-1.1-16.3 15.9-33.7 21.5-22.1 9.9-89.6-0.8-94.8-14.6-7.6-129-7.2-143.1-0.6z" style="fill:none;stroke-width:11"></path></g></g></svg>'
 
     // button & rolodex
-    let $iconM = newDiv({id:"getfire_icon", title:"Chat!"});
-    let $iconB = newDiv({id:"icon_b", content:iconSVG});
+    let $icon = newDiv({id:"getfire_icon", content:iconSVG, title:"Chat!"});
     let $rolo = newDiv({id:"getfire_rolo"});
-    $iconM.append($iconB);
-    $iconM.append($rolo);
-    $wrapper.append($iconM);
+    $icon.append($rolo);
+    $wrapper.append($icon);
 
 
     // top corner adjustment
@@ -79,13 +73,8 @@
     }
 
     // iframe
-    var $ifWrapper = newDiv({id:"if_wrap"});
-    var $iframe = document.createElement("iframe");
-    var $ifButton = newDiv({id:"if_button", content:"×"});
-    $iframe.name = 'iFrame';
-    $ifWrapper.append($iframe);
-    $ifWrapper.append($ifButton);
-    $wrapper.append($ifWrapper);
+    // var $iframe = document.createElement("iframe");
+    // $wrapper.append($iframe);
 
     // tokens
     var gfct = "none";
@@ -94,17 +83,8 @@
     }
 
     window.onmessage = function (e) {
-      // console.log('msg!',e)
-      if (e.data == false){
-        $iframe.src = "about:blank";
-        var iframe = document.getElementById('if_wrap');
-        iframe.style.display = 'none';
-        GETFIRE.modal(false, "Sign in Failure!");
-      }
-      if (!e.origin.includes('localhost:300') && !e.origin.includes('getfire.net')){
-        GETFIRE.modal(false, "Sign in Failure!");
+      if (!e.origin.includes('localhost:3000') && !e.origin.includes('getfire.net'))
         return;
-      }
 
       var jwtpack;
 
@@ -119,8 +99,7 @@
           // success
           signIn(jwtpack.cards);
           
-          $ifWrapper.style.display="none";
-          GETFIRE.modal(false, "Sign in Success!");
+          GETFIRE.modal(false, "Sign in success!");
           setCookie('_gfc0', jwtpack.token);
         }
       }
@@ -254,7 +233,6 @@
       }
       // show it
       this.$container.style.display = "block";
-      this.scrollToBottom();
     };
 
     GETFIRE.Topic.prototype.populateContainer = function(){
@@ -356,8 +334,8 @@
       $c.querySelector(".topic_settings_button").style.display = "block";
       $c.querySelector(".topic_preview").style.display = "none";
 
-      this.scrollToShowAll();
       this.scrollToBottom();
+      this.scrollToShowAll();
     };
 
     GETFIRE.Topic.prototype.close = function(){
@@ -536,7 +514,7 @@
       xreq({type: 'post', addr: 'api/v1/index',
         data: {topic_names: topics, name: defaultName},
         success: function(dat){
-          if (!dat.html) dat.html = '';
+          dat.html ||= '';
 
           // init cards
           for (var i=0; i<dat.cards.length; i++){
@@ -546,15 +524,13 @@
           
           // init topics
           $tWrapper.innerHTML = dat.html;
-          let $tFooter = newDiv({id:"topic_footer"});
-          $tWrapper.append($tFooter);
-          if (!dat.topics) dat.topics = [];
+          dat.topics ||= [];
           var channelQueue = ['gtc-0'];
           for (var i=0; i<dat.topics.length; i++){
             var tTopic = new GETFIRE.Topic(dat.topics[i]);
             //
             tTopic.$container = document.getElementById("topic_die").cloneNode(true);
-            $tWrapper.prepend(tTopic.$container);
+            $tWrapper.appendChild(tTopic.$container);
             tTopic.populateContainer();
             //
             chatTopics.push(tTopic);
@@ -572,10 +548,6 @@
             }
           }
 
-          // reposition modal higher in dom
-          var modal = document.getElementById("modal_wrapper");
-          $wrapper.appendChild(modal);
-          
           // sub to topic
           GETFIRE.pn.subscribe({
             channels : channelQueue
@@ -790,7 +762,7 @@
 
 
 
-      // document.getElementById("message_time_ago").innerHTML = time;
+      document.getElementById("message_time_ago").innerHTML = time;
       document.getElementById("popup_name").innerHTML = name;
       popup.setAttribute("data-id", id);
       popup.setAttribute("data-topic-id", topic);
@@ -801,24 +773,16 @@
 
 
     function handleKey(e){
-      if (e.target.classList.contains('message_entry_content')){
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          if (e.altKey === true) {
-            e.target.value += "\n";
-            e.target.focus();
-          } else {
-            e.target.nextElementSibling.click();
-          }
-        }
-        e.stopPropagation();
+      if (e.path.includes($wrapper)){
+        if (e.target.nodeName == "TEXTAREA") 
+          e.stopPropagation();
       }
     }
-
 
     // global click handler
     function handleClick(e){
       var path = e.path;
+
       var target = e.target || e.srcElement;
       if (target.tagName === 'A') {
         var url = target.getAttribute('href');
@@ -843,19 +807,13 @@
         e.preventDefault();
       }
 
-      if (path.includes($iconB)){
-        if ($tWrapper.offsetParent !== null){
-          $tWrapper.style.display = "none";
-        } else {
-          $tWrapper.style.display = "block";
-        }
-      }
-      
       // click is inside applet
       if (path.includes($wrapper)) {
-        // $tWrapper.style.display = "block";
+        $tWrapper.style.display = "block";
+
         for (var i=0; i<chatTopics.length; i++){
           var t = chatTopics[i];
+        
           var $c = t.$container;
           if (path.includes($c)){
             t.scrollToShowAll();
@@ -917,23 +875,22 @@
             // Sign in
             if (classHit(path, "members_in")){
               var func = function(){
-                console.log('?', "ur?l")
                 topics = "";
                 for (var i=0; i<chatTopics.length; i++){
                   topics += chatTopics[i].name + ',';
                 }
                 // topics = chatTopics
                 var url = uri+"api/v1/treq"+"?topics="+topics;
-                // window.open(url, 'treq', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
+                window.open(url, 'treq', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');
 
                 // TD: for mobile: iframe key fetch
-                $ifWrapper.style.display="block";
-                window.open(url, 'iFrame');
+                
+                // window.open(url, 'iFrame');
+                // $iframe.src = url; 
               }
               if (isMobile){
                 //
-                // GETFIRE.modal(false, 'Mobile sign in not yet available!');
-                GETFIRE.modal(true, "Sign in to GetFire.net? <br><br>", func);
+                GETFIRE.modal(false, 'Mobile sign in not yet available!');
               } else {
                 GETFIRE.modal(true, "Sign in to GetFire.net? <br><br>", func);
               }
@@ -950,78 +907,49 @@
             }
 
             if (classHit(path, "topic_unsubscribe_b")){
-              
-              if(window.confirm("Leave chat topic?")) {
-                GETFIRE.pn.unsubscribe({
-                  channels : ["ft-"+ t.id]
-                });
-                document.getElementById(t.id).remove();
-                document.querySelector("[data-id="+t.id+"]").remove();
-                chatTopics.splice(i, 1);
+              var func = function(){
+                xreq({type: 'post', addr: 'api/v1/end_sub',
+                  data: {id: t.id},
+                  success: function(dat){
+                    // td: unsub topic
+
+                    //   topic.status = "recent";
+                    //   topic.$container = null;
+                    //   fire.buildRolodexes();
+                    //   fire.unsubscribeFromTopic(id);
+                
+                  },
+                  failure: function(){console.log('failure to leave')}});
               }
+
+              GETFIRE.modal(true, "Leave chat topic?<br><br>", func);
             }
 
 
             if (classHit(path, "user_message")){
-              var msg;
-              if (e.srcElement.classList.contains('user_message')){
-                 msg = e.srcElement;
-              } else {
-                msg = e.srcElement.parentNode;                
-              }
-              
-              var wasTagged = msg.classList.contains('um_select');
-              var prevTagged = msg.parentNode.querySelector('.um_select');
-              if (prevTagged){
-                prevTagged.classList.remove('um_select');
-                prevTagged.querySelector('.message_time').remove();
-              }
-              
-              
-              if (msg){
-                msg.classList.add('um_select');
-                
-                var timeAgo = newDiv({className:'message_time', content: timeago().format(msg.getAttribute("data-time"))})
-                msg.append(timeAgo);
-                
-                if (!wasTagged) return;
-
-                var hit = classHit(path, "topic_container")
-                var topic;
-                if (hit){
-                  topic = hit.id;
-                }
-                populateAvatarPopup(e, msg, topic);
+              var msg = e.srcElement;
+              if (!msg.classList.contains("user_message")){
+                msg = msg.parentNode;
               }
 
+              var hit = classHit(path, "topic_container")
+              var topic;
+              if (hit){
+                topic = hit.id;
+              }
 
-
+              populateAvatarPopup(e, msg, topic);
             }
 
           }
         } // end topic hit test
 
-
-
-        if (path.includes(document.getElementById("if_button"))){
-          $ifWrapper.style.display="none";
-        }
         
         // rolodex
         if (hit = classHit(path, "topic_rolodex_topic")){
-          $tWrapper.style.display = "block";
           var id = hit.getAttribute("data-id");
           var t = GETFIRE.findTopic(id);
-          if (t) {
-            if (t.$container.offsetParent == null){
-              t.show();
-              hit.classList.add("active_rolo_mod");
-
-            } else {
-              t.hide();
-              hit.classList.remove("active_rolo_mod");
-            }
-          }
+          if (t) t.show();
         }
 
 
@@ -1119,7 +1047,7 @@
         if(popup && !path.includes(popup) && !classHit(path, "user_message")) {
           popup.style.display = "none";
         }
-        if (e.srcElement.id == "avatar_popup" || e.srcElement.id == "message_reply" || !classHit(path, "user_message")){
+        if (e.srcElement.id == "avatar_popup" || e.srcElement.id == "message_time" || e.srcElement.id == "message_reply"){
           popup.style.display = "none";
         }
 
@@ -1146,16 +1074,13 @@
 
 
     function xreq(obj, test){
-      if (!obj.type) obj.type = 'get';
-      if (!obj.addr) obj.addr = '';
-      if (!obj.data) obj.data = {};
-      if (!obj.success) obj.success = function(){};
-      if (!obj.failure) obj.failure = function(){};
+      obj.type ||= 'get';
+      obj.addr ||= '';
+      obj.data ||= {};
+      obj.success ||= function(){};
+      obj.failure ||= function(){};
 
       let xhr = new XMLHttpRequest();
-      xhr.onerror= function(e) {
-        console.log("chat disabled:");
-      };
       
       xhr.open(obj.type, uri+obj.addr);
       xhr.withCredentials = true;
@@ -1220,10 +1145,10 @@
       var width = Math.min(Math.max(window.innerWidth/3, 400), window.innerWidth-45);
       var height = window.innerHeight;
       // var halfHeight = height < 316 ? height : 316;
-      var buffer = 41;
+      var buffer = 0;
       $tWrapper.style.maxHeight = (height - buffer)+"px";
       $tWrapper.style.maxWidth = (width)+"px";
-      // individual chats
+
       // GETFIRE.$topic.style.width = width+"px";
       // GETFIRE.$topic.style.height = fullHeight ? height+"px" : halfHeight+"px";
 
@@ -1278,39 +1203,29 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ////////////////////////////////////////////////////////////////
-// Polyfills Utils
+// Polyfills for ie/safari
 ////////////////////////////////////////////////////////////////
 
-
-Function.prototype.debounce = function (threshold, execAsap) {
-  var func = this, // reference to original function
-      timeout; // handle to setTimeout async task (detection period)
-  // return the new debounced function which executes the original function only once
-  // until the detection period expires
-  return function debounced () {
-      var obj = this, // reference to original context object
-          args = arguments; // arguments at execution time
-      // this is the detection function. it will be executed if/when the threshold expires
-      function delayed () {
-          // if we're executing at the end of the detection period
-          if (!execAsap)
-              func.apply(obj, args); // execute now
-          // clear timeout handle
-          timeout = null;
-      }
-      // stop any current detection period
-      if (timeout)
-          clearTimeout(timeout);
-      // otherwise, if we're not already waiting and we're executing at the beginning of the detection period
-      else if (execAsap)
-          func.apply(obj, args); // execute now
-      // reset the detection period
-      timeout = setTimeout(delayed, threshold || 100);
-  };
-};
-
-// click event path
+// click event path (for firefox)
 if (!("path" in Event.prototype))
   Object.defineProperty(Event.prototype, "path", {
     get: function() {
