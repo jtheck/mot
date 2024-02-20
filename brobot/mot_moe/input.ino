@@ -1,5 +1,16 @@
 
+// listen for input state updates
 
+void observeInput(){
+  
+}
+
+
+
+
+
+
+// what to do with state anomaly
 
 void walkCursor(int max){
   if (cursorPos < max){

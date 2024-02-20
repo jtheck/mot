@@ -4,7 +4,67 @@ var moe = window.MOT;
 var joe = window.MOT;
 
 
+
+
+
+
+
+
+
 var init = function() {
+  // var file = new XMLHttpRequest();
+  // file.open("GET", "power.svg", true);
+  // console.log(file)
+  // file.onreadystatechange = function() {
+  //   console.log("merp")
+  //   if (file.readyState === 4) {  // Makes sure the document is ready to parse
+  //     if (file.status === 200) {  // Makes sure it's found the file
+  //       text = file.responseText;
+  //       // document.getElementById("div1").innerHTML = text;
+  //       console.log(text)
+  //     }
+  //   }
+  // }
+  let balls = fetch("repo/tamomogo.ino").then(response => response.text().then(function(text){
+    // console.log(text);
+    $id("code_out").value = text;
+  }))
+  // console.log(balls)
+
+  let header = $id('header');
+  let p_home = $id('page_home');
+  let p_repo = $id('page_repository');
+  let p_train = $id('page_training');
+  let p_help = $id('page_help');
+
+  header.onclick = function(e){
+    switch(e.target.id){
+      case 'b_home':
+        p_home.style.display = 'block';
+        p_train.style.display = 'none';
+        p_repo.style.display = 'none';
+        p_help.style.display = 'none';
+      break;
+      case 'b_repo':
+        p_repo.style.display = 'block';
+        p_home.style.display = 'none';
+        p_train.style.display = 'none';
+        p_help.style.display = 'none';
+      break;
+      case 'b_train':
+        p_train.style.display = 'block';
+        p_home.style.display = 'none';
+        p_repo.style.display = 'none';
+        p_help.style.display = 'none';
+      break;
+      case 'b_help':
+        p_help.style.display = 'block';
+        p_home.style.display = 'none';
+        p_train.style.display = 'none';
+        p_repo.style.display = 'none';
+      break;
+    }
+  }
 
 
   moe.readState("state");
@@ -176,6 +236,14 @@ if ("serviceWorker" in navigator) {
 
 
 } // end init
+
+
+
+
+function $id(id) {
+  return document.querySelector("#"+id);
+}
+
 
 var pokeMot = function(){
   var xhr = new XMLHttpRequest();
