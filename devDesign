@@ -1,0 +1,25 @@
+
+
+
+
+
+
+
+
+
+
+Input!
+  BUTTON (or similar, ID)
+   STATE (new BUTTON STATE 0-1)
+    TIME (recorded true or clocked interval)
+
+Stream!
+  Input! array chronological
+  
+
+
+
+
+
+
+

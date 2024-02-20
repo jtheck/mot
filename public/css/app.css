@@ -18,25 +18,115 @@ text-align: left;
   position: fixed;
   z-index: -1;
   top: 0px;
+  bottom: 0px;
   left: 0px;
-  width: 100%;
-  height:100%;
+  right: 0px;
   background-image: linear-gradient(0deg, transparent 0%, transparent 9px, rgba(255, 255, 255, 0.2) 9px, rgba(255, 255, 255, 0.2) 10px, transparent 10px, transparent 19px, rgba(255, 255, 255, 0.1) 19px, rgba(255, 255, 255, 0.1) 20px, transparent 20px, transparent 29px, rgba(255, 255, 255, 0.1) 29px, rgba(255, 255, 255, 0.1) 30px, transparent 30px, transparent 39px, rgba(255, 255, 255, 0.1) 39px, rgba(255, 255, 255, 0.1) 40px, transparent 40px, transparent 49px, rgba(255, 255, 255, 0.1) 49px, rgba(255, 255, 255, 0.1) 50px), linear-gradient(-90deg, transparent 0%, transparent 9px, rgba(255, 255, 255, 0.2) 9px, rgba(255, 255, 255, 0.2) 10px, transparent 10px, transparent 19px, rgba(255, 255, 255, 0.1) 19px, rgba(255, 255, 255, 0.1) 20px, transparent 20px, transparent 29px, rgba(255, 255, 255, 0.1) 29px, rgba(255, 255, 255, 0.1) 30px, transparent 30px, transparent 39px, rgba(255, 255, 255, 0.1) 39px, rgba(255, 255, 255, 0.1) 40px, transparent 40px, transparent 49px, rgba(255, 255, 255, 0.1) 49px, rgba(255, 255, 255, 0.1) 50px);
   background-size: 50px 50px;
 
 }
 
+#icon {
+  filter: drop-shadow(1px 1px 2px #222);
+  margin: 3px;
+  position: absolute;
+  left: 0px;
+  padding: 6px;
+}
+#icon_flip {
+  transform: rotate(180deg);
+  filter: drop-shadow(1px 1px 2px #222);
+  margin: 3px;
+  position: absolute;
+  right: 0px;
+  padding: 6px;
+  padding-bottom: 8px;
+}
+
+#header {
+  position: fixed;
+  z-index: 9;
+  width: 400px;
+  left: 50%;
+  top: 0px;
+  font-size: 1.6em;
+  border-radius: 5px;
+  margin-left: -200px;
+  background-color: rgba(255,255,255,.3);
+  text-align: center;
+}
+button{
+  background: none;
+	color: #000;
+	border: none;
+	padding: 0;
+	font: inherit;
+	font-size: 16pt;
+  cursor: pointer;
+	outline: inherit;
+}
+button:before{
+  content:"「";
+}
+button:after{
+  content:"」";
+}
+.page {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  width: 100vw;
+  height: 100vh;
+}
+
+.page_content {
+  position: absolute;
+  top: 62px;
+  left: 12px;
+  bottom: 12px;
+  right: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 4px;
+}
+
+#page_welcome {
+  display: block;
+}
+
+#page_training {
+  display: none;
+}
+
+#page_repository {
+  display: none;
+}
+#repo_select {
+  border: 1px solid #000;
+  width: 100%;
+}
+
+#page_help {
+  display: none;
+}
+
+#code_out {
+  resize: none;
+  width: 100%;
+  height: 40vh; 
+}
+
 #controls {
   position: fixed;
   z-index: 1;
-  right: -19px;
-  top: 15px;
+  right: 0px;
+  top: 75px;
   user-select: none;
   transform: scale(.72);
 }
 
-textarea {
-  background: rgba(255, 255, 255, 0.456)0.328);
+#text_entry {
+  background: rgba(255, 255, 255, 0.456, 0.328);
   z-index: 8;
   color: #fff;
   font-family: cursive;
@@ -44,21 +134,24 @@ textarea {
   padding: 10px;
   position: absolute;
   resize: none;
-  max-width: 75%;
-  left: 16%;
+max-width: 75%;
+left: 16%;
   bottom: 10px;
   text-shadow: 1px 1px 3px #000;
   height: 3em;
 }
-textarea:hover {
+#text_entry:hover {
   height: 3em;
   background: rgba(255,255,255,.5);
 }
-textarea:focus {
+#text_entry:focus {
   height: 5em;
   background: rgba(255,255,255,.5);
 }
 
+select{
+  width: 100px;
+}
 
 #text_in_w {
   position: absolute;
@@ -74,7 +167,7 @@ textarea:focus {
   padding: 10px;
   position: absolute;
   resize: none;
-  width: 100%;
+width: 100%;
 
 }
 
@@ -115,7 +208,7 @@ textarea:focus {
   position: absolute;
   left: 0px;
   top: 53px;
-  width: 100%;
+width: 100%;
   height: 9px;
   background-color: green;
 }
