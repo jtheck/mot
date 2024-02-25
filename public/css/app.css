@@ -46,12 +46,12 @@ text-align: left;
 #header {
   position: fixed;
   z-index: 9;
-  width: 400px;
+  width: 300px;
   left: 50%;
   top: 0px;
   font-size: 1.6em;
   border-radius: 5px;
-  margin-left: -200px;
+  margin-left: -150px;
   background-color: rgba(255,255,255,.3);
   text-align: center;
 }
@@ -61,16 +61,22 @@ button{
 	border: none;
 	padding: 0;
 	font: inherit;
-	font-size: 16pt;
+	font-size: 11pt;
   cursor: pointer;
 	outline: inherit;
 }
 button:before{
-  content:"「";
+  content:" \300C";
 }
 button:after{
-  content:"」";
+  content:" \300D";
 }
+
+select{
+  height: 100px;
+  width: 70px;
+}
+
 .page {
   position: fixed;
   left: 0px;
@@ -149,9 +155,7 @@ left: 16%;
   background: rgba(255,255,255,.5);
 }
 
-select{
-  width: 100px;
-}
+
 
 #text_in_w {
   position: absolute;

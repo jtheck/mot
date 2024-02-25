@@ -118,7 +118,7 @@ if ("serviceWorker" in navigator) {
 
   // Init chat
   if (typeof GETFIRE !== "undefined"){
-    var chat = GETFIRE({topicNames: ["mot", 'test'],
+    var chat = GETFIRE({topicNames: ["mot moe", 'test'],
       defaultName: Math.random() > .5 ? "Beep" : "Boop",
       startOpen: false,
       startPreview: false,
