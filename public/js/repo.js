@@ -3,31 +3,26 @@
 
 
 function Project(){
-
   this.name = '';
+  this.location = '';
+
   this.boards = [];
   this.features = [];
+  this.availableFeatures = [];
 
   this.activeBoard = '';
   this.activeFeatures = [];
 
-  this.rawCode = '';
-  this.boardCurated = '';
-  this.featureCurated = '';
+  this.codeRaw = '';
+  this.codeLines = [];
+  this.codeCurated = '';
 }
-
 let activeProject = new Project();
-
-function Feature(){
-  this.name = '';
-  this.boards = [];
-}
-
 
 
 
 let directory = [
-  {
+{
     group:'Miscellaneous',
     projects:[
         'Hello_World',
@@ -37,38 +32,12 @@ let directory = [
   {
     group:'Mot.Moe',
     projects:[
-        'TamagoMoMo',
-        'Mot.moe'
+        'TamagoMotmoe',
+        'Battle Brobot'
     ]
   }
 ];
   
-  
-function saveCode(){
-  let code = $id("code_out").value;
-  let blob = new Blob([code], {type: "text/ino;charset=utf-8"}); 
-  console.log(blob)
-  let url = URL.createObjectURL(blob);
-  let link = document.createElement("a");
-
-  link.download = "test.ino";
-  link.href = url;
-  link.click();
-}
-
-function copyCode(){
-    // Get the text field
-    let code = $id("code_out");
-
-    // Select the text field
-    code.select();
-    code.setSelectionRange(0, 99999); // For mobile devices
-  
-      // Copy the text inside the text field
-    navigator.clipboard.writeText(code.value);
-    
-    alert("Code copied to your clipboard!");
-}
 
 
 
@@ -77,12 +46,12 @@ function copyCode(){
 
 
   
-var selectProject = function(e){
+function selectProject(){
   let $projectSelect = $id("project_select");
-  let val = $projectSelect.value;
-  let $project = $id("proj_"+val.replace(' ', '_'));
+  let name = $projectSelect.value;
+  let $project = $id("proj_"+name.replace(' ', '_'));
   
-  let project = val.replace(' ', '_');
+  let project = name.replace(' ', '_');
   let group = $project.parentElement.label; 
   let folder = 'repo/'+group+'/'+project+'/';
 
@@ -93,49 +62,97 @@ var selectProject = function(e){
   $projectLogo.src = folder+"logo.png";
   $logoCell.innerHTML = "";
   $logoCell.append($projectLogo);
+  
+  
+  activeProject = new Project();
+  activeProject.name = name;
+  activeProject.location = folder;
 
-
-
-  codeFill(path);
+  codeFetch(path);
 }
 
+function selectBoard(){
+  let $boardSelect = $id("board_select");
+  let board = $boardSelect.value;
 
-let codeFill = function(path){
+  activeProject.activeBoard = board;
+  activeProject.activeFeatures = [];
 
-  let balls = fetch(path)
+  let $boardCell = $id("project_board");
+  let $boardLink = document.createElement("a");
+  $boardLink.href = activeProject.location+"/boards/"+activeProject.activeBoard+".jpg"; 
+  $boardLink.target = '_blank';
+  let $projectBoard = document.createElement("img");
+  $projectBoard.src = activeProject.location+"/boards/"+activeProject.activeBoard+".jpg";
+  $boardCell.innerHTML = "";
+  $boardLink.append($projectBoard);
+  $boardCell.append($boardLink);
+
+  $featureSelect = $id("feature_select");
+  $featureSelect.innerHTML = '';
+
+
+  code = activeProject.codeRaw;
+  let boardLine = new RegExp(`\/\/MM ${board} ([^\n]*)`);
+  var featuresMatch = code.match(boardLine);
+  if (!featuresMatch) return;
+  featuresMatch = featuresMatch[1];
+  var trimmedMatch = featuresMatch.slice(1, -1);
+  var features = trimmedMatch.split(', ');
+  activeProject.availableFeatures = features;
+
+  featureFill();
+
+  curateCode();
+}
+
+function selectFeature(e){
+  if (e.checked)
+    activeProject.activeFeatures.push(e.name);
+  else
+    activeProject.activeFeatures = activeProject.activeFeatures.filter(function(item) {
+      return item !== e.name;
+    });
+
+  curateCode();
+}
+
+function codeFetch(path){
+  fetch(path)
     .then(res => res.text()
     .then(
       function(rawCode){
+        activeProject.codeRaw = rawCode;
+        activeProject.codeLines = rawCode.split('\n');
 
-        var removeMM = /\/\/MM.*?\n/g;
-        let cleanCode = rawCode.replace(removeMM, '');
-        $id("code_out").value=cleanCode;
-        
-
-
-        boardFill(rawCode);
-        featureFill(rawCode);
-
+        boardFill();
+        featureFill();
+        curateCode();
       }
     ));
-
 }
 
-let boardFill = function(code){
-  
+function boardFill(){
+  code = activeProject.codeRaw;
   var boardsLine = /\/\/MM BOARDS ([^\n]*)/;
-  var boardsMatch = code.match(boardsLine)[1];
+  var boardsMatch = code.match(boardsLine);
   if (!boardsMatch) return false;
+  boardsMatch = boardsMatch[1];
   
   var trimmedMatch = boardsMatch.slice(1, -1);
   var boards = trimmedMatch.split(', ')
 
-  console.log(boards);
-
+  activeProject.boards = boards;
 
   let $boardSelect = $id("board_select");
   $boardSelect.innerHTML = "";
-  
+  var $defaultOption = document.createElement("option");
+  $defaultOption.innerHTML = "Select a Board";
+  $defaultOption.setAttribute("hidden", "");
+  $defaultOption.setAttribute("disabled", "");
+  $defaultOption.setAttribute("selected", "");
+  $defaultOption.setAttribute("value", "");
+  $boardSelect.append($defaultOption);
   for (var i=0; i<boards.length; i++){
     var tBoard = boards[i];
     var $board = document.createElement("option");
@@ -144,34 +161,97 @@ let boardFill = function(code){
 
     $boardSelect.append($board);
   }
-
-
-  
-  let $imageCell = $id("project_board");
-  let $boardImage = document.createElement("img");
-  $boardImage.src = "wat/u.png";
-  $imageCell.innerHTML = "";
-  $imageCell.append($boardImage);
-
 }
 
-let featureFill = function(code){
+function featureFill(){
+  var code = activeProject.codeRaw;
   let featuresLine = /\/\/MM FEATURES ([^\n]*)/; 
-  let featuresMatch = code.match(featuresLine)[1];
+  let featuresMatch = code.match(featuresLine);
   if (!featuresMatch) return false;
+  featuresMatch = featuresMatch[1];
 
   let trimmedMatch = featuresMatch.slice(1, -1);
   let features = trimmedMatch.split(', ');
 
-  console.log(features);
+  // console.log(features);
+  activeProject.features = features;
 
+  let $featureSelect = $id("feature_select");
+  $featureSelect.innerHTML = '';
+  for (var i=0; i<features.length; i++){
+    var tFeature = features[i];
+    var $feature = document.createElement("input");
+    $feature.setAttribute("type", "checkbox");
+    $feature.setAttribute("name", tFeature);
+    if (!activeProject.availableFeatures.includes(tFeature))
+      $feature.setAttribute("disabled", true);
+    $feature.setAttribute("onchange", "selectFeature(this)");
+    var $label = document.createElement("label");
+    $label.innerHTML = tFeature;
+    var $br = document.createElement("br");
+
+    $featureSelect.append($feature);
+    $featureSelect.append($label);
+    $featureSelect.append($br);
+  }
 
 }
 
+function curateCode(){
+  let curating = [];
+  let is_has_flags = [];
+  let skipFlag = '';  
+  for (var i=0; i<activeProject.codeLines.length; i++){
+    let tLine = activeProject.codeLines[i];
+    if (tLine.includes("//MM"))
+      continue;
+    if (tLine.includes("#define MM_IS"))
+      continue;
+    if (tLine.includes("#define MM_HAS"))
+      continue;
+
+    if (skipFlag){
+      if (tLine.includes("#endif // MM_HAS_"+skipFlag))
+        skipFlag = '';
+      if (tLine.includes("#endif // MM_IS_"+skipFlag))
+        skipFlag = '';      
+      continue;
+    }
+    if (tLine.includes("#endif // MM_HAS_"))
+      continue;
+    if (tLine.includes("#endif // MM_IS_"))
+      continue;
+      
+
+    if (!skipFlag && tLine.includes("#ifdef MM_HAS_")){
+      let index = tLine.indexOf('MM_HAS_');
+      let feature = tLine.substring(index + 'MM_HAS_'.length);
+      if (!activeProject.activeFeatures.includes(feature))
+        skipFlag = feature;
+      
+      continue;
+    }
+
+    if (!skipFlag && tLine.includes("#ifdef MM_IS_")){
+      let index = tLine.indexOf('MM_IS_');
+      let board = tLine.substring(index + 'MM_IS_'.length);
+      if (activeProject.activeBoard != board)
+        skipFlag = board;
+      
+      continue;
+    } 
 
 
+    curating.push(tLine);
+  }
 
-var initRepo = function(){
+  activeProject.codeCurated = curating.join('\n');
+
+  $id("code_out").value=activeProject.codeCurated;
+}
+
+
+function initRepo(){
   let $projectSelect = $id("project_select");
 
   for (var i=0; i<directory.length; i++){
@@ -198,3 +278,31 @@ var initRepo = function(){
   
 }
   
+
+function openRaw(){
+  const newWindow = window.open('about:blank', '_blank');
+  newWindow.document.write(`<pre>${activeProject.codeRaw}</pre>`);
+  newWindow.document.title = activeProject.name;
+  newWindow.document.close();
+
+}
+  
+function saveCode(){
+  let code = $id("code_out").value;
+  let blob = new Blob([code], {type: "text/ino;charset=utf-8"}); 
+  let url = URL.createObjectURL(blob);
+  let link = document.createElement("a");
+  let fileName = activeProject.name.replace(' ', '_');
+  link.download = fileName+".ino";
+  link.href = url;
+  link.click();
+}
+
+function copyCode(){
+    let code = $id("code_out");
+    code.select();
+    code.setSelectionRange(0, 99999); // For mobile devices
+    navigator.clipboard.writeText(code.value);
+    
+    alert("Code copied to your clipboard!");
+}

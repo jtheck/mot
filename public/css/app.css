@@ -53,10 +53,10 @@ text-align: left;
   width: 300px;
   left: 50%;
   top: 0px;
-  font-size: 1.4em;
+  font-size: 1.3em;
   border-radius: 5px;
   margin-left: -150px;
-  /* background-color: rgba(255,255,255,.3); */
+  user-select: none;
   text-align: center;
 }
 button{
@@ -66,6 +66,7 @@ button{
 	padding: 0;
 	font: inherit;
 	font-size: 11pt;
+  margin-left: -7px;
   cursor: pointer;
 	outline: inherit;
 }
@@ -75,9 +76,28 @@ button:before{
 button:after{
   content:" \300D";
 }
-
-select{
+button:hover {
+  color: #0f0;
 }
+
+a {
+  color: #0f0;
+  text-decoration: none;
+}
+a:visited {
+  color: #0f0;
+}
+a[href^="mailto"] {
+  color: #0f0;
+}
+
+#b_home {
+  cursor: pointer;
+}
+#b_home:hover {
+  color: #0f0;
+}
+
 
 .page {
   position: fixed;
@@ -93,6 +113,7 @@ select{
   left: 12px;
   bottom: 12px;
   right: 12px;
+  overflow-y: auto;
   border: 1px solid #ddd;
   text-align: center;
   padding: 4px;
@@ -101,13 +122,23 @@ select{
 #page_welcome {
   display: block;
 }
-
 #page_training {
   display: none;
 }
-
 #page_repository {
   display: none;
+}
+#page_control {
+  display: none;
+}
+#how_to {
+  width: 100%;
+  text-align: center;
+}
+#how_to td {
+  width: 33%;
+  padding: 10px;
+  /* border: 1px solid #fff; */
 }
 #repo_table {
   width: 100%;
@@ -126,6 +157,18 @@ td {
   font-weight: bold;
 }
 
+#project_logo {
+  min-width: 140px;
+  width: 10%;
+}
+#project_board {
+  width: 90%;
+}
+#project_board img {
+  /* width: inherit; */
+  max-height: 108px;
+}
+
 #page_help {
   display: none;
 }
@@ -133,8 +176,10 @@ td {
 #code_out {
   resize: none;
   width: 100%;
-  height: 40vh; 
+  height: 40vh;
+  padding: 7px; 
   text-wrap: nowrap;
+  font-size: .8em;
 }
 
 #controls {

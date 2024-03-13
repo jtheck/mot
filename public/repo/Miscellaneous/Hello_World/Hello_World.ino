@@ -1,46 +1,56 @@
 /************************************
  Mot.moe 'Hello World' example.
+  Ft. Onboard LED, Piezo Buzzer,
+   Serial Monitor, SSD1306 OLED Screen 
 ************************************/
-
 //MM PROJECT Hello World
 //MM BOARDS [UNO, ESP8266, ESP01]
 //MM FEATURES [LED, MONITOR, SCREEN, BUZZER]
-//MM LED [UNO, ESP8266, ESP01]
-//MM MONITOR [UNO, ESP8266, ESP01]
-//MM SCREEN [UNO, ESP8266, ESP01]
-//MM BUZZER [UNO, ESP8266, ESP01]
+//MM UNO [LED, MONITOR, SCREEN, BUZZER]
+//MM ESP8266 [LED, MONITOR, SCREEN, BUZZER]
+//MM ESP01 [LED, SCREEN]
+// #define MM_IS_UNO
+// #define MM_IS_ESP8266
+// #define MM_IS_ESP01
+// #define MM_HAS_LED
+// #define MM_HAS_MONITOR
+// #define MM_HAS_SCREEN
+// #define MM_HAS_BUZZER
 
-#define IS_UNO
-// #define IS_ESP8266
-// #define IS_ESP01
-
-#define HAS_LED
-#define HAS_MONITOR
-// #define HAS_SCREEN
-// #define HAS_BUZZER
-
-
-
-#ifdef HAS_LED
-
-#ifdef IS_UNO
+#ifdef MM_IS_UNO
+#define ON HIGH
+#define OFF LOW
+#ifdef MM_HAS_LED
 #define BOARD_LED 13
-#endif //IS_UNO
-#ifdef IS_ESP8266
+#endif // MM_HAS_LED
+#ifdef MM_HAS_BUZZER
+#define BUZZER_PIN 12
+#endif // MM_HAS_BUZZER
+#endif // MM_IS_UNO
+//MM
+#ifdef MM_IS_ESP8266
+#define ON LOW
+#define OFF HIGH
+#ifdef MM_HAS_LED
 #define BOARD_LED 2
-#endif //IS_ESP8266
-#ifdef IS_ESP01
+#endif // MM_HAS_LED
+#ifdef MM_HAS_BUZZER
+#define BUZZER_PIN 12
+#endif // MM_HAS_BUZZER
+#endif // MM_IS_ESP8266
+//MM
+#ifdef MM_IS_ESP01
+#define ON LOW
+#define OFF HIGH
+#ifdef MM_HAS_LED
 #define BOARD_LED 1
-#endif
-
+#endif // MM_HAS_LED
+#endif // MM_IS_ESP01
 
 struct Keyframe {
   int time;
   bool state;
 };
-
-
-
 
 const int frameCt = 7;
 struct Animation {
@@ -49,71 +59,68 @@ struct Animation {
   struct Keyframe keyframes[frameCt];
 };
 
+#ifdef MM_HAS_LED
 struct Animation LEDAnimation = {
   .startTime = 0,
   .currentFrame = 0,
   .keyframes = {
-    {40, true},
-    {150, false},
-    {250, true},
-    {420, false},
-    {650, true},
-    {940, false},
-    {3200, false}
+    {40, ON},
+    {150, OFF},
+    {250, ON},
+    {420, OFF},
+    {650, ON},
+    {940, OFF},
+    {3000, OFF}
   }
 };
-
-int ledFrame = 0;
-unsigned long ledTimer = 0;
-
-
-#endif //HAS_LED
-
+#endif // MM_HAS_LED
+#ifdef MM_HAS_BUZZER
+struct Animation buzzerAnimation = {
+  .startTime = 0,
+  .currentFrame = 0,
+  .keyframes = {
+    {40, ON},
+    {150, OFF},
+    {250, ON},
+    {420, OFF},
+    {650, ON},
+    {940, OFF},
+    {3000, OFF}
+  }
+};
+#endif // MM_HAS_BUZZER
 
 struct Timing {
   unsigned long startTime;
   unsigned long frameStart;
   unsigned long framePrev;
-  unsigned long frameDuration;
 };
+struct Timing timer = {0, 0, 0};
 
-struct Timing timer =
-  {0, 0, 0, 0};
 
 void setup() {
-  // put your setup code here, to run once:
-
-  #ifdef HAS_LED
-
+#ifdef MM_HAS_LED
   pinMode(BOARD_LED, OUTPUT);
-
-  #endif
-
-
-  #ifdef HAS_MONITOR
-
+#endif // MM_HAS_LED
+#ifdef MM_HAS_MONITOR
   Serial.begin(9600);
   Serial.println("Hello World!");
-
-  #endif
+#endif // MM_HAS_MONITOR
+#ifdef MM_HAS_BUZZER
+  pinMode(BUZZER_PIN, OUTPUT);
+#endif // MM_HAS_BUZZER
 }
 
 
-
-
-
 void loop() {
-  // Progress frame timings
+  // Timing
   timer.frameStart = millis();
-  // timer.frameDuration = timer.frameStart - timer.framePrev;
   timer.framePrev = timer.frameStart;
 
-
-
-  #ifdef HAS_LED
+#ifdef MM_HAS_LED
   // Step "Hello World" LED animation
-  int elapsed = timer.frameStart - LEDAnimation.startTime;
-  if (elapsed > LEDAnimation.keyframes[LEDAnimation.currentFrame].time){
+  int LEDElapsed = timer.frameStart - LEDAnimation.startTime;
+  if (LEDElapsed > LEDAnimation.keyframes[LEDAnimation.currentFrame].time){
     digitalWrite(BOARD_LED, LEDAnimation.keyframes[LEDAnimation.currentFrame].state);
     if (LEDAnimation.currentFrame < frameCt){
       LEDAnimation.currentFrame++;
@@ -122,13 +129,20 @@ void loop() {
       LEDAnimation.startTime = timer.frameStart;
     }
   }
-  #endif //HAS_LED
-
-
-  #ifdef HAS_MONITOR
-
-  // Serial.println("bop");
-
-  #endif //HAS_MONITOR
-
+#endif // MM_HAS_LED
+#ifdef MM_HAS_MONITOR
+#endif // MM_HAS_MONITOR
+#ifdef MM_HAS_BUZZER
+  // Step "Hello World" BUZZER animation
+  int buzzerElapsed = timer.frameStart - buzzerAnimation.startTime;
+  if (buzzerElapsed > buzzerAnimation.keyframes[buzzerAnimation.currentFrame].time){
+    digitalWrite(BUZZER_PIN, buzzerAnimation.keyframes[buzzerAnimation.currentFrame].state);
+    if (buzzerAnimation.currentFrame < frameCt){
+      buzzerAnimation.currentFrame++;
+    } else {
+      buzzerAnimation.currentFrame = 0;
+      buzzerAnimation.startTime = timer.frameStart;
+    }
+  }
+#endif // MM_HAS_BUZZER
 }

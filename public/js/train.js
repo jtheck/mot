@@ -15,35 +15,34 @@ var initTraining = function() {
   let p_home = $id('page_home');
   let p_repo = $id('page_repository');
   let p_train = $id('page_training');
+  let p_control = $id('page_control');
   let p_help = $id('page_help');
 
   header.onclick = function(e){
-      switch(e.target.id){
+    if (e.target.id !== "header"){
+      p_home.style.display = 'none';
+      p_train.style.display = 'none';
+      p_repo.style.display = 'none';
+      p_control.style.display = 'none';
+      p_help.style.display = 'none';
+    }
+    switch(e.target.id){
       case 'b_home':
-          p_home.style.display = 'block';
-          p_train.style.display = 'none';
-          p_repo.style.display = 'none';
-          p_help.style.display = 'none';
-      break;
-      case 'b_repo':
-          p_repo.style.display = 'block';
-          p_home.style.display = 'none';
-          p_train.style.display = 'none';
-          p_help.style.display = 'none';
-      break;
-      case 'b_train':
-          p_train.style.display = 'block';
-          p_home.style.display = 'none';
-          p_repo.style.display = 'none';
-          p_help.style.display = 'none';
-      break;
-      case 'b_help':
-          p_help.style.display = 'block';
-          p_home.style.display = 'none';
-          p_train.style.display = 'none';
-          p_repo.style.display = 'none';
-      break;
-      }
+        p_home.style.display = 'block';
+    break;
+    case 'b_repo':
+        p_repo.style.display = 'block';
+    break;
+    case 'b_train':
+        p_train.style.display = 'block';
+    break;
+    case 'b_help':
+        p_help.style.display = 'block';
+    break;
+    case 'b_control':
+        p_control.style.display = 'block';
+    break;
+    }
   }
 
 
