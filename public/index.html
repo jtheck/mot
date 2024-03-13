@@ -1,5 +1,5 @@
-
 <html>
+
   <head>
     <title>Mot.moe &#x4EBA;&#x5DE5;</title>
 
@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#22126d">
     <meta name="description" content="Big Mot Moe General AI">
-    <meta name="keywords" content="in silico thinkin, motes, percept, AI, dogecoin">
+    <meta name="keywords" content="arduino projects, battlebots, in silico thinkin, motes, percept, AI, dogecoin">
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://mot.moe/images/panda.jpg" />
 
@@ -33,8 +33,10 @@
 
     <!-- app & mot -->
     <link rel="stylesheet" type="text/css" href="css/app.css"/>
+    <script src="js/main.js"></script>
     <script src="js/mot.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/repo.js"></script>
+    <script src="js/train.js"></script>
 
     <!-- <script src="https://cdn.rawgit.com/jtheck/GetFire/57eded32/dist/getfire.1.05.min.js" type="text/javascript"></script> -->
 
@@ -47,59 +49,99 @@
   <body>
     <div id="bg"></div>
 
+    <img id="icon_flip" src="/favicon/favicon-32x32.png">
+    <img id="icon" src="/favicon/favicon-32x32.png">
     <div id="header">
-      <img id="icon" src="/favicon/favicon-32x32.png">
-      <img id="icon_flip" src="/favicon/favicon-32x32.png">
-      Mot.moe &#x4EBA;&#x5DE5; 
-      <!-- 人工  -->
-      <br>
+      <div id="b_home">&#x4EBA;&#x5DE5;</div>
 
-      <button id="b_home">home</button>
-      <button id="b_repo">repo</button>
-      <button id="b_train">train</button>
-      <button id="b_help">about</button>
+      <button id="b_repo">Code</button>
+      <button id="b_train">Train</button>
+      <button id="b_control">Control</button>
+      <button id="b_help">Help</button>
     </div>
+
+
 
     <div id="page_home" class="page">
       <div class="page_content">
-        Welcome to the home of Mot.moe!
+        <h4>
+          Welcome to the home of Mot.moe!
+        </h4>
         <br><br>
-        features
-        <br><br>
-        links
-        <br><br>
-        begin
-
-
+        Featuring Battle Brobots and TamagoMotmoe!
+       
+        <br><br><br><br>
+        <h4>How to Begin</h4>
+        <table id="how_to">
+          <tr>
+            <td>Code</td>
+            <td>Train</td>
+            <td>Control</td>
+          </tr>
+          <tr>
+            <td>Select a Project and Board from the code repository, and build your robot!</td>
+            <td>Customize, train and save your robot!</td>
+            <td>Control your robot with WiFi or Bluetooth!</td>
+          </tr>
+        </table>
 
       </div>
     </div>
 
+
+    <div id="page_control" class="page">
+      <div class="page_content">
+        CONTROL
+        <BR><BR>
+        WIFI | BLUETOOTH
+      </div>
+    </div>
+
+
+
     <div id="page_repository" class="page">
       <div class="page_content">
-        REPO
-        <br>
-        <table id="repo_select">
+
+        <table id="repo_table">
           <tr>
-            <th>board</th>
-            <th>function</th>
-            <th>code</th>
+            <td width="100px">
+              <div class="repo_title">
+                Project
+              </div>
+              <select id="project_select" onchange="selectProject()">
+                <option hidden disabled selected value>Select a Project</option>
+              </select>
+              <br><br>
+              <div class="repo_title">
+                Board
+              </div>
+              <select id="board_select" onchange="selectBoard()"">
+                <option hidden disabled selected value>Select a Project</option>
+                <!-- <option value="one">8266</option>
+                <option value="2">esp-01</option>
+                <option>Uno</option> -->
+              </select>
+              <br><br>
+            </td>
+            <td class="img_cell" id="project_logo">
+              (Select a Project)
+            </td>
+            <td class="img_cell" id="project_board">(Select a Board)</td>
           </tr>
           <tr>
-            <td style="width:50px">
-              <select size="5">
-                <option selected value="one">8266</option>
-                <option value="2">esp-01</option>
-              </select>
-            </td>
-            <td style="width:50px">
-              <select size="9">
-                <option value="one">opt 1</option>
-                <option value="2">opt 2</option>
-              </select>
-            </td>
             <td>
+              <div class="repo_title">
+                Features
+              </div>
+              <form id="feature_select">
+                (Select a Board)
+              </form>
+            </td>
+            <td colspan="2" style="text-align: right;">
               <textarea id="code_out"></textarea>
+              <button onclick="openRaw()" style="float: left">View Raw</button>
+              <button onclick="copyCode()">Copy</button>
+              <button onclick="saveCode()">Save</button>
             </td>
           </tr>
         </table>
@@ -107,23 +149,42 @@
       </div>
     </div>
 
+
+
     <div id="page_help" class="page">
       <div class="page_content">
         <h4>About</h4>
-        Mot.moe is a general artificial intelligence robotics platform based on the Arduino
-        open source hardware microcontrollers and software environment.
-        <br><br>
-        Links for more resources.
+        Mot.moe is an open source robotics and AGI (artificial general intelligence) platform based on the Arduino
+        open source software ecosystem and microcontroller harware environment. Build and share all your
+        projects!
+        <br><br><br>
+        <h4>Resources</h4>
+        (Links to more resources.)
+        <br><br><br>
+        <h4>Friends</h4>
+        <a href="https://getfire.net" title="GetFire.net" target="_blank">GetFire Chat</a>
+        <br>
+        <a href="https://treha.online" title="Treha.online" target="_blank">Treha Online Game</a>
+        <br><br><br>
+        <h4>Contact</h4>
+        For questions, comments, and suggestions, or to submit your Projects:
+        <br>
+        <a href="mailto:motmoe@proton.me">motmoe@proton.me</a>
         <BR><BR><BR>
         <h4>Privacy</h4>
         Mot.moe uses cookies.
+        <BR><BR><BR>
+				©'24 Mot.moe
+					
       </div>
     </div>
+
+
 
     <div id="page_training" class="page">
       <div class="page_content">
  
-        <div id="m.m" style="color:red" onclick="pokeMot();">BOOP</div> 
+        <!-- <div id="m.m" style="color:red" onclick="pokeMot();">BOOP</div>  -->
     
         <div id="ignition" data-state="OFF" onclick="ignite();" title="power"></div>
         <div id="state" class="hud_r" title="machine state"></div>
@@ -191,6 +252,6 @@
   </body>
 
   <script>
-    (function() { init(); })();
+    document.addEventListener("DOMContentLoaded", init());
   </script>
 </html>

@@ -28,19 +28,23 @@ text-align: left;
 
 #icon {
   filter: drop-shadow(1px 1px 2px #222);
-  margin: 3px;
-  position: absolute;
-  left: 0px;
-  padding: 6px;
+  /* margin: 3px; */
+  position: fixed;
+  top: 7px;
+  right: 7px;
+  /* padding: 6px; */
+  /* width: 22px; */
 }
 #icon_flip {
   transform: rotate(180deg);
   filter: drop-shadow(1px 1px 2px #222);
-  margin: 3px;
-  position: absolute;
-  right: 0px;
-  padding: 6px;
-  padding-bottom: 8px;
+  /* margin: 3px; */
+  position: fixed;
+  top: 7px;
+  left: 7px;
+  /* padding: 6px; */
+  /* padding-bottom: 8px; */
+  /* width: 24px; */
 }
 
 #header {
@@ -49,10 +53,10 @@ text-align: left;
   width: 300px;
   left: 50%;
   top: 0px;
-  font-size: 1.6em;
+  font-size: 1.3em;
   border-radius: 5px;
   margin-left: -150px;
-  background-color: rgba(255,255,255,.3);
+  user-select: none;
   text-align: center;
 }
 button{
@@ -62,6 +66,7 @@ button{
 	padding: 0;
 	font: inherit;
 	font-size: 11pt;
+  margin-left: -7px;
   cursor: pointer;
 	outline: inherit;
 }
@@ -71,11 +76,28 @@ button:before{
 button:after{
   content:" \300D";
 }
-
-select{
-  height: 100px;
-  width: 70px;
+button:hover {
+  color: #0f0;
 }
+
+a {
+  color: #0f0;
+  text-decoration: none;
+}
+a:visited {
+  color: #0f0;
+}
+a[href^="mailto"] {
+  color: #0f0;
+}
+
+#b_home {
+  cursor: pointer;
+}
+#b_home:hover {
+  color: #0f0;
+}
+
 
 .page {
   position: fixed;
@@ -91,6 +113,7 @@ select{
   left: 12px;
   bottom: 12px;
   right: 12px;
+  overflow-y: auto;
   border: 1px solid #ddd;
   text-align: center;
   padding: 4px;
@@ -99,17 +122,51 @@ select{
 #page_welcome {
   display: block;
 }
-
 #page_training {
   display: none;
 }
-
 #page_repository {
   display: none;
 }
-#repo_select {
-  border: 1px solid #000;
+#page_control {
+  display: none;
+}
+#how_to {
   width: 100%;
+  text-align: center;
+}
+#how_to td {
+  width: 33%;
+  padding: 10px;
+  /* border: 1px solid #fff; */
+}
+#repo_table {
+  width: 100%;
+  border: 1px solid #000;
+}
+td {
+  vertical-align: top;
+  padding: 7px;
+}
+.img_cell {
+  border: 1px solid #fff;
+  text-align: center;
+  vertical-align: middle;
+}
+.repo_title {
+  font-weight: bold;
+}
+
+#project_logo {
+  min-width: 140px;
+  width: 10%;
+}
+#project_board {
+  width: 90%;
+}
+#project_board img {
+  /* width: inherit; */
+  max-height: 108px;
 }
 
 #page_help {
@@ -119,7 +176,10 @@ select{
 #code_out {
   resize: none;
   width: 100%;
-  height: 40vh; 
+  height: 40vh;
+  padding: 7px; 
+  text-wrap: nowrap;
+  font-size: .8em;
 }
 
 #controls {
