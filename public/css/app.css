@@ -434,3 +434,11 @@ padding-top: 22px;
 #binary_in span:active {
   background: rgba(255,255,255,.3);
 }
+
+
+#privacy_poli {
+  font-size: .7em;
+  text-align: left;
+  height: 200px;
+  width: 100%;
+}

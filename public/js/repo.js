@@ -80,10 +80,10 @@ function selectBoard(){
 
   let $boardCell = $id("project_board");
   let $boardLink = document.createElement("a");
-  $boardLink.href = activeProject.location+"/boards/"+activeProject.activeBoard+".jpg"; 
+  $boardLink.href = activeProject.location+"boards/"+activeProject.activeBoard+".jpg"; 
   $boardLink.target = '_blank';
   let $projectBoard = document.createElement("img");
-  $projectBoard.src = activeProject.location+"/boards/"+activeProject.activeBoard+".jpg";
+  $projectBoard.src = activeProject.location+"boards/"+activeProject.activeBoard+".jpg";
   $boardCell.innerHTML = "";
   $boardLink.append($projectBoard);
   $boardCell.append($boardLink);
@@ -96,7 +96,7 @@ function selectBoard(){
   let boardLine = new RegExp(`\/\/MM ${board} ([^\n]*)`);
   var featuresMatch = code.match(boardLine);
   if (!featuresMatch) return;
-  featuresMatch = featuresMatch[1];
+  featuresMatch = featuresMatch[1].trim();
   var trimmedMatch = featuresMatch.slice(1, -1);
   var features = trimmedMatch.split(', ');
   activeProject.availableFeatures = features;
@@ -137,8 +137,7 @@ function boardFill(){
   var boardsLine = /\/\/MM BOARDS ([^\n]*)/;
   var boardsMatch = code.match(boardsLine);
   if (!boardsMatch) return false;
-  boardsMatch = boardsMatch[1];
-  
+  boardsMatch = boardsMatch[1].trim();
   var trimmedMatch = boardsMatch.slice(1, -1);
   var boards = trimmedMatch.split(', ')
 
@@ -168,7 +167,7 @@ function featureFill(){
   let featuresLine = /\/\/MM FEATURES ([^\n]*)/; 
   let featuresMatch = code.match(featuresLine);
   if (!featuresMatch) return false;
-  featuresMatch = featuresMatch[1];
+  featuresMatch = featuresMatch[1].trim();
 
   let trimmedMatch = featuresMatch.slice(1, -1);
   let features = trimmedMatch.split(', ');
@@ -225,7 +224,8 @@ function curateCode(){
 
     if (!skipFlag && tLine.includes("#ifdef MM_HAS_")){
       let index = tLine.indexOf('MM_HAS_');
-      let feature = tLine.substring(index + 'MM_HAS_'.length);
+      let feature = tLine.substring(index + 'MM_HAS_'.length).trim();
+
       if (!activeProject.activeFeatures.includes(feature))
         skipFlag = feature;
       
@@ -234,7 +234,7 @@ function curateCode(){
 
     if (!skipFlag && tLine.includes("#ifdef MM_IS_")){
       let index = tLine.indexOf('MM_IS_');
-      let board = tLine.substring(index + 'MM_IS_'.length);
+      let board = tLine.substring(index + 'MM_IS_'.length).trim();
       if (activeProject.activeBoard != board)
         skipFlag = board;
       
