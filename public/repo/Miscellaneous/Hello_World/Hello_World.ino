@@ -18,6 +18,7 @@
 // #define MM_HAS_BUZZER
 
 #ifdef MM_IS_UNO
+// SCL A5, SDA A4
 #define ON HIGH
 #define OFF LOW
 #ifdef MM_HAS_LED
@@ -29,6 +30,7 @@
 #endif // MM_IS_UNO
 //MM
 #ifdef MM_IS_ESP8266
+// SCL D1, SDA D2
 #define ON LOW
 #define OFF HIGH
 #ifdef MM_HAS_LED
@@ -46,6 +48,7 @@
 #define BOARD_LED 1
 #endif // MM_HAS_LED
 #endif // MM_IS_ESP01
+
 
 struct Keyframe {
   int time;
@@ -89,6 +92,16 @@ struct Animation buzzerAnimation = {
   }
 };
 #endif // MM_HAS_BUZZER
+#ifdef MM_HAS_SCREEN
+#include <Wire.h>
+#include <Adafruit_SSD1306.h>
+#include <Adafruit_GFX.h>
+#define OLED_ADDR   0x3C
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define SCREEN_ADDRESS 0x3C
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+#endif // MM_HAS_SCREEN
 
 struct Timing {
   unsigned long startTime;
@@ -109,6 +122,27 @@ void setup() {
 #ifdef MM_HAS_BUZZER
   pinMode(BUZZER_PIN, OUTPUT);
 #endif // MM_HAS_BUZZER
+#ifdef MM_HAS_SCREEN
+ // initialize and clear display
+  display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
+  display.clearDisplay();
+  display.display();
+
+  // display a pixel in each corner of the screen
+  display.drawPixel(0, 0, WHITE);
+  display.drawPixel(127, 0, WHITE);
+  display.drawPixel(0, 63, WHITE);
+  display.drawPixel(127, 63, WHITE);
+
+  // display a line of text
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(27,30);
+  display.print("Hello, world!");
+
+  // update display with all of the above graphics
+  display.display();
+#endif // MM_HAS_SCREEN
 }
 
 

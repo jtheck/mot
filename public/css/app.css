@@ -140,6 +140,9 @@ a[href^="mailto"] {
   padding: 10px;
   /* border: 1px solid #fff; */
 }
+#how_desc td {
+  background-color: #fff6;
+}
 #repo_table {
   width: 100%;
   border: 1px solid #000;
@@ -152,6 +155,7 @@ td {
   border: 1px solid #fff;
   text-align: center;
   vertical-align: middle;
+  background-color: #fff6;
 }
 .repo_title {
   font-weight: bold;
@@ -441,4 +445,5 @@ padding-top: 22px;
   text-align: left;
   height: 200px;
   width: 100%;
+  background-color: #fff6;
 }
