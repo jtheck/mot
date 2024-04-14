@@ -26,13 +26,14 @@ let directory = [
     group:'Miscellaneous',
     projects:[
         'Hello_World',
-        'Hourglass'
+        'Hourglass',
+        'Control'
     ]
   },
   {
     group:'Mot.Moe',
     projects:[
-        'TamagoMotmoe',
+        'Tamago',
         'Battle Brobot'
     ]
   }
@@ -80,10 +81,10 @@ function selectBoard(){
 
   let $boardCell = $id("project_board");
   let $boardLink = document.createElement("a");
-  $boardLink.href = activeProject.location+"boards/"+activeProject.activeBoard+".jpg"; 
+  $boardLink.href = "images/boards/"+activeProject.activeBoard+".jpg"; 
   $boardLink.target = '_blank';
   let $projectBoard = document.createElement("img");
-  $projectBoard.src = activeProject.location+"boards/"+activeProject.activeBoard+".jpg";
+  $projectBoard.src = "images/boards/"+activeProject.activeBoard+".jpg";
   $boardCell.innerHTML = "";
   $boardLink.append($projectBoard);
   $boardCell.append($boardLink);
