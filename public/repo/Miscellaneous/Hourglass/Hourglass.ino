@@ -1,6 +1,14 @@
 /**************************************************************************
- TWO SCREEN HOURGLASS WITH TILT
+ Two-screen Hourglass and eyeball example.
+  Ft. Onboard Tilt, Dual SSD1306 OLED Screens,
+    External IMU MPU6050 Tilt, 2+n Control
  **************************************************************************/
+//MM PROJECT Hourglass Eyeballs
+//MM BOARDS [NANO33BLE, ESP8266]
+//MM FEATURES [SCREENS, IMU, 2NCONTROL]
+//MM NANO33BLE [SCREENS, IMU, 2NCONTROL]
+//MM ESP8266 [SCREENS, IMU, 2NCONTROL]
+
 
 #include <SPI.h>
 #include <Wire.h>
