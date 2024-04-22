@@ -6,12 +6,19 @@
 //MM BOARDS [ESP32]
 //MM FEATURES [IBUS, WIFI, BT, TX]
 //MM ESP32 [IBUS, WIFI, BT, TX]
-// Include iBusBM Library
-#include <IBusBM.h>
+#define MM_IS_ESP32
+#define MM_HAS_IBUS
+#define MM_HAS_WIFI
 
+#ifdef MM_HAS_WIFI
 #include <WiFi.h>
 WiFi.mode(WIFI_AP)
+#endif // MM_HAS_WIFI
 
+
+#ifdef MM_HAS_IBUS
+// Include iBusBM Library
+#include <IBusBM.h>
 // Create iBus Object
 IBusBM ibus;
  
@@ -29,13 +36,17 @@ bool readSwitch(byte channelInput, bool defaultValue) {
   int ch = readChannel(channelInput, 0, 100, intDefaultValue);
   return (ch > 50);
 }
- 
+#endif // MM_HAS_IBUS
+
+
+
 void setup() {
   // Start serial monitor
   Serial.begin(115200);
- Serial.print("FLYSKY TAKE ONE");
+  Serial.print("FLYSKY TAKE ONE");
   // Attach iBus object to serial port
   ibus.begin(Serial2);
+
 }
  
 void loop() {

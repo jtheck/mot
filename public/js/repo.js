@@ -34,7 +34,7 @@ let directory = [
     group:'Mot.Moe',
     projects:[
         'Tamago',
-        'Battle Brobot'
+        'Battle_Brobot'
     ]
   }
 ];

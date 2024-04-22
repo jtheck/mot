@@ -1,13 +1,14 @@
 /************************************
  Mot.moe 'Hello World' example.
-  Ft. Onboard LED, Piezo Buzzer,
-   Serial Monitor, SSD1306 OLED Screen 
+  Ft. Onboard LED, Piezo BUZZER,
+   Serial MONITOR, SSD1306 OLED SCREEN,
+   WIFI Presence 
 ************************************/
 //MM PROJECT Hello World
 //MM BOARDS [UNO, ESP8266, ESP01]
-//MM FEATURES [LED, MONITOR, SCREEN, BUZZER]
+//MM FEATURES [LED, MONITOR, SCREEN, BUZZER, WIFI]
 //MM UNO [LED, MONITOR, SCREEN, BUZZER]
-//MM ESP8266 [LED, MONITOR, SCREEN, BUZZER]
+//MM ESP8266 [LED, MONITOR, SCREEN, BUZZER, WIFI]
 //MM ESP01 [LED, SCREEN]
 // #define MM_IS_UNO
 // #define MM_IS_ESP8266
@@ -16,6 +17,7 @@
 // #define MM_HAS_MONITOR
 // #define MM_HAS_SCREEN
 // #define MM_HAS_BUZZER
+// #define MM_HAS_WIFI
 
 #ifdef MM_IS_UNO
 // SCL A5, SDA A4
@@ -39,6 +41,10 @@
 #ifdef MM_HAS_BUZZER
 #define BUZZER_PIN 12
 #endif // MM_HAS_BUZZER
+#ifdef MM_HAS_WIFI
+  #include <ESP8266WiFi.h>
+  #include <ESP8266WebServer.h>
+#endif // MM_HAS_WIFI
 #endif // MM_IS_ESP8266
 //MM
 #ifdef MM_IS_ESP01
@@ -48,6 +54,16 @@
 #define BOARD_LED 1
 #endif // MM_HAS_LED
 #endif // MM_IS_ESP01
+//MM
+#ifdef MM_HAS_SCREEN
+#include <Wire.h>
+#include <Adafruit_SSD1306.h>
+#include <Adafruit_GFX.h>
+#define OLED_ADDR   0x3C
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+#endif // MM_HAS_SCREEN
 
 
 struct Keyframe {
@@ -92,16 +108,6 @@ struct Animation buzzerAnimation = {
   }
 };
 #endif // MM_HAS_BUZZER
-#ifdef MM_HAS_SCREEN
-#include <Wire.h>
-#include <Adafruit_SSD1306.h>
-#include <Adafruit_GFX.h>
-#define OLED_ADDR   0x3C
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
-#define SCREEN_ADDRESS 0x3C
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
-#endif // MM_HAS_SCREEN
 
 struct Timing {
   unsigned long startTime;
