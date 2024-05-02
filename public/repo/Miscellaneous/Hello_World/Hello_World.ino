@@ -6,7 +6,7 @@
 ************************************/
 //MM PROJECT Hello World
 //MM BOARDS [UNO, ESP8266, ESP01]
-//MM FEATURES [LED, MONITOR, SCREEN, BUZZER, WIFI]
+//MM FEATURES [LED, MONITOR, SCREEN, BUZZER]
 //MM UNO [LED, MONITOR, SCREEN, BUZZER]
 //MM ESP8266 [LED, MONITOR, SCREEN, BUZZER, WIFI]
 //MM ESP01 [LED, SCREEN]
@@ -42,8 +42,8 @@
 #define BUZZER_PIN 12
 #endif // MM_HAS_BUZZER
 #ifdef MM_HAS_WIFI
-  #include <ESP8266WiFi.h>
-  #include <ESP8266WebServer.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
 #endif // MM_HAS_WIFI
 #endif // MM_IS_ESP8266
 //MM
@@ -173,7 +173,7 @@ void loop() {
 #ifdef MM_HAS_MONITOR
 #endif // MM_HAS_MONITOR
 #ifdef MM_HAS_BUZZER
-  // Step "Hello World" BUZZER animation
+  // Step "Hello World" BUZZER expression
   int buzzerElapsed = timer.frameStart - buzzerAnimation.startTime;
   if (buzzerElapsed > buzzerAnimation.keyframes[buzzerAnimation.currentFrame].time){
     digitalWrite(BUZZER_PIN, buzzerAnimation.keyframes[buzzerAnimation.currentFrame].state);

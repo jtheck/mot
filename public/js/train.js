@@ -211,21 +211,76 @@ return document.querySelector("#"+id);
 }
 
 
+    // // get ip
+    // let ip = evt.target.getAttribute("data-ip");
+    // let mot = findMote(ip);
+    // fetch("http://"+ip+"/log")
+    // .then(respo => respo.text())
+    // .then(data => {
+    //   // console.log(data);
+    // })
+    // .catch(er => {
+    //   // console.log('no polo');
+    // });
+    
+function pollDeviceLog(){
+      
+    fetch('http://192.168.2.3/poll')
+      .then(respo => respo.text())
+      .then(data => {
+    let log = $id("control_monitor");
+    log.append(data);
+    log.innerHTML += "<BR>";
+    log.scrollTop = log.scrollHeight;
+  })
+  .catch(er => {
+    console.log('er');
+  });
+  // alert('boop')
+}
+
+let pollInterval = false;
+
 var pokeMot = function(){
-var xhr = new XMLHttpRequest();
-// xhr.open("GET", "http://192.168.2.3/boop");
-xhr.open("POST", "http://192.168.2.3/boop");
-let data = '{x:"yz", 1:23}';
-xhr.send(data);
-xhr.onload = function(e){
-    const data = JSON.parse(xhr.responseText);
-    // alert(xhr.status)
-    console.log(data);
-}
-xhr.onerror = function(e){
-    alert('its bad');
-    console.log(e);
-}
+  if (pollInterval){
+    clearInterval(pollInterval);
+    pollInterval = false;
+  } else {
+    pollInterval = setInterval(pollDeviceLog, 330);
+  }
+    
+
+
+
+  // var xhr = new XMLHttpRequest();
+  // // xhr.open("GET", "http://192.168.2.3/boop");
+  // xhr.open("POST", "http://192.168.2.3/boop");
+  // let data = '{x:"yz", 1:23}';
+  // xhr.send(data);
+  // xhr.onload = function(e){
+    
+  //     const data = JSON.parse(xhr.responseText);
+  //     // alert(xhr.status)
+  //     console.log(data);
+  // }
+  // xhr.onerror = function(e){
+  //     alert('its bad');
+  //     console.log(e);
+  // }
+
+
+
+
+  // fetch('http://192.168.2.3/boop')
+  // .then(respo => respo.text())
+  // .then(data => {
+  //   console.log(data);
+  // })
+  // .catch(er => {
+  //   console.log('er');
+  // });
+  // alert('boop')
+
 }
 
 var ignite = function(){

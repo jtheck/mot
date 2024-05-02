@@ -26,6 +26,7 @@ let directory = [
     group:'Miscellaneous',
     projects:[
         'Hello_World',
+        'Hello_Wifi',
         'Hourglass',
         'Control'
     ]
@@ -257,7 +258,7 @@ function initRepo(){
 
   for (var i=0; i<directory.length; i++){
     var tGroup = directory[i];
-    console.log(tGroup)
+    // console.log(tGroup)
     var $group = document.createElement("optgroup");
     $group.label = tGroup.group;
     

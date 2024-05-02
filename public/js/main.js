@@ -4,7 +4,7 @@
 var init = function(){
   initRepo();
   initTraining();
-
+  initControl();
 
   // Init chat
   if (typeof GETFIRE !== "undefined"){
