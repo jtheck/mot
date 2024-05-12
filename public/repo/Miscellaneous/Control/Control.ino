@@ -6,9 +6,9 @@
 //MM BOARDS [ESP32]
 //MM FEATURES [IBUS, WIFI, BT, TX]
 //MM ESP32 [IBUS, WIFI, BT, TX]
-#define MM_IS_ESP32
-#define MM_HAS_IBUS
-#define MM_HAS_WIFI
+// #define MM_IS_ESP32
+// #define MM_HAS_IBUS
+// #define MM_HAS_WIFI
 
 #ifdef MM_HAS_WIFI
 #include <WiFi.h>
@@ -17,9 +17,8 @@ WiFi.mode(WIFI_AP)
 
 
 #ifdef MM_HAS_IBUS
-// Include iBusBM Library
+// PIN! IBUS data --> RX2
 #include <IBusBM.h>
-// Create iBus Object
 IBusBM ibus;
  
 // Read the number of a given channel and convert to the range provided.
@@ -30,12 +29,12 @@ int readChannel(byte channelInput, int minLimit, int maxLimit, int defaultValue)
   return map(ch, 1000, 2000, minLimit, maxLimit);
 }
  
-// Read the channel and return a boolean value
-bool readSwitch(byte channelInput, bool defaultValue) {
-  int intDefaultValue = (defaultValue) ? 100 : 0;
-  int ch = readChannel(channelInput, 0, 100, intDefaultValue);
-  return (ch > 50);
-}
+// // Read the channel and return a boolean value
+// bool readSwitch(byte channelInput, bool defaultValue) {
+//   int intDefaultValue = (defaultValue) ? 100 : 0;
+//   int ch = readChannel(channelInput, 0, 100, intDefaultValue);
+//   return (ch > 50);
+// }
 #endif // MM_HAS_IBUS
 
 
@@ -44,9 +43,10 @@ void setup() {
   // Start serial monitor
   Serial.begin(115200);
   Serial.print("FLYSKY TAKE ONE");
+#ifdef MM_HAS_IBUS
   // Attach iBus object to serial port
   ibus.begin(Serial2);
-
+#endif
 }
  
 void loop() {
