@@ -1,17 +1,13 @@
 /**************************************************************************
  Two-screen Hourglass and eyeball example.
-  Ft. Single & Dual SSD1306 OLED Screens,
-    Onboard Tilt, External IMU MPU6050 Tilt
+  Ft. Onboard Tilt, Dual SSD1306 OLED Screens,
+    External IMU MPU6050 Tilt, 2+n Control
  **************************************************************************/
 //MM PROJECT Hourglass Eyeballs
-//MM BOARDS [UNO, NANO33BLE, ESP8266]
+//MM BOARDS [NANO33BLE, ESP8266]
 //MM FEATURES [SCREENS, IMU, 2NCONTROL]
-//MM UNO [SCREENS, IMU]
 //MM NANO33BLE [SCREENS, IMU, 2NCONTROL]
 //MM ESP8266 [SCREENS, IMU, 2NCONTROL]
-#define MM_IS_UNO
-#define MM_HAS_1SCREEN
-// #define MM_HAS_2SCREENS
 
 
 #include <SPI.h>
@@ -19,9 +15,9 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-// #include <Adafruit_MPU6050.h>
-// #include <Adafruit_Sensor.h>
-// Adafruit_MPU6050 mpu;
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+Adafruit_MPU6050 mpu;
 
 //#include <ArduinoSound.h>
 
@@ -29,15 +25,15 @@
 
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
-// #define VIRTUAL_WIDTH 256 // double wide
-// #define VIRTUAL_HEIGHT 64
+#define VIRTUAL_WIDTH 256 // double wide
+#define VIRTUAL_HEIGHT 64
 
 // ARDUINO NANO 33 BLE
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
-// #define SCREEN_ADDRESS2 0x3D ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+#define SCREEN_ADDRESS2 0x3D ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-// Adafruit_SSD1306 display2(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+Adafruit_SSD1306 display2(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 
 
@@ -71,30 +67,30 @@ void setup() {
     Serial.println(F("SSD1306 allocation failed"));
     for(;;); // Don't proceed, loop forever
   }
-  // if(!display2.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS2)) {
-  //   Serial.println(F("SSD1306 allocation failed"));
-  //   for(;;); // Don't proceed, loop forever
-  // }
+  if(!display2.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS2)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;); // Don't proceed, loop forever
+  }
 
-  // // IMU
-  // byte gyro = mpu.begin();
-  // if (!mpu.begin()){
-  //   Serial.println("fail");
-  //   while(1){
-  //     delay(10);
-  //     } // Wait for successful connection (0)
-  // }
-  // // Serial.println("found!");
-  // mpu.setAccelerometerRange(MPU6050_RANGE_8_G); // 2 < 4 < 8 < 16 +-G
-  // mpu.setGyroRange(MPU6050_RANGE_500_DEG); // 250 < 500 < 1000 < 2000 deg/s
-  // mpu.setFilterBandwidth(MPU6050_BAND_5_HZ); // 5, 10, 21, 44, 94, 184, 260 HZ 
-  // // Serial.println(mpu.getAccelerometerRange());
-  // // Serial.println(mpu.getGyroRange());
-  // // Serial.println(mpu.getFilterBandwidth());
+  // IMU
+  byte gyro = mpu.begin();
+  if (!mpu.begin()){
+    Serial.println("fail");
+    while(1){
+      delay(10);
+      } // Wait for successful connection (0)
+  }
+  // Serial.println("found!");
+  mpu.setAccelerometerRange(MPU6050_RANGE_8_G); // 2 < 4 < 8 < 16 +-G
+  mpu.setGyroRange(MPU6050_RANGE_500_DEG); // 250 < 500 < 1000 < 2000 deg/s
+  mpu.setFilterBandwidth(MPU6050_BAND_5_HZ); // 5, 10, 21, 44, 94, 184, 260 HZ 
+  // Serial.println(mpu.getAccelerometerRange());
+  // Serial.println(mpu.getGyroRange());
+  // Serial.println(mpu.getFilterBandwidth());
 
 
   // Clear the buffer
-  // display2.clearDisplay();
+  display2.clearDisplay();
   display.clearDisplay();
 
   testanimate(logo_bmp, LOGO_WIDTH, LOGO_HEIGHT); // Animate bitmaps
@@ -125,33 +121,33 @@ void testanimate(const uint8_t *bitmap, uint8_t w, uint8_t h) {
   }
 
   for(;;) { // Loop forever...
-      //  sensors_event_t a, g, temp;
-      //  mpu.getEvent(&a, &g, &temp);
-      //  Serial.println(a.acceleration.x);
-      //  Serial.println(a.acceleration.y);
+       sensors_event_t a, g, temp;
+       mpu.getEvent(&a, &g, &temp);
+       Serial.println(a.acceleration.x);
+       Serial.println(a.acceleration.y);
 //    
     display.clearDisplay(); // Clear the display buffer
-    // display2.clearDisplay(); // Clear the display buffer
+    display2.clearDisplay(); // Clear the display buffer
 
     // Draw each snowflake:
     for(f=0; f< NUMFLAKES; f++) {
 //  display.drawCircle(icons[f][XPOS], icons[f][YPOS], 9, SSD1306_WHITE);
 
     display.drawPixel(icons[f][XPOS], icons[f][YPOS], SSD1306_WHITE);
-// display2.drawPixel(icons[f][XPOS], icons[f][YPOS], SSD1306_WHITE);
+display2.drawPixel(icons[f][XPOS], icons[f][YPOS], SSD1306_WHITE);
 
       // display.drawBitmap(icons[f][XPOS], icons[f][YPOS], bitmap, w, h, SSD1306_WHITE);
 //      display2.drawBitmap(icons[f][XPOS], icons[f][YPOS], bitmap, w, h, SSD1306_WHITE);
     }
 
     display.display(); // Show the display buffer on the screen
-    // display2.display();
+    display2.display();
     delay(10);
 
     // Then update coordinates of each flake...
     for(f=0; f< NUMFLAKES; f++) {
-      icons[f][YPOS] -= 1;//a.acceleration.x+a.acceleration.x*random(1,2);//cons[f][DELTAY];
-      icons[f][XPOS] -= 1;//a.acceleration.y+a.acceleration.y*random(1,2);//cons[f][DELTAY];
+      icons[f][YPOS] -= a.acceleration.x+a.acceleration.x*random(1,2);//cons[f][DELTAY];
+      icons[f][XPOS] -= a.acceleration.y+a.acceleration.y*random(1,2);//cons[f][DELTAY];
       
       // If snowflake is off the bottom of the screen...
       if (icons[f][YPOS] >= display.height()) {

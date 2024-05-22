@@ -5,7 +5,7 @@ Mot Moe
 
 
 
-[Click here for robot repository!](./public/repo)
+[Click here for robot code repository!](./public/repo)
 
 
 
