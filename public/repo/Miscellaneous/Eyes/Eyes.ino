@@ -4,7 +4,7 @@
     Onboard Tilt, External IMU MPU6050 Tilt
  **************************************************************************/
 //MM PROJECT Eyeballs
-#define MM_IS_UNO
+//#define MM_IS_UNO
 //#define MM_HAS_1SCREEN
 #define MM_HAS_2SCREENS
 
@@ -39,6 +39,7 @@ struct Eye {
   int lidLower;
   int irisRadius;
   int pupilRadius;
+  int brow;
   int lines[15];
 };
 
@@ -47,9 +48,10 @@ struct Eye eye1 = {
     .x = SCREEN_WIDTH/2,
     .y = SCREEN_HEIGHT/2,
     .lidUpper = 12,
-    .lidLower = SCREEN_HEIGHT - 18,
+    .lidLower = SCREEN_HEIGHT - 1,
     .irisRadius = 24,
     .pupilRadius = 9,
+    .brow = 1,
     // .lines = {} 
   };
 
@@ -58,14 +60,51 @@ struct Eye eye2 = {
     .x = SCREEN_WIDTH/2,
     .y = SCREEN_HEIGHT/2,
     .lidUpper = 9,
-    .lidLower = SCREEN_HEIGHT - 12,
+    .lidLower = SCREEN_HEIGHT - 3,
     .irisRadius = 24,
     .pupilRadius = 8,
+    .brow = -3,
     // .lines = {} 
   };
 #endif
 
 
+struct Keyframe {
+  int time;
+  int state;
+};
+
+const int frameCt = 6;
+struct Animation {
+  unsigned long startTime;
+  int currentFrame;
+  struct Keyframe keyframes[frameCt];
+};
+
+struct Gesture {
+  // int 
+
+};
+
+struct Animation testAnim = {
+  .startTime = 0,
+  .currentFrame = 0,
+  .keyframes = {
+    {2, 9},
+    {40, 19},
+    {50, 60},
+    // {55, SCREEN_HEIGHT - 12},
+    {60, 19},
+    {175, 12},
+    {4255, 9}
+  }
+};
+
+struct Timing {
+  unsigned long frameStart;
+  unsigned long framePrev;
+};
+struct Timing timer = {0, 0};
 
 
 
@@ -77,8 +116,8 @@ void setup() {
   
  
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
+    // Serial.println(F("SSD1306 allocation failed"));
+    // for(;;); // Don't proceed, loop forever
   }
   display.clearDisplay();
   initEye(&eye1);
@@ -86,17 +125,36 @@ void setup() {
   
   #ifdef MM_HAS_2SCREENS
   if(!display2.begin(SSD1306_SWITCHCAPVCC, SCREEN2_ADDRESS)) {
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
+    // Serial.println(F("SSD1306 allocation failed"));
+    // for(;;); // Don't proceed, loop forever
   }
   display2.clearDisplay();
   initEye(&eye2);
   #endif
 
-  Serial.println("Begin!");
+  if (Serial) Serial.println("Begin!");
 }
 
 void loop() {
+  // Timing
+  timer.frameStart = millis();
+  timer.framePrev = timer.frameStart;
+
+
+  // Serial.print((String)elapsed+" v "+testAnim.keyframes[testAnim.currentFrame].time+" frame "+testAnim.currentFrame);
+  int elapsed = timer.frameStart - testAnim.startTime;
+  if (elapsed > testAnim.keyframes[testAnim.currentFrame].time){
+    eye1.lidUpper = testAnim.keyframes[testAnim.currentFrame].state;
+    if (testAnim.currentFrame < frameCt-1){
+      testAnim.currentFrame++;
+    } else {
+      testAnim.currentFrame = 0;
+      testAnim.startTime = timer.frameStart;
+    }
+  }
+
+
+
 
   display.clearDisplay(); // Clear the display buffer
   #ifdef MM_HAS_2SCREENS
@@ -127,10 +185,7 @@ void initEye(struct Eye* eye){
 }
 
 
-
-
 void drawEye(struct Eye eye, Adafruit_SSD1306 *disp){
- 
   disp->drawCircle(eye.x, eye.y, eye.irisRadius, 1); 
   disp->drawCircle(eye.x, eye.y, eye.irisRadius+1, 1);
   disp->fillCircle(eye.x, eye.y, eye.pupilRadius, 1);
@@ -149,6 +204,5 @@ void drawEye(struct Eye eye, Adafruit_SSD1306 *disp){
   }
   disp->drawFastHLine(0, eye.lidLower, SCREEN_WIDTH, 1);
 
-
-
+  disp->drawLine(0, 5+eye.brow, SCREEN_WIDTH, 5-eye.brow, 1);
 }
