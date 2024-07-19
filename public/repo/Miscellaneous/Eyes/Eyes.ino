@@ -32,6 +32,37 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 Adafruit_SSD1306 display2(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #endif
 
+struct Timing {
+  unsigned long frameStart;
+  unsigned long framePrev;
+};
+struct Timing timer = {0, 0};
+
+struct Keyframe {
+  int time;
+  int state;
+};
+
+const int maxFrameCt = 6;
+struct Animation {
+  unsigned long startTime;
+  int duration; 
+  int currentFrame;
+  int frameCt;
+  struct Keyframe keyframes[maxFrameCt];
+  int *target;  
+};
+
+struct Gesture {
+  unsigned long startTime;
+  int duration;
+  // int frameCt;
+  // int currentFrame;
+  struct Animation animations[4];
+};
+
+
+
 struct Eye {
   int x;
   int y;
@@ -44,100 +75,105 @@ struct Eye {
 };
 
 
+
 struct Eye eye1 = {
-    .x = SCREEN_WIDTH/2,
-    .y = SCREEN_HEIGHT/2 +6,
-    .lidUpper = 12,
-    .lidLower = SCREEN_HEIGHT - 1,
-    .irisRadius = 24,
-    .pupilRadius = 9,
-    .brow = 1,
-    // .lines = {} 
-  };
-
-#ifdef MM_HAS_2SCREENS
-struct Eye eye2 = {
-    .x = SCREEN_WIDTH/2,
-    .y = SCREEN_HEIGHT/2 +6,
-    .lidUpper = 9,
-    .lidLower = SCREEN_HEIGHT - 3,
-    .irisRadius = 24,
-    .pupilRadius = 8,
-    .brow = -3,
-    // .lines = {} 
-  };
-#endif
-
-
-struct Keyframe {
-  int time;
-  int state;
+  .x = SCREEN_WIDTH/2,
+  .y = SCREEN_HEIGHT/2 +6,
+  .lidUpper = 15,
+  .lidLower = SCREEN_HEIGHT-1,
+  .irisRadius = 24,
+  .pupilRadius = 9,
+  .brow = 0,//7
+  // .lines = {} 
 };
 
-const int frameCt = 6;
-struct Animation {
-  unsigned long startTime;
-  int currentFrame;
-  struct Keyframe keyframes[frameCt];
-  int *target;  
-};
-
-struct Gesture {
-  // int anim[4];
-
-  struct Animation animations[4];
-};
-
-struct Animation upperLidBlinkLeft = {
+struct Animation blinkUpperLidLeft = {
   .startTime = 0,
+  .duration = 175,
   .currentFrame = 0,
+  .frameCt = 5,
   .keyframes = {
-    {2, 9},
+    {2, 13},
     {40, 19},
-    {50, 60},
+    {50, 59},
     {60, 19},
-    {175, 12},
-    {3255, 9}
+    {175, 15}
   },
   .target = &eye1.lidUpper,
 };
-struct Animation lowerLidBlink = {
+struct Animation blinkLowerLidLeft = {
   .startTime = 0,
+  .duration = 60,
   .currentFrame = 0,
+  .frameCt = 3,
   .keyframes = {
     {2, 63},
-    {50, 60}
-  }
+    {50, 60},
+    {60, SCREEN_HEIGHT-1}
+  },
+  .target = &eye1.lidLower
 };
 
-struct Animation upperLidBlinkRight = {
+#ifdef MM_HAS_2SCREENS
+struct Eye eye2 = {
+  .x = SCREEN_WIDTH/2,
+  .y = SCREEN_HEIGHT/2 +6,
+  .lidUpper = 15,
+  .lidLower = SCREEN_HEIGHT-1,
+  .irisRadius = 24,
+  .pupilRadius = 9,
+  .brow = 0,//-7
+  // .lines = {} 
+};
+
+struct Animation blinkUpperLidRight = {
   .startTime = 0,
+  .duration = 175,
   .currentFrame = 0,
+  .frameCt = 5,
   .keyframes = {
-    {2, 9},
+    {2, 13},
     {40, 19},
-    {50, 60},
+    {50, 59},
     {60, 19},
-    {175, 12},
-    {3255, 9}
+    {175, 15}
   },
   .target = &eye2.lidUpper,
 };
+struct Animation blinkLowerLidRight = {
+  .startTime = 0,
+  .duration = 60,
+  .currentFrame = 0,
+  .frameCt = 3,
+  .keyframes = {
+    {2, 63},
+    {50, 60},
+    {60, SCREEN_HEIGHT-1}
+  },
+  .target = &eye2.lidLower
+};
+#endif
+
+
+
 
 struct Gesture blink = {
+  .startTime = 0,
+  .duration = 1255,
   .animations = {
-    {upperLidBlinkLeft},
-    {upperLidBlinkRight}
+    {blinkUpperLidLeft},
+    {blinkLowerLidLeft},
+    {blinkUpperLidRight},
+    {blinkLowerLidRight}
   }
 };
 
-struct Timing {
-  unsigned long frameStart;
-  unsigned long framePrev;
-};
-struct Timing timer = {0, 0};
-
+int gestureQueueLength = 1;
 struct Gesture gestureQueue[4];
+
+
+
+
 
 void setup() {
   Serial.begin(9600);
@@ -145,7 +181,7 @@ void setup() {
   
   randomSeed(analogRead(0));
 
-gestureQueue[0] = blink;
+  gestureQueue[0] = blink;
 
   
  
@@ -153,7 +189,7 @@ gestureQueue[0] = blink;
     // Serial.println(F("SSD1306 allocation failed"));
     // for(;;); // Don't proceed, loop forever
   }
-// display.invertDisplay(true);
+  // display.invertDisplay(true);
   display.clearDisplay();
   initEye(&eye1);
 
@@ -183,51 +219,51 @@ void loop() {
     eye2.x = x;
     #endif
   }
-
-
-  for (int i=0; i<1; i++){
-    struct Gesture *tGesture = &gestureQueue[i];
-    
-    for (int u=0; u<2; u++){
-      struct Animation *tAnim = &tGesture->animations[u];
-
-int elapsed = timer.frameStart - tAnim->startTime;
-if (elapsed > tAnim->keyframes[tAnim->currentFrame].time){
-  
-*tAnim->target = tAnim->keyframes[tAnim->currentFrame].state;
-  // Serial.println(*tAnim->target);
-  // Serial.println((String)tAnim->currentFrame+ " v "+(frameCt-1));
-  
-  if (tAnim->currentFrame < frameCt-1){
-    tAnim->currentFrame++;
-    // Serial.println(tAnim->currentFrame);
-  } else {
-    // Serial.println("no");
-    tAnim->currentFrame = 0;
-    tAnim->startTime = timer.frameStart;
+  if (random(1000) < 13){
+    gestureQueueLength = 1;
+    gestureQueue[0] = blink;
   }
-}
+
+
+
+  for (int i=0; i<gestureQueueLength; i++){
+    struct Gesture *tGesture = &gestureQueue[i];
+    if (tGesture->startTime == 0) tGesture->startTime = timer.frameStart; 
+    // bool advancedFrame = false;
+    int gElapsed = timer.frameStart - tGesture->startTime;
+
+    for (int j=0; j<4; j++){
+      struct Animation *tAnim = &tGesture->animations[j];
+
+      int elapsed = timer.frameStart - tAnim->startTime;
+      if (elapsed > tAnim->keyframes[tAnim->currentFrame].time){
+        *tAnim->target = tAnim->keyframes[tAnim->currentFrame].state;
+        // Serial.println((String)tAnim->currentFrame+ " v "+(frameCt-1));
       
-
-
-
+        if (tAnim->currentFrame < tAnim->frameCt-1){
+          tAnim->currentFrame++;
+        }
+      }
+            
     }
 
+    if (gElapsed > tGesture->duration){
+      // gestureQueue[i] = null;
+      gestureQueueLength = 0;
 
+      tGesture->startTime = 0;
+      for (int j=0; j<4; j++){
+        struct Animation *tAnim = &tGesture->animations[j];
+        tAnim->currentFrame = 0;
+        tAnim->startTime = timer.frameStart; 
+      }
+
+    }
   }
 
 
   // Serial.print((String)elapsed+" v "+testAnim.keyframes[testAnim.currentFrame].time+" frame "+testAnim.currentFrame);
-  // int elapsed = timer.frameStart - testAnim.startTime;
-  // if (elapsed > testAnim.keyframes[testAnim.currentFrame].time){
-  //   eye1.lidUpper = testAnim.keyframes[testAnim.currentFrame].state;
-  //   if (testAnim.currentFrame < frameCt-1){
-  //     testAnim.currentFrame++;
-  //   } else {
-  //     testAnim.currentFrame = 0;
-  //     testAnim.startTime = timer.frameStart;
-  //   }
-  // }
+
 
 
 
