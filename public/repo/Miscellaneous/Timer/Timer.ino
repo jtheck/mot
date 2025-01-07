@@ -64,33 +64,30 @@ void loop() {
 
 
 if (digitalRead(PIN_BUTTON1) == HIGH){
-
-if (timer.timer == 25*MIN){
+if (timer.timer == 30*MIN){
   timer.timer = MIN;
 }
-
 if (timer.timer == 15*MIN){
-  timer.timer = 25*MIN;
+  timer.timer = 30*MIN;
 }
 if (timer.timer == 10*MIN){
   timer.timer = 15*MIN;
 }
-
 if (timer.timer == 5*MIN){
   timer.timer = 10*MIN;
 }
-  // timer.timer = 30000;
-if (timer.timer == MIN){
+if (timer.timer == 2*MIN){
   timer.timer = 5*MIN;
 }
+if (timer.timer == MIN){
+  timer.timer = 2*MIN;
+}
 
-delay(160);
-
-
+delay(165);
 }
 if (digitalRead(PIN_TILT)) {  // Check if tilt switch is HIGH
-timer.startTime = millis();
-timer.elapsedTime = 0;
+  timer.startTime = millis();
+  timer.elapsedTime = 0;
 }
 
   display.clearDisplay(); // Clear the display buffer
@@ -119,13 +116,13 @@ delay(33);
 delay(120);            // Wait for 1 second
   noTone(BUZZER_PIN);
 
-  tone(BUZZER_PIN, 69); // Generate a 4000 Hz tone
-  delay(90);            // Wait for 1 second
+  tone(BUZZER_PIN, 42); // Generate a 4000 Hz tone
+  delay(120);            // Wait for 1 second
   noTone(BUZZER_PIN);     // Stop the tone
 
-delay(29);
+delay(31);
   tone(BUZZER_PIN, 1233); // Generate a 4000 Hz tone
-  delay(143);            // Wait for 1 second
+  delay(144);            // Wait for 1 second
   noTone(BUZZER_PIN);     // Stop the tone
 
 // 
