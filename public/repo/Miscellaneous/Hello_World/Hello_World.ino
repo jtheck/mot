@@ -10,12 +10,12 @@
 //MM UNO [LED, MONITOR, SCREEN, BUZZER]
 //MM ESP8266 [LED, MONITOR, SCREEN, BUZZER, WIFI]
 //MM ESP01 [LED, SCREEN]
-// #define MM_IS_UNO
- #define MM_IS_ESP8266
+#define MM_IS_UNO
+// #define MM_IS_ESP8266
 // #define MM_IS_ESP01
 // #define MM_HAS_LED
 // #define MM_HAS_MONITOR
- #define MM_HAS_SCREEN
+#define MM_HAS_SCREEN
 // #define MM_HAS_BUZZER
 // #define MM_HAS_WIFI
 
