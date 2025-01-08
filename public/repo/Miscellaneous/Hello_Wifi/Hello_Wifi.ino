@@ -11,8 +11,8 @@
 // #define MM_IS_ESP01
 #define MM_IS_ESP32
 // #define MM_IS_ESP8266
-#define MM_HAS_STATICWIFI
-// #define MM_HAS_DYNAMICWIFI
+// #define MM_HAS_STATICWIFI
+#define MM_HAS_DYNAMICWIFI
 
 
 #ifdef MM_IS_ESP32
@@ -111,10 +111,10 @@ void setup()
   server.on("/", []()
             { server.send(200, "text/plain", "HIHIHOHO");
             Serial.println("GAH"); });
-  server.on("/boop", h_boop);
-  server.on("/poll", h_poll);
-  server.on("/marco", h_marco);
-  server.on("/log", h_log);
+  // server.on("/boop", h_boop);
+  // server.on("/poll", h_poll);
+  // server.on("/marco", h_marco);
+  // server.on("/log", h_log);
   server.enableCORS(true);
 #endif
   server.begin();

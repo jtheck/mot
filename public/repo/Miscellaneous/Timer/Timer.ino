@@ -8,12 +8,15 @@
 #define SCREEN_HEIGHT 64
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
-#define BUZZER_PIN 12
+#define BUZZER_PIN 13
+
+// #define BUZZER_PIN 12
 
 #define PIN_BUTTON1 7
 
-#define PIN_TILT 2
+#define PIN_TILT 6
 
+// #define PIN_TILT 2
 
 const unsigned long MIN = 60000;
 struct Timing {
@@ -49,10 +52,10 @@ void setup() {
 
   pinMode(BUZZER_PIN, OUTPUT);
 
-pinMode(PIN_BUTTON1, INPUT);
+// pinMode(PIN_BUTTON1, INPUT);
 
-  pinMode(PIN_TILT, INPUT);     // Set tiltPin as input
-  digitalWrite(PIN_TILT, HIGH);  // Enable internal pull-up resistor
+//   pinMode(PIN_TILT, INPUT);     // Set tiltPin as input
+//   digitalWrite(PIN_TILT, HIGH);  // Enable internal pull-up resistor
 }
 void loop() {
   // put your main code here, to run repeatedly:
@@ -63,32 +66,32 @@ void loop() {
   timer.elapsedTime = timer.frameStart - timer.startTime;
 
 
-if (digitalRead(PIN_BUTTON1) == HIGH){
-if (timer.timer == 30*MIN){
-  timer.timer = MIN;
-}
-if (timer.timer == 15*MIN){
-  timer.timer = 30*MIN;
-}
-if (timer.timer == 10*MIN){
-  timer.timer = 15*MIN;
-}
-if (timer.timer == 5*MIN){
-  timer.timer = 10*MIN;
-}
-if (timer.timer == 2*MIN){
-  timer.timer = 5*MIN;
-}
-if (timer.timer == MIN){
-  timer.timer = 2*MIN;
-}
+// if (digitalRead(PIN_BUTTON1) == HIGH){
+// if (timer.timer == 30*MIN){
+//   timer.timer = MIN;
+// }
+// if (timer.timer == 15*MIN){
+//   timer.timer = 30*MIN;
+// }
+// if (timer.timer == 10*MIN){
+//   timer.timer = 15*MIN;
+// }
+// if (timer.timer == 5*MIN){
+//   timer.timer = 10*MIN;
+// }
+// if (timer.timer == 2*MIN){
+//   timer.timer = 5*MIN;
+// }
+// if (timer.timer == MIN){
+//   timer.timer = 2*MIN;
+// }
 
-delay(165);
-}
-if (digitalRead(PIN_TILT)) {  // Check if tilt switch is HIGH
-  timer.startTime = millis();
-  timer.elapsedTime = 0;
-}
+// delay(165);
+// }
+// if (digitalRead(PIN_TILT)) {  // Check if tilt switch is HIGH
+//   timer.startTime = millis();
+//   timer.elapsedTime = 0;
+// }
 
   display.clearDisplay(); // Clear the display buffer
   display.setCursor(27,5);
