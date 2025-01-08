@@ -50,7 +50,7 @@ text-align: left;
 
 #header {
   position: fixed;
-  z-index: -2;
+  z-index: -1;
   width: 600px;
   left: 50%;
   top: 0px;
@@ -59,7 +59,26 @@ text-align: left;
   margin-left: -300px;
   user-select: none;
   text-align: center;
-  background: rgb(231, 172, 8);
+  background: rgba(231, 172, 8, .86);
+}
+
+#footer {
+  position: fixed;
+  z-index: -1;
+  left: 10px;
+  right: 25px;
+  bottom: 0px;
+}
+#footer img {
+  width: 100%;
+}
+#footer_name {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  text-align: right;
+  font-size: .7em;
+  font-family: monospace;
 }
 button{
   background: none;
@@ -126,7 +145,8 @@ a[href^="mailto"] {
   overflow-y: auto;
   border: 1px solid #ddd;
   text-align: center;
-  padding: 4px;
+  padding: 6px;
+  background-color: #0001;
 }
 
 #page_welcome {
@@ -151,8 +171,17 @@ a[href^="mailto"] {
   /* border: 1px solid #fff; */
 }
 #how_desc td {
-  background-color: #fff6;
+  background-color: rgba(255, 255, 255, 0.08);
 }
+#how_desc td:hover {
+  background-color: #6b5b95; /* Vibrant coral */
+  transition: background-color 0.1s ease-in-out;
+}
+#how_desc td:active {
+  background-color: #88d8b0; /* Vibrant coral */
+  transition: background-color 0.1s ease-in-out;
+}
+
 #repo_table {
   width: 100%;
   border: 1px solid #000;
@@ -160,6 +189,9 @@ a[href^="mailto"] {
 td {
   vertical-align: top;
   padding: 7px;
+}
+td li {
+  text-align: left;
 }
 .img_cell {
   border: 1px solid #fff;
@@ -193,7 +225,7 @@ td {
 
 #code_out {
   resize: none;
-  width: 100%;
+  width: 99%;
   height: 40vh;
   padding: 7px; 
   text-wrap: wrap;
@@ -487,9 +519,13 @@ padding-top: 22px;
 
 
 #privacy_poli {
-  font-size: .7em;
-  text-align: left;
-  height: 140px;
-  width: 100%;
-  background-color: #fff6;
+  font-size: .8em;
+  text-align: right;
+  height: 100px;
+  margin-left: 17%;
+  width: 67%;
+  color: black;
+  text-shadow: none;
+  background: lightsteelblue;
+  overflow: auto;
 }
