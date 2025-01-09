@@ -2,7 +2,7 @@
 
 // This is the "Offline page" service worker
 
-const CACHE = "momo-0.2";
+const CACHE = "momo-0.21";
 
 // TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
 const offlineFallbackPage = "/offline.html";
@@ -32,22 +32,22 @@ self.addEventListener("install", function (event) {
 self.addEventListener("fetch", function (event) {
   if (event.request.method !== "GET") return;
 
-  event.respondWith(
-    fetch(event.request).catch(function (error) {
-      // The following validates that the request was for a navigation to a new document
-      if (
-        event.request.destination !== "document" ||
-        event.request.mode !== "navigate"
-      ) {
-        return;
-      }
+  // event.respondWith(
+  //   fetch(event.request).catch(function (error) {
+  //     // The following validates that the request was for a navigation to a new document
+  //     if (
+  //       event.request.destination !== "document" ||
+  //       event.request.mode !== "navigate"
+  //     ) {
+  //       return;
+  //     }
 
-      console.error("sw Network request Failed. Serving offline page " + error);
-      return caches.open(CACHE).then(function (cache) {
-        return cache.match(offlineFallbackPage);
-      });
-    })
-  );
+  //     console.error("sw Network request Failed. Serving offline page " + error);
+  //     return caches.open(CACHE).then(function (cache) {
+  //       return cache.match(offlineFallbackPage);
+  //     });
+  //   })
+  // );
 });
 
 // This is an event that can be fired from your page to tell the SW to update the offline page

@@ -8,8 +8,8 @@
     content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#22126d">
-  <meta name="description" content="Big M0t.M0e General AI, Free Robot Instructionalables! Open source hardware.">
-  <meta name="keywords" content="arduino projects, battlebots, in silico thinkin, motes, percept, AI, dogecoin">
+  <meta name="description" content="Your favorite rest stop for wayward or forgotton arduino compatible microcontrollers, projects and boards.">
+  <meta name="keywords" content="arduino projects, battlebots, in silico thinkin, motes, percept, AI, dogecoin, agi">
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://mot.moe/images/panda.jpg" />
 
@@ -53,14 +53,13 @@
 <body>
   <div id="bg"></div>
 
-  <img id="icon_flip" src="/favicon/favicon-32x32.png">
-  <img id="icon" src="/favicon/favicon-32x32.png">
+  <img id="icon" src="/favicon/favicon-32x32.png" style="pointer-events:none">
   <div id="header">
     <div id="b_home" title="Home Page of MotMoe &#x4EBA;&#x5DE5;!">&#x4EBA;&#x5DE5;</div>
 
-    <button id="b_repo" title="Code a Mot">Code</button>
-    <button id="b_control" title="Control Your Moe">Control</button>
-    <button id="b_train" title="Train Champion MoMos">Train</button>
+    <button id="b_repo" title="Code a Robot">Code</button>
+    <button id="b_control" title="Control Your Robot">Control</button>
+    <button id="b_train" title="Train Champion Robots">Train</button>
     <button id="b_help" title="Extra Resources">Help</button>
   </div>
 
@@ -80,30 +79,30 @@
       Featuring Battle Brobots and TamagoMoMo!
 
       <br><br><br><br>
-      <h4>How to Begin?</h4>
+      <h4><i>How to Begin?</i></h4>
       <table class="how_to">
         <tr>
-          <td>Code</td>
-          <td>Control</td>
-          <td>Train</td>
+          <td>Code!</td>
+          <td>Control!</td>
+          <td>Train!</td>
         </tr>
         <tr id="how_desc">
           <td>
             <ol>
-              <li>Choose a Project and your Board!</li>
-              <li>Pick Features and test your code!</li>
+              <li>Choose a Project and select your Board!</li>
+              <li>Pick Features and test the code!</li>
               <li>Build your robot!</li>
             </ol>
           </td>
           <td>
             <ol>
               <li>Configure wireless connections!</li>
-              <li>Test and control your robot!</li>
+              <li>Initialize and control your robots!</li>
             </ol>
           <td>
             <ol>
-              <li>Train, save and share robots!</li>
-            </ol>
+              <li>Train, save and share!</li>
+              </ol>
           </td>
         </tr>
       </table>
@@ -124,7 +123,10 @@
             <select id="project_select" onchange="selectProject()">
               <option hidden disabled selected value>Select a Project</option>
             </select>
-            <br><br>
+            <div id="project_logo">
+              (Select a Project)
+            </div>
+            <br>
             <div class="repo_title">
               Board
             </div>
@@ -134,15 +136,10 @@
               <option value="2">esp-01</option>
               <option>Uno</option> -->
             </select>
-            <br><br>
-          </td>
-          <td class="img_cell" id="project_logo">
-            (Select a Project)
-          </td>
-          <td class="img_cell" id="project_board">(Select a Board)</td>
-        </tr>
-        <tr>
-          <td>
+            <div id="project_board">
+              (Select a Board)
+            </div>
+            <br>
             <div class="repo_title">
               Features
             </div>
@@ -150,7 +147,7 @@
               (Select a Board)
             </form>
           </td>
-          <td colspan="2" style="text-align: right;">
+          <td id="code_wrap" colspan="2" style="text-align: right;">
             <textarea id="code_out" spellcheck="false"></textarea>
             <button onclick="openRaw()" style="float: left">View Raw</button>
             <button onclick="copyCode()">Copy</button>
@@ -202,17 +199,27 @@
     </div>
   </div>
 
-
+  
   <div id="page_training" class="page">
     <div class="page_content">
 
+      <div id="form_factor"></div>
+      <div id='vital_1'></div>
       
-      <div id="ignition" data-state="OFF" onclick="ignite();" title="power"></div>
-      <div id="state" class="hud_r" title="machine state"></div>
-      <div id="clock" class="hud_l" title="run time"></div>
-      <br>
-      <br>
+      <div id="mot_out"></div>
+
+      <div id="vitals" class="vitals">
+        <div id="vitals_title" title="Mot.moe ai">
+        </div>
+        <div id="vitals_log"></div>
+      </div>
+      
       <div id="controls">
+        <div id="ignition" data-state="OFF" onclick="ignite();" title="power"></div>
+        <div id="state" class="hud_r" title="machine state"></div>
+        <div id="clock" class="hud_l" title="run time"></div>
+        <br>
+        <br>
         <div id="binary_in" title="binary switch">
           <span id="bi_bon" data-val="BON">bon</span>
           <span id="bi_mal" data-val="MAL">mal</span>
@@ -229,9 +236,9 @@
         </div>
         <br><br>
         <div id="directional_pad" title="directional pad">
-          <div class="mm_ph"></div>
+          <div class="mm_in" data-val='TURNLEFT' style='transform: rotate(-15deg);'></div>
           <div class="mm_in" data-val="FORWARD"></div>
-          <div class="mm_in" data-val='UP' style='margin-bottom: 16px; margin-left: 4px;'></div>
+          <div class="mm_in" data-val='UP' style='margin-bottom: 16px; margin-right: 4px;'></div>
           <br>
           <div class="mm_in" data-val="LEFT"></div>
           <div class="mm_in" data-val="CENTER"></div>
@@ -239,7 +246,7 @@
           <br>
           <div class="mm_in" data-val='DOWN' style='vertical-align: middle;'></div>
           <div class="mm_in" data-val="BACK"></div>
-          <div class="mm_ph"></div>
+          <div class="mm_in" data-val='TURNRIGHT' style="transform: rotate(15deg);"></div>
         </div>
         <br><br>
         <div id='symbol_set' title='symbol set'>
@@ -251,15 +258,8 @@
       <br>
       <br>
 
-      <div id="space_b" style="display:none">æ</div>
-
-      <div id="vitals" class="vitals">
-        <div id="vitals_title" title="Mot.moe ai">
-        </div>
-        <div id='vital_1'></div>
-        <div id="vitals_log"></div>
-        <div id="mot_out"></div>
-      </div>
+        <div id="space_b" style="display:none">æ</div>
+        
 
       <div id="text_in_w">
       </div>
@@ -269,30 +269,46 @@
       </form>
     </div>
   </div>
-
+      
 
   <div id="page_help" class="page">
     <div class="page_content">
       <h4>About</h4>
-      Mot.moe is an open source robotics and AGI (artificial general intelligence) platform based on
+      Your favorite rest stop for wayward or forgotton arduino compatible microcontrollers, projects and boards.
+      <br><br>
+      Mot.moe is an open source robotics and A ᷚI platform based on
       open web standards and the Arduino
       open source hardware software ecosystem. Build and share your
       projects with Mot.moe!
       <br><br><br>
       <h4>Resources & Tips</h4>
-      <a href="https://github.com/jtheck/mot" title="GitHub" target="_blank">&#12300; GitHub Repository &#12301;</a>
-      <br><br>
-      <ul>
-        <li>
-          Make sure libraries are installed and updated.
-        </li>
-        <li>
-          Ensure the correct board is selected.
-        </li>
-        <li>
-          Verify the correct port is in use.
-        </li>
-      </ul>
+      <div id="helper_tutor">
+        <img id="icon" src="/favicon/favicon-32x32.png">
+
+        <ol>
+          <li>
+            Install the Arduino IDE appropriate for your computing environment.
+          </li>
+          <li>
+            Select your Board. Use Board Manager to install it if it is missing. 
+          </li>
+          <li>
+            Use Manage Libraries to install and update required Project Libraries.
+          </li>
+          <li>
+            Plug in Board, and verify Port selection for upload.
+          </li>
+          <li>
+            Compile and Upload Code. Observe, compose, revise.
+          </li>
+          <li>
+            Jiggle wires, reset power, and apply mild blunt force trauma as necessary.
+          </li>
+        </ol>
+      </div>
+      <a href="https://github.com/jtheck/mot" title="GitHub" target="_blank">&#12300; See Code Repository on GitHub &#12301;</a>
+      <br>
+      
       <br><br>
       <h4>Friends</h4>
       <a href="https://getfire.net" title="GetFire.net" target="_blank">&#12300; GetFire Chat &#12301;</a>

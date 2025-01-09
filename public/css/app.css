@@ -29,23 +29,12 @@ text-align: left;
 
 #icon {
   filter: drop-shadow(1px 1px 2px #222);
-  /* margin: 3px; */
-  position: fixed;
-  top: 7px;
-  right: 7px;
-  /* padding: 6px; */
-  /* width: 22px; */
+  float: right;
 }
 #icon_flip {
   transform: rotate(180deg);
+  float: right;
   filter: drop-shadow(1px 1px 2px #222);
-  /* margin: 3px; */
-  position: fixed;
-  top: 7px;
-  left: 7px;
-  /* padding: 6px; */
-  /* padding-bottom: 8px; */
-  /* width: 24px; */
 }
 
 #header {
@@ -59,7 +48,21 @@ text-align: left;
   margin-left: -300px;
   user-select: none;
   text-align: center;
+
+  text-shadow: 0px 0px 5px #ddd;
   background: rgba(231, 172, 8, .86);
+}
+
+#helper_tutor {
+  background: rgba(231, 172, 8, .86);
+  padding: 7px;
+  margin: 11px;
+  text-align: left;
+  color: black;
+  text-shadow: none;
+}
+#helper_tutor li {
+  padding-bottom: 6px;
 }
 
 #footer {
@@ -68,6 +71,7 @@ text-align: left;
   left: 10px;
   right: 25px;
   bottom: 0px;
+  user-select: none;
 }
 #footer img {
   width: 100%;
@@ -86,12 +90,14 @@ button{
 	border: none;
 	padding: 0;
 	font: inherit;
-  text-shadow: 0px 0px 5px #fff;
-	font-size: 11pt;
+  text-shadow: 0px 0px 5px #777;
+	font-size: 14pt;
   font-weight: 900;;
   margin-left: -7px;
   cursor: pointer;
 	outline: inherit;
+  -webkit-tap-highlight-color: #0000;
+
 }
 button:before{
   content:" \300C";
@@ -101,9 +107,11 @@ button:after{
 }
 button:hover {
   color: #0f0;
+  text-shadow: 0px 0px 5px #0f0;
 }
 button:active {
   color: #ff00d2;
+  text-shadow: 0px 0px 5px #ff00d2;
 }
 
 a {
@@ -119,11 +127,15 @@ a[href^="mailto"] {
 
 #b_home {
   cursor: pointer;
+  font-weight: bold;
+  -webkit-tap-highlight-color: #0000;
 }
 #b_home:hover {
   color: #0f0;
 }
-
+#b_home:active {
+  color: #ff00d2;
+}
 
 .page {
   position: fixed;
@@ -164,10 +176,10 @@ a[href^="mailto"] {
 .how_to {
   width: 100%;
   text-align: center;
+  user-select: none;
 }
 .how_to td {
   width: 33%;
-  padding: 10px;
   /* border: 1px solid #fff; */
 }
 #how_desc td {
@@ -183,15 +195,17 @@ a[href^="mailto"] {
 }
 
 #repo_table {
-  width: 100%;
+  width: 98%;
   border: 1px solid #000;
 }
 td {
   vertical-align: top;
-  padding: 7px;
+  padding: 1px;
 }
 td li {
   text-align: left;
+  padding-bottom: 9px;
+
 }
 .img_cell {
   border: 1px solid #fff;
@@ -202,9 +216,15 @@ td li {
 .repo_title {
   font-weight: bold;
 }
+ol {
+  padding-left: 21px;
+}
+select {
 
+  width: 100%;
+  height: 31px;
+}
 #project_select {
-  width: inherit;
 }
 
 #project_logo {
@@ -216,6 +236,7 @@ td li {
 }
 #project_board img {
   /* width: inherit; */
+  max-width: 140px;
   max-height: 108px;
 }
 
@@ -226,13 +247,16 @@ td li {
 #code_out {
   resize: none;
   width: 99%;
-  height: 40vh;
+  min-height: 60vh;
   padding: 7px; 
   text-wrap: wrap;
   font-size: 1em;
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
-
+#code_wrap button {
+  color: white;
+}
 
 
 
@@ -258,44 +282,44 @@ td li {
   overflow-x: scroll;
 }
 
-ul {
-  list-style-position: inside;
-  margin-left: -56px;
-}
-
 
 #controls {
-  position: fixed;
+  position: absolute;
   z-index: 1;
+  left: 0px;
   right: 0px;
-  top: 75px;
+  top: 0px;
+  bottom: 0px;
   user-select: none;
-  transform: scale(.72);
 }
 
 #text_entry {
-  background: rgba(255, 255, 255, 0.456, 0.328);
+  background: rgba(0,0,0,.9);
   z-index: 8;
   color: #fff;
   font-family: cursive;
   font-size: 1.1em;
+  text-align: center;
   padding: 10px;
   position: absolute;
   resize: none;
-max-width: 75%;
-left: 16%;
-  bottom: 10px;
-  text-shadow: 1px 1px 3px #000;
-  height: 3em;
+  bottom: 245px;
+  right: 100px;
+  overflow: hidden;
+  width: 33px;
+  height: 33px;
 }
 #text_entry:hover {
-  height: 3em;
-  background: rgba(255,255,255,.5);
+  /* background: rgba(255,255,255,.5); */
 }
 #text_entry:focus {
-  height: 5em;
-  background: rgba(255,255,255,.5);
+  right:3%;
+  bottom: 100px;
+  height: 175px;
+  width: 90%;
 }
+
+
 
 
 
@@ -339,6 +363,7 @@ width: 100%;
 
 #vitals {
   font-family: monospace;
+  z-index: 1;
 }
 
 #vitals_title {
@@ -353,31 +378,47 @@ width: 100%;
 #vital_1 {
   position: absolute;
   left: 0px;
-  top: 53px;
+  top: 45px;
 width: 100%;
   height: 9px;
-  background-color: green;
+  background-color: #afafafb0;
 }
 
 #mot_out {
-  background-color: rgba(0,0,0,.5);
+  background-color: rgba(228, 255, 229, .8); 
   position: absolute;
-  top: 52%;
-  left: 35%;
-  transform: translate(-50%, -50%);
+  top: 9px;
+  left: 9px;
+  right: 9px;
 padding-top: 22px;
-
+z-index: 0;
   font-size: .9em;
+  font-family: monospace;
+  color: black;
+  text-shadow: none;
   display: block;
-  width: 69%;
   height: 69%;
   text-align: center;
   overflow-x: hidden;
   overflow-y: auto;
-  border-bottom-right-radius: 56px;
   white-space: nowrap;
 }
-
+#form_factor {
+  background-color: #3e113160;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  z-index: -1;
+  border-radius: 17;
+  border-bottom-right-radius: 74px; 
+}
+#directional_pad {
+  position: absolute;
+  bottom: 116px;
+  left: 3px;
+}
 #ignition {
   width: 33px;
   height: 33px;
@@ -431,6 +472,9 @@ padding-top: 22px;
   overflow-x: auto;
   border: 2px solid green;
   display: inline-block;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
   background: rgba(255,255,255,.5);
 }
 .sym {
@@ -458,19 +502,18 @@ padding-top: 22px;
 .mm_in:active {
   background: rgba(255,255,255,.3);
 }
-.mm_ph {
-  display: inline-block;
-  width: 36px;
-  height: 36px;
-  padding: 5px;
-  border: 2px solid rgba(0,0,0,0);
-}
 
 #slider_w {
+
+  position: absolute;
+  right: -52px;
   padding: 9px;
+  bottom: 149px;
   border: 2px solid green;
   display: inline-block;
-  background: rgba(255,255,255,.5);
+  transform: rotate(-90deg);
+  background: rgba(255, 255, 255, .5);
+
 }
 #slider_w:hover {
   border: 2px solid red;
@@ -481,7 +524,10 @@ padding-top: 22px;
 
 #ternary_in {
   font-size: 2em;
-  display: inline;
+  position: absolute;
+  bottom: 143px;
+  right: 54px;
+  transform: rotate(-45deg);
 
 }
 
@@ -500,8 +546,11 @@ padding-top: 22px;
 
 #binary_in {
   font-size: 2em;
-  display: inline;
   padding: 12px;
+  position: absolute;
+  bottom: 70px;
+  right: 36px;
+  transform: rotate(-45deg);
 }
 
 #binary_in span {

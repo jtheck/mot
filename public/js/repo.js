@@ -250,6 +250,8 @@ function curateCode(){
   activeProject.codeCurated = curating.join('\n');
 
   $id("code_out").value=activeProject.codeCurated;
+   $id("code_out").style.height = '0px';
+  $id("code_out").style.height = $id("code_out").scrollHeight + "px";
 }
 
 

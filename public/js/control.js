@@ -45,7 +45,7 @@ function scanMotes(){
   document.querySelector("#available_mobs").innerHTML="...";
 
 
-  let sweepTill = 4 ;
+  let sweepTill = 6 ;
   for (var i = 2; i < sweepTill; i++){
     var ip = '192.168.2.'+i;
     var tar = 'http://'+ip+'/marco';

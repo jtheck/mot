@@ -11,8 +11,8 @@
 // #define MM_IS_ESP01
 #define MM_IS_ESP32
 // #define MM_IS_ESP8266
-// #define MM_HAS_STATICWIFI
-#define MM_HAS_DYNAMICWIFI
+#define MM_HAS_STATICWIFI
+// #define MM_HAS_DYNAMICWIFI
 
 
 #ifdef MM_IS_ESP32
@@ -113,7 +113,7 @@ void setup()
             Serial.println("GAH"); });
   // server.on("/boop", h_boop);
   // server.on("/poll", h_poll);
-  // server.on("/marco", h_marco);
+  server.on("/marco", h_marco);
   // server.on("/log", h_log);
   server.enableCORS(true);
 #endif
@@ -170,16 +170,16 @@ void loop()
 //   const char *boop = "IT IS WHAT IT IS"; // doc["x"];
 //   Serial.println(boop);
 // }
-// void h_marco()
-// {
-//   // server.send(200, "application/json", "{\"a\":\"bc\"}");
-//   Serial.println("served /marco");
+void h_marco()
+{
+  // server.send(200, "application/json", "{\"a\":\"bc\"}");
+  Serial.println("served /marco");
 
-//   // server.send(200, "text/plain", "HELLO MOMO");
-//   // Serial.println("served /");
+  // server.send(200, "text/plain", "HELLO MOMO");
+  // Serial.println("served /");
 
 //  server.send(200, "text/plain", hostName); 
-// }
+}
 
 // void log(){
 //   Serial.println("serve");
