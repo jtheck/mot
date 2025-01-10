@@ -66,36 +66,37 @@ void loop() {
   timer.elapsedTime = timer.frameStart - timer.startTime;
 
 
-// if (digitalRead(PIN_BUTTON1) == HIGH){
-// if (timer.timer == 30*MIN){
-//   timer.timer = MIN;
-// }
-// if (timer.timer == 15*MIN){
-//   timer.timer = 30*MIN;
-// }
-// if (timer.timer == 10*MIN){
-//   timer.timer = 15*MIN;
-// }
-// if (timer.timer == 5*MIN){
-//   timer.timer = 10*MIN;
-// }
-// if (timer.timer == 2*MIN){
-//   timer.timer = 5*MIN;
-// }
-// if (timer.timer == MIN){
-//   timer.timer = 2*MIN;
-// }
+if (digitalRead(PIN_BUTTON1) == HIGH){
+if (timer.timer == 30*MIN){
+  timer.timer = MIN;
+}
+if (timer.timer == 15*MIN){
+  timer.timer = 30*MIN;
+}
+if (timer.timer == 10*MIN){
+  timer.timer = 15*MIN;
+}
+if (timer.timer == 5*MIN){
+  timer.timer = 10*MIN;
+}
+if (timer.timer == 2*MIN){
+  timer.timer = 5*MIN;
+}
+if (timer.timer == MIN){
+  timer.timer = 2*MIN;
+}
 
-// delay(165);
-// }
-// if (digitalRead(PIN_TILT)) {  // Check if tilt switch is HIGH
-//   timer.startTime = millis();
-//   timer.elapsedTime = 0;
-// }
+delay(165);
+}
+if (digitalRead(PIN_TILT)) {  // Check if tilt switch is HIGH
+  timer.startTime = millis();
+  timer.elapsedTime = 0;
+}
 
   display.clearDisplay(); // Clear the display buffer
   display.setCursor(27,5);
-  display.print(msToString(timer.timer - timer.elapsedTime));
+  display.print(msToString(timer.timer));
+  // display.print(msToString(timer.timer - timer.elapsedTime));
   display.setCursor(17,25);
   display.print("TiMER!");
 
