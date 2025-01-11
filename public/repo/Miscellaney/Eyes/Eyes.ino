@@ -1,6 +1,6 @@
 /**************************************************************************
- Two-screen Hourglass and eyeball example.
-  Ft. Single & Dual SSD1306 OLED Screens,
+ Mot.moe 'Midly expressive eyeballs' example.
+  Featuring: Single & Dual SSD1306 I2C OLEDs
     Onboard Tilt, External IMU MPU6050 Tilt
  **************************************************************************/
 //MM PROJECT Eyeballs

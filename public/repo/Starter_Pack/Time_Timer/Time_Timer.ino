@@ -1,4 +1,13 @@
-
+/************************************
+ Mot.moe 'Excellent Timing Timer' example.
+  Featuring: Buzzer Tone, ssd1306 lcd
+  Considerations: Extensibility, time management!
+************************************/
+//MM PROJECT Timer
+//MM BOARDS [UNO, 8266]
+//MM FEATURES [FEATURELESS]
+// MM ESP32 [IBUS, WIFI, BT, TX]
+// #define MM_IS_ESP32
 
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>

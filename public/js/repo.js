@@ -23,16 +23,25 @@ let activeProject = new Project();
 
 let directory = [
 {
-    group:'Miscellaneous',
+    group:'Starter_Pack',
     projects:[
-        'Hello_World',
-        'Hello_Wifi',
-        'Hourglass',
-        'Control'
+      'Fresh_Sketch',
+      'Hello_World',
+      'Into_TheWiFi',
+      'Time_Timer',
+      'Para_Manipular',
+      'Contrololol'
     ]
   },
   {
-    group:'Mot.Moe',
+    group:'Miscellaney',
+    projects:[
+        'Car',
+        'Eyes'
+    ]
+  },
+  {
+    group:'Mot_Moe',
     projects:[
         'Tamago',
         'Battle_Brobot'
@@ -189,9 +198,11 @@ function featureFill(){
     $feature.setAttribute("onchange", "selectFeature(this)");
     var $label = document.createElement("label");
     $label.innerHTML = tFeature;
+    $label.append($feature);
     var $br = document.createElement("br");
 
-    $featureSelect.append($feature);
+    // $featureSelect.append($label);
+    // $featureSelect.append($feature);
     $featureSelect.append($label);
     $featureSelect.append($br);
   }

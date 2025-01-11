@@ -4,10 +4,10 @@
     External IMU MPU6050 Tilt, 2+n Control
  **************************************************************************/
 //MM PROJECT Hourglass Eyeballs
-//MM BOARDS [NANO33BLE, ESP8266]
+//MM BOARDS [NANO33BLE, 8266]
 //MM FEATURES [SCREENS, IMU, 2NCONTROL]
 //MM NANO33BLE [SCREENS, IMU, 2NCONTROL]
-//MM ESP8266 [SCREENS, IMU, 2NCONTROL]
+//MM 8266 [SCREENS, IMU, 2NCONTROL]
 
 
 #include <SPI.h>

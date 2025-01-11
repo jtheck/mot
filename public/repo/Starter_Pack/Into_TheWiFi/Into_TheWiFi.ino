@@ -1,11 +1,12 @@
 /************************************
  Mot.moe 'Hello Wifi' example.
-  Ft. Dynamic WiFi, Static WiFi
+  Featuring: Dynamic WiFi, Static WiFi
+  Considerations: Configuration and responsiveness for wireless feedback and monitoring.
 ************************************/
 //MM PROJECT Hello Wifi
-//MM BOARDS [ESP8266, ESP01, ESP32]
+//MM BOARDS [8266, ESP01, ESP32]
 //MM FEATURES [DYNAMICWIFI, STATICWIFI]
-//MM ESP8266 [DYNAMICWIFI, STATICWIFI]
+//MM 8266 [DYNAMICWIFI, STATICWIFI]
 //MM ESP01 [STATICWIFI]
 //MM ESP32 [DYNAMICWIFI, STATICWIFI]
 // #define MM_IS_ESP01

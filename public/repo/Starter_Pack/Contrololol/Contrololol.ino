@@ -1,6 +1,7 @@
 /************************************
- Mot.moe 'Radio Control' example.
-  Ft. iBus, wifi, bluetooth, tx 
+ Mot.moe 'Radio Control (lol)' example.
+  Featuring: iBus(RC), WiFi, bluetooth, tx 
+  Considerations: 
 ************************************/
 //MM PROJECT Control
 //MM BOARDS [ESP32]

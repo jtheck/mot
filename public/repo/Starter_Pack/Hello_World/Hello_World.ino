@@ -1,21 +1,20 @@
 /************************************
  Mot.moe 'Hello World' example.
-  Ft. Onboard LED, Piezo BUZZER,
-   Serial MONITOR, SSD1306 OLED SCREEN,
-   WIFI Presence 
+  Featuring: Onboard LED, Buzzer Chirp, Serial Monitoring, SSD1306 I2C OLED
+  Considerations: Feature selection, pin identification and placement. Fault monitoring.
 ************************************/
 //MM PROJECT Hello World
-//MM BOARDS [UNO, ESP8266, ESP01]
+//MM BOARDS [UNO, 8266, ESP01]
 //MM FEATURES [LED, MONITOR, SCREEN, BUZZER]
 //MM UNO [LED, MONITOR, SCREEN, BUZZER]
-//MM ESP8266 [LED, MONITOR, SCREEN, BUZZER, WIFI]
+//MM 8266 [LED, MONITOR, SCREEN, BUZZER, WIFI]
 //MM ESP01 [LED, SCREEN]
 //#define MM_IS_UNO
- #define MM_IS_ESP8266
-// #define MM_IS_ESP01
-// #define MM_HAS_LED
+// #define MM_IS_ESP8266
+ #define MM_IS_ESP01
+ #define MM_HAS_LED
 // #define MM_HAS_MONITOR
-#define MM_HAS_SCREEN
+//#define MM_HAS_SCREEN
 // #define MM_HAS_BUZZER
 // #define MM_HAS_WIFI
 
