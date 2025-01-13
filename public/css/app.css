@@ -47,7 +47,7 @@ text-align: left;
 }
 #header {
   position: fixed;
-  z-index: -1;
+  z-index: 1;
   width: 600px;
   left: 50%;
   top: 0px;
@@ -74,7 +74,7 @@ text-align: left;
 }
 
 #footer {
-  position: fixed;
+  position: absolute;
   z-index: -1;
   left: 10px;
   right: 25px;
@@ -82,7 +82,7 @@ text-align: left;
   user-select: none;
 }
 #footer img {
-  width: 100%;
+  width: 94vw;
 }
 #footer_name {
   position: absolute;
