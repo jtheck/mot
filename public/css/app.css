@@ -83,7 +83,13 @@ text-align: left;
   pointer-events: none;
 }
 #footer img {
-  width: 94vw;
+  width: 555px;
+  float: right;
+  padding-bottom: 9px;
+  z-index: -1;
+  pointer-events: none;
+}
+#perseverance{
 }
 #footer_name {
   position: absolute;
