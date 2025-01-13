@@ -1,10 +1,10 @@
-/************************************
- Mot.moe's: TamagoMoMo - The #1 Pocket Electronic Pet Tending Robot Assistant Training Simulator 
-  Featuring: Pocketability!
+/**************************************************************************
+
+  Mot.moe's TamagoMoMo - The #1 Pocket Electronic Pet Raising Robot Assistant Training Simulator 
+  
+  Featuring: Pocket size compatible!
   Considerations: The burdens of responsibility.
-************************************/
-
-
+ **************************************************************************/
 
 
 

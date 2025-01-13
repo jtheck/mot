@@ -37,6 +37,14 @@ text-align: left;
   filter: drop-shadow(1px 1px 2px #222);
 }
 
+#header_n {
+  position: absolute;
+  left: 0px;
+}
+#header_p {
+  position: absolute;
+  right: 0px;
+}
 #header {
   position: fixed;
   z-index: -1;
@@ -46,7 +54,7 @@ text-align: left;
   font-size: 1.3em;
   /* border-radius: 5px; */
   margin-left: -300px;
-  user-select: none;
+  /* user-select: none; */
   text-align: center;
 
   text-shadow: 0px 0px 5px #ddd;
@@ -95,7 +103,7 @@ button{
   font-weight: 900;;
   margin-left: -7px;
   cursor: pointer;
-	outline: inherit;
+	/* outline: inherit; */
   -webkit-tap-highlight-color: #0000;
 
 }
@@ -107,11 +115,11 @@ button:after{
 }
 button:hover {
   color: #0f0;
-  text-shadow: 0px 0px 5px #0f0;
+  text-shadow: 0px 0px 5px #fff;
 }
 button:active {
   color: #ff00d2;
-  text-shadow: 0px 0px 5px #ff00d2;
+  text-shadow: 0px 0px 5px #fff;
 }
 
 a {
@@ -155,6 +163,7 @@ a[href^="mailto"] {
   bottom: 12px;
   right: 12px;
   overflow-y: auto;
+  /* overflow-x: hidden; */
   border: 1px solid #ddd;
   text-align: center;
   padding: 6px;
@@ -294,7 +303,7 @@ select {
 }
 
 #text_entry {
-  background: rgba(0,0,0,.9);
+  background: rgba(0,0,0,.85);
   z-index: 8;
   color: #fff;
   font-family: cursive;
@@ -304,7 +313,7 @@ select {
   position: absolute;
   resize: none;
   bottom: 245px;
-  right: 100px;
+  right: 127px;
   overflow: hidden;
   width: 33px;
   height: 33px;
@@ -431,6 +440,7 @@ z-index: 0;
   user-select: none;
   -webkit-filter: drop-shadow(1px 1px 1px #000);
   filter: drop-shadow(0px 0px 1px #000);
+  -webkit-tap-highlight-color: #0000;
 }
 #ignition:hover {
   stroke: #ff0;
@@ -467,20 +477,20 @@ z-index: 0;
 
 #symbol_set {
   padding: 9px;
-  width: 138px;
+  text-align: left;
+  width: 160px;
   max-height: 240px;
-  overflow-x: auto;
-  border: 2px solid green;
-  display: inline-block;
   position: absolute;
   left: 0px;
   bottom: 0px;
-  background: rgba(255,255,255,.5);
 }
 .sym {
   display: inline-block;
-  padding: 9px;
-  border: 2px solid green;
+  width: 33px; 
+  height: 17px;
+  text-align: center;
+  margin-top: 6px;
+  border: 2px solid #0086c3;
   cursor: pointer;
 }
 .sym:hover {
@@ -492,78 +502,111 @@ z-index: 0;
   width: 36px;
   height: 36px;
   padding: 5px;
-  border: 2px solid green;
+  border: 2px solid #ffffffd6;
+  border-style: outset;
   background: rgba(255,255,255,.5);
   cursor: pointer;
 }
 .mm_in:hover {
-  border-color: red;
+  border-style: inset;
+  border-color: green;
 }
 .mm_in:active {
   background: rgba(255,255,255,.3);
 }
 
 #slider_w {
-
   position: absolute;
-  right: -52px;
-  padding: 9px;
-  bottom: 149px;
-  border: 2px solid green;
+  right: 28px;
+  bottom: 46px;
   display: inline-block;
   transform: rotate(-90deg);
-  background: rgba(255, 255, 255, .5);
-
 }
 #slider_w:hover {
-  border: 2px solid red;
+  /* border: 2px solid red; */
 }
 #slider_w:active {
-  background: rgba(255,255,255,.3);
+  /* background: rgba(255,255,255,.3); */
 }
+
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 10px;
+  width: 220px;
+  position: absolute;
+  background-color: #ffffff;
+/* pointer-events: none; */
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 48px;
+  height: 40px;
+  background-color: #000000;
+  border: 1px solid #777;
+  border-radius: 15px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: #0000;
+}
+input[type=range]::-webkit-slider-thumb:active {
+  background-color: #fff;
+}
+
+
 
 #ternary_in {
   font-size: 2em;
   position: absolute;
-  bottom: 143px;
-  right: 54px;
+  bottom: 181px;
+  right: 28px;
   transform: rotate(-45deg);
-
+  font-family: monospace;
+  font-variant-caps: petite-caps;
 }
 
 #ternary_in span {
-  padding: 3px;
   cursor: pointer;
-  border: 2px solid green;
-  background: rgba(255,255,255,.5);
+  border: 3px solid red;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #5f5f5f;
+  -webkit-tap-highlight-color: #0000;
 }
 #ternary_in span:hover {
-  border: 2px solid red;
+  border-color: white !important;
 }
 #ternary_in span:active {
-  background: rgba(255,255,255,.3);
+  background: #333;
 }
 
 #binary_in {
   font-size: 2em;
   padding: 12px;
   position: absolute;
-  bottom: 70px;
-  right: 36px;
+  bottom: 93px;
+  right: 23px;
   transform: rotate(-45deg);
+  font-family: monospace;
+  font-variant-caps: petite-caps;
 }
 
 #binary_in span {
-  padding: 3px;
+  display: inline-block;
   cursor: pointer;
-  border: 2px solid green;
-  background: rgba(255,255,255,.5);
+  border: 3px solid red;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #5f5f5f;
+  -webkit-tap-highlight-color: #0000;
 }
 #binary_in span:hover {
-  border: 2px solid red;
+  border-color: white !important;
 }
 #binary_in span:active {
-  background: rgba(255,255,255,.3);
+  background: #333;
 }
 
 

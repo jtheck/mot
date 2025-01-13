@@ -1,6 +1,9 @@
 /**************************************************************************
- *  Battle Brobot
- *    Ft. Walker TX Ranger
+
+  Mot.moe's Battle Brobot
+
+  Featuring: Walker TX Ranger
+  Considerations:
  **************************************************************************/
 //MM PROJECT Battle Brobot
 //MM BOARDS [NANO33BLE, 8266]

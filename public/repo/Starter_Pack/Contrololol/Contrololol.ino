@@ -1,5 +1,5 @@
 /************************************
- Mot.moe 'Radio Control (lol)' example.
+  Mot.moe 'Radio Control (lolol)' example.
   Featuring: iBus(RC), WiFi, bluetooth, tx 
   Considerations: 
 ************************************/

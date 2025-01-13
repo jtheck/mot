@@ -1,8 +1,13 @@
-/**************************************************************************
- Mot.moe 'Midly expressive eyeballs' example.
-  Featuring: Single & Dual SSD1306 I2C OLEDs
-    Onboard Tilt, External IMU MPU6050 Tilt
- **************************************************************************/
+/******
+  'Moderately Expressive Eyeballs' 
+  Featuring: Single & Dual SSD1306 I2C OLEDs, Onboard Tilt, External IMU MPU6050 Tilt
+  Considerations: I2C addressing.
+******/
+
+
+
+
+
 //MM PROJECT Eyeballs
 //#define MM_IS_UNO
 //#define MM_HAS_1SCREEN

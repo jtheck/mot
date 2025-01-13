@@ -1,10 +1,14 @@
 /************************************
- Mot.moe 'Freshy Sketchy' example.
+  Mot.moe 'Freshy Sketchy' example.
   Featuring: Compilation Success!
   Considerations: Dev-environment preparedness and familiarity.
 ************************************/
+//MM PROJECT Fresh
+//MM BOARDS [ALL, NONE]
+//MM FEATURES [INCLUDED]
 
-
+//MM ALL [INCLUDED]
+//MM NONE [INCLUDED]
 
 
 

@@ -1,5 +1,5 @@
 /************************************
- Mot.moe 'Hello World' example.
+  Mot.moe 'Hello World' example.
   Featuring: Onboard LED, Buzzer Chirp, Serial Monitoring, SSD1306 I2C OLED
   Considerations: Feature selection, pin identification and placement. Fault monitoring.
 ************************************/

@@ -55,8 +55,10 @@
 
   <img id="icon" src="/favicon/favicon-32x32.png" style="pointer-events:none">
   <div id="header">
-    <div id="b_home" title="Home Page of MotMoe &#x4EBA;&#x5DE5;!">&#x4EBA;&#x5DE5;</div>
-
+    <div id="header_n">n</div>
+    <div id="header_p">p</div>
+    <button id="b_home" title="Home Page of MotMoe &#x4EBA;&#x5DE5;!">&#x4EBA;&#x5DE5;</button>
+    <br>  
     <button id="b_repo" title="Code a Robot">Code</button>
     <button id="b_control" title="Control Your Robot">Control</button>
     <button id="b_train" title="Train Champion Robots">Train</button>
@@ -201,7 +203,7 @@
 
   
   <div id="page_training" class="page">
-    <div class="page_content">
+    <div class="page_content" style="top: 2px;bottom: 1px;left: 2px;right: 2px">
 
       <div id="form_factor"></div>
       <div id='vital_1'></div>
@@ -221,14 +223,14 @@
         <br>
         <br>
         <div id="binary_in" title="binary switch">
-          <span id="bi_bon" data-val="BON">bon</span>
-          <span id="bi_mal" data-val="MAL">mal</span>
+          <span id="bi_bon" data-val="BON" style="border-color:green">bon</span>
+          <span id="bi_mal" data-val="MAL" style="border-color:red">mal</span>
         </div>
         <br><br>
         <div id="ternary_in" title="ternary switch">
-          <span id="ti_off" data-val="OFF">off</span>
-          <span id="ti_neutral" data-val="NIL">nil</span>
-          <span id="ti_on" data-val="ON">on</span>
+          <span id="ti_off" data-val="OFF" style="border-color:blue">oft</span>
+          <span id="ti_neutral" data-val="NIL" style="border-color:yellow">nil</span>
+          <span id="ti_on" data-val="ON" style="border-color:orange">on</span>
         </div>
         <br><br>
         <div id="slider_w" title="range slider">
@@ -236,23 +238,28 @@
         </div>
         <br><br>
         <div id="directional_pad" title="directional pad">
-          <div class="mm_in" data-val='TURNLEFT' style='transform: rotate(-15deg);'></div>
+          <div class="mm_in" data-val='TURNLEFT' style='transform: rotate(-15deg);scale: 0.9;'></div>
           <div class="mm_in" data-val="FORWARD"></div>
           <div class="mm_in" data-val='UP' style='margin-bottom: 16px; margin-right: 4px;'></div>
           <br>
           <div class="mm_in" data-val="LEFT"></div>
-          <div class="mm_in" data-val="CENTER"></div>
+          <div class="mm_in" data-val="CENTER"></div> 
           <div class="mm_in" data-val="RIGHT"></div>
           <br>
           <div class="mm_in" data-val='DOWN' style='vertical-align: middle;'></div>
           <div class="mm_in" data-val="BACK"></div>
-          <div class="mm_in" data-val='TURNRIGHT' style="transform: rotate(15deg);"></div>
+          <div class="mm_in" data-val='TURNRIGHT' style="transform: rotate(15deg);scale: 0.9;"></div>
         </div>
         <br><br>
         <div id='symbol_set' title='symbol set'>
+          <!-- <div class='sym' data-val='?'>?</div> -->
+          <br>
+          <div class='sym' data-val='?'>?</div>
+          <br>
           <div class='sym' data-val='+'>+</div>
           <div class='sym' data-val='-'>-</div>
           <div class='sym' data-val='='>=</div>
+          <div class='sym' data-val='!'>!</div>
         </div>
       </div>
       <br>

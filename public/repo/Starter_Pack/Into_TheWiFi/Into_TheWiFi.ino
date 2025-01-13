@@ -1,5 +1,5 @@
 /************************************
- Mot.moe 'Hello Wifi' example.
+  Mot.moe 'Hello Wifi' example.
   Featuring: Dynamic WiFi, Static WiFi
   Considerations: Configuration and responsiveness for wireless feedback and monitoring.
 ************************************/
