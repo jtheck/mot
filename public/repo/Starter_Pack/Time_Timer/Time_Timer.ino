@@ -6,7 +6,7 @@
 //MM PROJECT Timer
 //MM BOARDS [UNO, 8266]
 //MM FEATURES [INCLUDED]
-// MM ESP32 [IBUS, WIFI, BT, TX]
+//MM ESP32 [IBUS, WIFI, BT, TX]
 // #define MM_IS_ESP32
 
 #include <Wire.h>

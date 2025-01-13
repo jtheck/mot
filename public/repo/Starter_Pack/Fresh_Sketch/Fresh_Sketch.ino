@@ -6,11 +6,15 @@
 //MM PROJECT Fresh
 //MM BOARDS [ALL, NONE]
 //MM FEATURES [INCLUDED]
-
 //MM ALL [INCLUDED]
 //MM NONE [INCLUDED]
+// #define MM_IS_NONE
+// #define MM_IS_ALL
+// #define MM_HAS_INCLUDED
 
-
+#ifdef MM_HAS_INCLUDED
+// FRESH SKETCH is featureset complete!
+#endif // MM_HAS_INCLUDED
 
 void setup() {
   // put your setup code here, to run once:
