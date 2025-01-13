@@ -80,6 +80,7 @@ text-align: left;
   right: 25px;
   bottom: 0px;
   user-select: none;
+  pointer-events: none;
 }
 #footer img {
   width: 94vw;
@@ -183,12 +184,12 @@ a[href^="mailto"] {
   display: none;
 }
 .how_to {
-  width: 100%;
+  /* width: 100%; */
   text-align: center;
   user-select: none;
 }
 .how_to td {
-  width: 33%;
+  width: 27%;
   /* border: 1px solid #fff; */
 }
 #how_desc td {
@@ -284,11 +285,11 @@ select {
 
 
 #control_monitor{
-  min-width: 300px;
+  /* min-width: 300px;
   max-width: 60vw;;
   min-height: 300px;
   max-height: 315px;
-  overflow-x: scroll;
+  overflow-x: scroll; */
 }
 
 
