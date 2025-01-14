@@ -34,7 +34,7 @@ let directory = [
     ]
   },
   {
-    group:'Miscellaney',
+    group:'Misc',
     projects:[
         'Car',
         'Eyes'

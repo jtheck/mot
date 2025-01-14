@@ -1,7 +1,8 @@
 /************************************
-  Mot.moe 'Hello Wifi' example.
+  Mot.moe's 'Hello Wifi' example.
+
   Featuring: Dynamic WiFi, Static WiFi
-  Considerations: Configuration and responsiveness for wireless feedback and monitoring.
+  Considerations: Configuration for wireless feedback and monitoring.
 ************************************/
 //MM PROJECT Hello Wifi
 //MM BOARDS [8266, ESP01, ESP32]
@@ -10,8 +11,8 @@
 //MM ESP01 [STATICWIFI]
 //MM ESP32 [DYNAMICWIFI, STATICWIFI]
 // #define MM_IS_ESP01
-#define MM_IS_ESP32
-// #define MM_IS_ESP8266
+// #define MM_IS_ESP32
+#define MM_IS_ESP8266
 #define MM_HAS_STATICWIFI
 // #define MM_HAS_DYNAMICWIFI
 
@@ -51,6 +52,7 @@ const char *password = "hellomotmoe";
 void setup()
 {
   // put your setup code here, to run once:
+  
   Serial.begin(115200);
 
 #ifdef MM_HAS_DYNAMICWIFI
@@ -124,8 +126,11 @@ void setup()
 #endif // MM_HAS_STATICWIFI
 }
 
+
 void loop()
 {
+  // put your main code here, to run repeatedly:
+
   // up and at them
 #ifdef MM_HAS_STATICWIFI
 // server.handleClient();

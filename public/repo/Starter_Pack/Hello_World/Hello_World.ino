@@ -1,5 +1,6 @@
 /************************************
-  Mot.moe 'Hello World' example.
+  Mot.moe's 'Hello World' example.
+
   Featuring: Onboard LED, Buzzer Chirp, Serial Monitoring, SSD1306 I2C OLED
   Considerations: Feature selection, pin identification and placement. Fault monitoring.
 ************************************/
@@ -117,6 +118,8 @@ struct Timing timer = {0, 0, 0};
 
 
 void setup() {
+  // put your setup code here, to run once:
+
 #ifdef MM_HAS_LED
   pinMode(BOARD_LED, OUTPUT);
 #endif // MM_HAS_LED
@@ -152,6 +155,8 @@ void setup() {
 
 
 void loop() {
+  // put your main code here, to run repeatedly:
+  
   // Timing
   timer.frameStart = millis();
   timer.framePrev = timer.frameStart;

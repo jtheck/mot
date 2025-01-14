@@ -1,6 +1,7 @@
 /************************************
-  Mot.moe 'Radio Control (lolol)' example.
-  Featuring: iBus(RC), WiFi, bluetooth, tx 
+  Mot.moe's 'Radio Control (lolol)' example.
+  
+  Featuring: iBus(RC), bluetooth, tx 
   Considerations: 
 ************************************/
 //MM PROJECT Control
@@ -41,17 +42,20 @@ int readChannel(byte channelInput, int minLimit, int maxLimit, int defaultValue)
 
 
 void setup() {
+  // put your setup code here, to run once:
+
   // Start serial monitor
   Serial.begin(115200);
   Serial.print("FLYSKY TAKE ONE");
 #ifdef MM_HAS_IBUS
   // Attach iBus object to serial port
   ibus.begin(Serial2);
-#endif
+#endif // MM_HAS_IBUS
 }
  
 void loop() {
- 
+  // put your main code here, to run repeatedly:
+
   // Cycle through first 5 channels and determine values
   // Print values to serial monitor
   // Note IBusBM library labels channels starting with "0"

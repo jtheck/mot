@@ -533,6 +533,7 @@ z-index: 0;
 }
 
 #slider_w {
+  touch-action: none;
   position: absolute;
   right: 32px;
   bottom: 46px;

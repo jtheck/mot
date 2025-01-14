@@ -2,10 +2,10 @@
 
   Mot.moe's TamagoMoMo - The #1 Pocket Electronic Pet Raising Robot Assistant Training Simulator 
   
+
   Featuring: Pocket size compatible!
   Considerations: The burdens of responsibility.
  **************************************************************************/
-
 
 
 void setup() {

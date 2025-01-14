@@ -1,7 +1,10 @@
 /******
-  'Moderately Expressive Eyesballs' 
+
+  'Eyeballs, Moderately Expressive'
+
   Featuring: Single & Dual SSD1306 I2C OLEDs, Onboard Tilt, External IMU MPU6050 Tilt
   Considerations: I2C addressing.
+
 ******/
 //MM PROJECT Eyeballs
 

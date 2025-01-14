@@ -1,5 +1,6 @@
 /************************************
-  Mot.moe 'Freshy Sketchy' example.
+  Mot.moe's 'Freshy Sketchy' example.
+
   Featuring: Compilation Success!
   Considerations: Dev-environment preparedness and familiarity.
 ************************************/
@@ -13,7 +14,7 @@
 // #define MM_HAS_INCLUDED
 
 #ifdef MM_HAS_INCLUDED
-// FRESH SKETCH is featureset complete!
+// Maximum Features enabled!
 #endif // MM_HAS_INCLUDED
 
 void setup() {

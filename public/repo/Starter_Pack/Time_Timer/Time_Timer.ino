@@ -1,14 +1,17 @@
 /************************************
-  Mot.moe 'Excellent Timing Timer' example.
+  Mot.moe's 'Excellent Timing Timer' example.
+
   Featuring: Buzzer Tone, ssd1306 lcd
-  Considerations: Extensibility, time management!
+  Considerations: Extensibility and time management.
 ************************************/
 //MM PROJECT Timer
 //MM BOARDS [UNO, 8266]
-//MM FEATURES [INCLUDED]
-//MM ESP32 [IBUS, WIFI, BT, TX]
+//MM FEATURES [BUZZER, SCREEN]
+//MM ESP32 [BUZZER, SCREEN]
+//MM UNO [BUZZER, SCREEN]
+//MM 8266 [BUZZER, SCREEN]
 // #define MM_IS_ESP32
-
+// #define MM_IS_UNO
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
@@ -42,6 +45,7 @@ struct Timing timer = {0, 0, 0, 0, MIN};
 
 void setup() {
   // put your setup code here, to run once:
+
 // initialize and clear display
   display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
   
@@ -66,8 +70,11 @@ void setup() {
 //   pinMode(PIN_TILT, INPUT);     // Set tiltPin as input
 //   digitalWrite(PIN_TILT, HIGH);  // Enable internal pull-up resistor
 }
+
+
 void loop() {
   // put your main code here, to run repeatedly:
+
   // Timing
   timer.frameStart = millis();
   timer.framePrev = timer.frameStart;
@@ -76,8 +83,11 @@ void loop() {
 
 
 if (digitalRead(PIN_BUTTON1) == HIGH){
-if (timer.timer == 30*MIN){
+if (timer.timer == 52*MIN){
   timer.timer = MIN;
+}
+if (timer.timer == 30*MIN){
+  timer.timer = 52*MIN;
 }
 if (timer.timer == 15*MIN){
   timer.timer = 30*MIN;

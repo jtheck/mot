@@ -1,5 +1,6 @@
 /************************************
-  Mot.moe 'Para Manipular Ejemplar' example.
+  Mot.moe's 'Para Manipular Ejemplar' example.
+
   Featuring: Motor Control, Sensory Feedback
   Considerations: Limit testing and calibration of motors, observe stresses on power supply.
 ************************************/
