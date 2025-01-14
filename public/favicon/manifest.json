@@ -1,6 +1,7 @@
 {
-    "name": "mot.moe",
+    "name": "Mot.moe",
     "short_name": "Momo",
+    "version": "0.1",
     "icons": [
         {
             "src": "android-chrome-192x192.png",
