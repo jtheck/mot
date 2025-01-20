@@ -1,61 +1,88 @@
 /************************************
-  Mot.moe's 'Hello Wifi' example.
+  Mot.moe's 'Into The Wifi' Starter Pack Example.
 
-  Featuring: Dynamic WiFi, Static WiFi
-  Considerations: Configuration for wireless feedback and monitoring.
+  Featuring: Standalone Access Point, Dynamic WiFi Login, Static WiFi Credentials
+  Considerations: Network configuration for wireless feedback and monitoring.
 ************************************/
 //MM PROJECT Hello Wifi
-//MM BOARDS [8266, ESP01, ESP32]
-//MM FEATURES [DYNAMICWIFI, STATICWIFI]
-//MM 8266 [DYNAMICWIFI, STATICWIFI]
-//MM ESP01 [STATICWIFI]
-//MM ESP32 [DYNAMICWIFI, STATICWIFI]
+//MM BOARDS [ESP8266, ESP01, ESP32]
+//MM FEATURES [ACCESS_POINT, STATIC_STATION, PORTABLE_STATION]
+//MM ESP8266 [ACCESS_POINT, STATIC_STATION]
+//MM ESP01 [STATIC_STATION]
+//MM ESP32 [PORTABLE_STATION]
+//MM
 // #define MM_IS_ESP01
 // #define MM_IS_ESP32
-#define MM_IS_ESP8266
-#define MM_HAS_STATICWIFI
-// #define MM_HAS_DYNAMICWIFI
+// #define MM_IS_ESP8266
+//MM
+// #define MM_HAS_ACCESS_POINT
+// #define MM_HAS_STATIC_STATION
+// #define MM_HAS_PORTABLE_STATION
+//MM
 
+
+
+
+// #include <ESP8266WebServer.h>
+#include <ESP8266WiFi.h>
+
+// #endif // MM_HAS_WIFI
+const char* ssid = "ESP8266-Access-Point";
+const char* password = "123456789";
+// void setup() {
+//MM   Serial.begin(115200);
+//   WiFi.softAP(ssid, password);
+//   IPAddress apIP = WiFi.softAPIP();
+//   Serial.print("Access Point IP address: ");
+//   Serial.println(apIP);
+// }
+// void loop() {
+//   Serial.printf("Stations connected: %d\n", WiFi.softAPgetStationNum());
+//   delay(3000);
+// }
 
 #ifdef MM_IS_ESP32
-#ifdef MM_HAS_STATICWIFI
+  #ifdef MM_HAS_STATIC_STATION
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
 // WiFiServer server(80);
 AsyncWebServer server(80);
-#endif
-#ifdef MM_HAS_DYNAMICWIFI
+  #endif // MM_HAS_STATIC_STATION  
+#endif // MM_IS_ESP32
 
-#endif
-#endif
 //MM
 #ifdef MM_IS_ESP8266
-#ifdef MM_HAS_STATICWIFI
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 ESP8266WebServer server(80);
-#endif // MM_HAS_STATICWIFI
-#endif
+#ifdef MM_HAS_STATIC_STATION
+#endif // MM_HAS_STATIC_STATION
+#endif // MM_IS_ESP8266
 
-#ifdef MM_HAS_STATICWIFI
+#ifdef MM_HAS_STATIC_STATION
 // WARNING: Protect your credentials!
 const char *hostName = "Hello Wifi";
 const char *ssid     = "ROBO WiFi";
 const char *password = "hellomotmoe";
-#endif
+#endif // MM_HAS_STATIC_STATION
 
-#ifdef MM_HAS_DYNAMICWIFI
+#ifdef MM_HAS_PORTABLE_STATION
 #include <WiFiManager.h> // https://github.com/tzapu/WiFiManager
-#endif // MM_HAS_DYNAMICWIFI
+#endif // MM_HAS_PORTABLE_STATION
 //MM
+WiFiServer server(80);
+
 
 void setup()
 {
   // put your setup code here, to run once:
   
-  Serial.begin(115200);
 
-#ifdef MM_HAS_DYNAMICWIFI
+  Serial.begin(115200);
+server.begin();
+Serial.println(WiFi.localIP());
+
+#ifdef MM_HAS_PORTABLE_STATION
 
   // WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
   // it is a good practice to make sure your code sets wifi mode how you want it.
@@ -87,9 +114,9 @@ void setup()
     // if you get here you have connected to the WiFi
     Serial.println("connected...yeey :)");
   }
-#endif // MM_HAS_DYNAMICWIFI
+#endif // MM_HAS_PORTABLE_STATION
 
-#ifdef MM_HAS_STATICWIFI
+#ifdef MM_HAS_STATIC_STATION
   // WIFI
   // WiFi.hostname(hostName);
   WiFi.begin(ssid, password);
@@ -123,7 +150,7 @@ void setup()
   server.begin();
 
   Serial.println("listening");
-#endif // MM_HAS_STATICWIFI
+#endif // MM_HAS_STATIC_STATION
 }
 
 
@@ -131,16 +158,17 @@ void loop()
 {
   // put your main code here, to run repeatedly:
 
-  // up and at them
-#ifdef MM_HAS_STATICWIFI
-// server.handleClient();
-#endif // MM_HAS_STATICWIFI
 
-#ifdef MM_HAS_DYNAMICWIFI
+  // up and at them
+#ifdef MM_HAS_STATIC_STATION
+// server.handleClient();
+#endif // MM_HAS_STATIC_STATION
+
+#ifdef MM_HAS_PORTABLE_STATION
   // get put
   if (0)
    true;
-#endif // MM_HAS_DYNAMICWIFI
+#endif // MM_HAS_PORTABLE_STATION
 
 }
 

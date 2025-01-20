@@ -1,21 +1,22 @@
 /************************************
-  Mot.moe's 'Radio Control (lolol)' example.
+  Mot.moe's 'Radio Control (lolol)' Starter Pack Example.
   
-  Featuring: iBus(RC), bluetooth, tx 
-  Considerations: 
+  Featuring: iBus(RC), bluetooth, RF(~400Mhz) Transmit and Receive, IR
+  Considerations: Variety of application.
 ************************************/
 //MM PROJECT Control
 //MM BOARDS [ESP32]
-//MM FEATURES [IBUS, WIFI, BT, TX]
-//MM ESP32 [IBUS, WIFI, BT, TX]
+//MM FEATURES [IBUS, BT, RF_TX, RF_RX, IR]
+//MM ESP32 [IBUS, BT, RF_TX, RF_RX, IR]
+//MM
 // #define MM_IS_ESP32
+//MM
 // #define MM_HAS_IBUS
-// #define MM_HAS_WIFI
-
-#ifdef MM_HAS_WIFI
-#include <WiFi.h>
-WiFi.mode(WIFI_AP)
-#endif // MM_HAS_WIFI
+// #define MM_HAS_BT
+// #define MM_HAS_RF_TX
+// #define MM_HAS_RF_RX
+// #define MM_HAS_IR
+//MM
 
 
 #ifdef MM_HAS_IBUS
@@ -52,7 +53,8 @@ void setup() {
   ibus.begin(Serial2);
 #endif // MM_HAS_IBUS
 }
- 
+
+
 void loop() {
   // put your main code here, to run repeatedly:
 

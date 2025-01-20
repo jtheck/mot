@@ -216,7 +216,7 @@ function curateCode(){
   for (var i=0; i<activeProject.codeLines.length; i++){
     let tLine = activeProject.codeLines[i];
     if (tLine.includes("//MM"))
-      continue;
+      continue;  
     if (tLine.includes("#define MM_IS"))
       continue;
     if (tLine.includes("#define MM_HAS"))
@@ -317,7 +317,12 @@ function copyCode(){
     let code = $id("code_out");
     code.select();
     code.setSelectionRange(0, 99999); // For mobile devices
-    navigator.clipboard.writeText(code.value);
     
-    alert("Code copied to your clipboard!");
+    navigator.clipboard.writeText(code.value)
+      .then(() => {
+        alert("Code copied to your clipboard!");
+      })
+      .catch(() => {
+        alert("Code copy maneuver maulfunctioned! :(");
+      });
 }
