@@ -35,7 +35,7 @@
 #endif // MM_HAS_BUZZER
 #endif // MM_IS_UNO
 //MM
-#ifdef MM_HAS_ESP32
+#ifdef MM_IS_ESP32
 // ESP32 Pin Out
 //
 

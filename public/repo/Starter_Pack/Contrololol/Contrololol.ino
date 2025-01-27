@@ -45,6 +45,7 @@ int readChannel(byte channelInput, int minLimit, int maxLimit, int defaultValue)
 void setup() {
   // put your setup code here, to run once:
 
+  
   // Start serial monitor
   Serial.begin(115200);
   Serial.print("FLYSKY TAKE ONE");
@@ -57,6 +58,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+
 
   // Cycle through first 5 channels and determine values
   // Print values to serial monitor

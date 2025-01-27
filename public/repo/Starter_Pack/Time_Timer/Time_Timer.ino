@@ -126,7 +126,7 @@ void loop() {
   display.setCursor(0,5);
   display.print(millisecondsToString(timer.timer));
   // display.print(millisecondsToString(timer.timer - timer.elapsedTime));
-  display.setTextSize(3);
+  display.setTextSize(2);
   display.setCursor(20,20);
   display.print("TiMER!");
   display.setTextSize(2);

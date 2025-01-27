@@ -69,6 +69,7 @@ text-align: left;
   padding: 7px;
   margin: 11px;
   text-align: left;
+  word-break: break-word;
   color: black;
   text-shadow: none;
 }
