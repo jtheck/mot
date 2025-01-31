@@ -20,51 +20,48 @@
 // #define MM_HAS_PORTABLE_STATION
 //MM
 #ifdef MM_IS_ESP8266
+////////////////////////////////////
+// ESP8266
+////////////////////////////////////
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
-
-#endif // MM_IS_ESP8266
-
-
-// Credentials
-const char* ssid = "ESP8266-AP";
-const char* password = "12345678"; // Note: Eight character minimum!
-// IP Details 
+#ifdef MM_HAS_ACCESS_POINT
+// Access Point Credentials & IP
+const char* ssid = "RB-NET-ESP8266-AP"; // Access point SSID
+const char* password = "12345678"; // WARN: Eight character minimum!
 IPAddress local_ip(192,168,2,1);
 IPAddress gateway(192,168,2,1);
 IPAddress subnet(255,255,255,0);
-
-//MM
-#ifdef MM_IS_ESP8266
 ESP8266WebServer server(80);
+#endif // MM_HAS_ACCESS_POINT
 #ifdef MM_HAS_STATIC_STATION
+// WiFi Credentials
+// WARNING: Protect your credentials!
+const char* hostName = "Hello Wifi!";
+const char* ssid = "RB-NET-0G";  // Network SSID
+const char* password = "12345678";  // Enter Password here!
+ESP8266WebServer server(80);
 #endif // MM_HAS_STATIC_STATION
 #endif // MM_IS_ESP8266
-
-
-
+//MM
 #ifdef MM_IS_ESP32
-  #ifdef MM_HAS_STATIC_STATION
+////////////////////////////////////
+// ESP32
+////////////////////////////////////
+#ifdef MM_HAS_STATIC_STATION
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
+const char* ssid     = "RB-NET-0G";
+const char* password = "12345678";
 // WiFiServer server(80);
 AsyncWebServer server(80);
-  #endif // MM_HAS_STATIC_STATION  
-#endif // MM_IS_ESP32
-
-
-#ifdef MM_HAS_STATIC_STATION
-// WARNING: Protect your credentials!
-const char *hostName = "Hello Wifi";
-const char *ssid     = "ROBO WiFi";
-const char *password = "hellomotmoe";
 #endif // MM_HAS_STATIC_STATION
-
+//MM
 #ifdef MM_HAS_PORTABLE_STATION
 #include <WiFiManager.h> // https://github.com/tzapu/WiFiManager
 #endif // MM_HAS_PORTABLE_STATION
+#endif // MM_IS_ESP32
 //MM
-// WiFiServer server(80);
 
 
 void setup()
@@ -74,42 +71,37 @@ void setup()
 
   Serial.begin(115200);
 
-  WiFi.softAP(ssid, password);
+#ifdef MM_HAS_ACCESS_POINT
   WiFi.softAPConfig(local_ip, gateway, subnet);
+  WiFi.softAP(ssid, password);
   delay(100);
 
   server.on("/", handle_connect);
   server.on("/marco", handle_marco);
   server.onNotFound(handle_404);
 
-
   server.begin();
   
   Serial.println(WiFi.localIP());
-
-
-
+  Serial.println(WiFi.softAPIP());
+#endif // MM_HAS_ACCESS_POINT
+//MM
 #ifdef MM_HAS_PORTABLE_STATION
   // WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
   // it is a good practice to make sure your code sets wifi mode how you want it.
-
   // WiFiManager, Local intialization. Once its business is done, there is no need to keep it around
   WiFiManager wm;
-
   // reset settings - wipe stored credentials for testing
   // these are stored by the esp library
   // wm.resetSettings();
-
   // Automatically connect using saved credentials,
   // if connection fails, it starts an access point with the specified name ( "AutoConnectAP"),
   // if empty will auto generate SSID, if password is blank it will be anonymous AP (wm.autoConnect())
   // then goes into a blocking loop awaiting configuration and will return success result
-
   bool res;
   // res = wm.autoConnect(); // auto generated AP name from chipid
   // res = wm.autoConnect("AutoConnectAP"); // anonymous ap
   res = wm.autoConnect("ROBO Uplink WiFi", "password"); // password protected ap
-
   if (!res)
   {
     Serial.println("Failed to connect");
@@ -121,43 +113,57 @@ void setup()
     Serial.println("connected...yeey :)");
   }
 #endif // MM_HAS_PORTABLE_STATION
-
+//MM
 #ifdef MM_HAS_STATIC_STATION
-  // WIFI
+  // // WIFI
   // WiFi.hostname(hostName);
-  WiFi.begin(ssid, password);
-  Serial.print("connecting");
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(1000);
-    Serial.print(".");
-  }
-  Serial.println(" ");
-  Serial.print("IP: ");
-  Serial.println(WiFi.localIP());
-
+  // WiFi.begin(ssid, password);
+  // Serial.print("connecting");
+  // while (WiFi.status() != WL_CONNECTED)
+  // {
+  //   delay(1000);
+  //   Serial.print(".");
+  // }
+  // Serial.println(" ");
+  // Serial.print("IP: ");
+  // Serial.println(WiFi.localIP());
 
 #ifdef MM_IS_ESP32
   server.on("/", [](AsyncWebServerRequest *request){
     request->send(200, "text/plain", "HIHIHIHHOHOHO");
   });
 #endif
-
+//MM
 #ifdef MM_IS_ESP8266
-  server.on("/", []()
-            { server.send(200, "text/plain", "HIHIHOHO");
-            Serial.println("GAH"); });
-  // server.on("/boop", h_boop);
-  // server.on("/poll", h_poll);
-  server.on("/marco", h_marco);
-  // server.on("/log", h_log);
-  server.enableCORS(true);
-#endif
-  server.begin();
+  Serial.println("Connecting to ");
+  Serial.println(ssid);
 
-  Serial.println("listening");
+  //connect to your local wi-fi network
+  WiFi.begin(ssid, password);
+  //check wi-fi is connected to wi-fi network
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.print(".");
+  }
+  WiFi.hostname(hostName);
+  Serial.println("");
+  Serial.println("WiFi connected..!");
+  Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
+
+//   server.on("/", []()
+//             { server.send(200, "text/plain", "HIHIHOHO");
+//             Serial.println("GAH"); });
+//   // server.on("/boop", h_boop);
+//   // server.on("/poll", h_poll);
+//   server.on("/marco", h_marco);
+//   // server.on("/log", h_log);
+//   server.enableCORS(true);
+//   server.begin();
+
+//   Serial.println("listening");
+#endif //MM_IS_ESP8266
 #endif // MM_HAS_STATIC_STATION
-} // end void setup()
+} // END setup()
 
 
 void loop()
@@ -167,19 +173,18 @@ void loop()
 
   server.handleClient();
 
-
   // up and at them
 #ifdef MM_HAS_STATIC_STATION
 // server.handleClient();
 #endif // MM_HAS_STATIC_STATION
-
+//MM
 #ifdef MM_HAS_PORTABLE_STATION
   // get put
   if (0)
    true;
 #endif // MM_HAS_PORTABLE_STATION
 
-} // end void loop()
+} // END loop()
 
 
 // void h_poll(){
@@ -241,7 +246,7 @@ void handle_marco()
 String SendHTML(uint8_t led1stat,uint8_t led2stat){
 String ptr = "<!DOCTYPE html> <html>\n";
   ptr +="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
-  ptr +="<title>LED Control</title>\n";
+  ptr +="<title>WiFi Control</title>\n";
   ptr +="<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
   ptr +="body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n";
   ptr +=".button {display: block;width: 80px;background-color: #1abc9c;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 25px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}\n";
@@ -256,15 +261,15 @@ String ptr = "<!DOCTYPE html> <html>\n";
   ptr +="<h1>ESP8266 Web Server</h1>\n";
   ptr +="<h3>Using Access Point(AP) Mode</h3>\n";
   
-  //  if(led1stat)
-  // {ptr +="<p>LED1 Status: ON</p><a class=\"button button-off\" href=\"/led1off\">OFF</a>\n";}
-  // else
-  // {ptr +="<p>LED1 Status: OFF</p><a class=\"button button-on\" href=\"/led1on\">ON</a>\n";}
+   if(led1stat)
+  {ptr +="<p>LED1 Status: ON</p><a class=\"button button-off\" href=\"/led1off\">OFF</a>\n";}
+  else
+  {ptr +="<p>LED1 Status: OFF</p><a class=\"button button-on\" href=\"/led1on\">ON</a>\n";}
 
-  // if(led2stat)
-  // {ptr +="<p>LED2 Status: ON</p><a class=\"button button-off\" href=\"/led2off\">OFF</a>\n";}
-  // else
-  // {ptr +="<p>LED2 Status: OFF</p><a class=\"button button-on\" href=\"/led2on\">ON</a>\n";}
+  if(led2stat)
+  {ptr +="<p>LED2 Status: ON</p><a class=\"button button-off\" href=\"/led2off\">OFF</a>\n";}
+  else
+  {ptr +="<p>LED2 Status: OFF</p><a class=\"button button-on\" href=\"/led2on\">ON</a>\n";}
 
   ptr +="</body>\n";
   ptr +="</html>\n";

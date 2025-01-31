@@ -23,8 +23,12 @@
 // #define MM_HAS_BUZZER
 //MM
 #ifdef MM_IS_UNO
+////////////////////////////////////
 // Arduino UNO Pin Out
-// SCL A5, SDA A4
+// Serial Clock (SCL) - A5
+// Serial Data (SDA) - A4
+// Buzzer Pin+ - 12 - D12
+////////////////////////////////////
 #define ON HIGH
 #define OFF LOW
 #ifdef MM_HAS_LED
@@ -36,15 +40,20 @@
 #endif // MM_IS_UNO
 //MM
 #ifdef MM_IS_ESP32
+////////////////////////////////////
 // ESP32 Pin-Out
-//
+// Serial Clock (SCL) - D22- GPIO22
+// Serial Data (SDA) - D21 - GPIO21
+////////////////////////////////////
 
 #endif // MM_IS_ESP32
 //MM
 #ifdef MM_IS_ESP8266
 ////////////////////////////////////
 // ESP8266 Pin-Out
-// SCL D1, SDA D2
+// Serial Clock (SCL) - D1 - GPIO5
+// Serial Data (SDA) - D2 - GPIO4
+// Buzzer Pin+ - SD3 - 12 - GPIO10
 ////////////////////////////////////
 #define ON LOW
 #define OFF HIGH
@@ -81,7 +90,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 #endif // MM_HAS_SCREEN
 //MM
 
-// Hello World Animations
+// Animations
 struct Keyframe {
   int time;
   bool state;
@@ -123,7 +132,7 @@ struct Animation buzzerExpression = {
   }
 };
 #endif // MM_HAS_BUZZER
-// Basic Timing
+// Timer
 struct Timing {
   unsigned long startTime;
   unsigned long frameStart;
@@ -150,10 +159,11 @@ void setup() {
 #endif // MM_HAS_SERIAL_MONITOR
 //MM
 #ifdef MM_HAS_SCREEN
+
+  // OLED Screen
 #ifdef MM_IS_ESP01
   Wire.begin(2,0);
 #endif // MM_IS_ESP01
-  // Init and make display
   display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
   display.clearDisplay();
   display.display();
@@ -177,12 +187,12 @@ void loop() {
   // put your main code here, to run repeatedly:
   
 
-  // Timing
+  // Timer
   timer.frameStart = millis();
   timer.framePrev = timer.frameStart;
 
 #ifdef MM_HAS_LED
-  // Step "Hello World" LED animation
+  // Step LED animation
   int LEDElapsed = timer.frameStart - LEDAnimation.startTime;
   if (LEDElapsed > LEDAnimation.keyframes[LEDAnimation.currentFrame].time){
     digitalWrite(BOARD_LED, LEDAnimation.keyframes[LEDAnimation.currentFrame].state);
@@ -194,11 +204,8 @@ void loop() {
     }
   }
 #endif // MM_HAS_LED
-#ifdef MM_HAS_SERIAL_MONITOR
-//  Serial.println("Hello World!");
-#endif // MM_HAS_SERIAL_MONITOR
 #ifdef MM_HAS_BUZZER
-  // Step "Hello World" BUZZER expression
+  // Step BUZZER expression
   int buzzerElapsed = timer.frameStart - buzzerExpression.startTime;
   if (buzzerElapsed > buzzerExpression.keyframes[buzzerExpression.currentFrame].time){
     digitalWrite(BUZZER_PIN, buzzerExpression.keyframes[buzzerExpression.currentFrame].state);
@@ -210,4 +217,7 @@ void loop() {
     }
   }
 #endif // MM_HAS_BUZZER
+#ifdef MM_HAS_SERIAL_MONITOR
+  Serial.println("Hello World!");
+#endif // MM_HAS_SERIAL_MONITOR
 }
