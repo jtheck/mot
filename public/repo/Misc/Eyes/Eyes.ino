@@ -184,7 +184,7 @@ struct Gesture gestureQueue[4];
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   // while(!Serial);
   
   randomSeed(analogRead(0));

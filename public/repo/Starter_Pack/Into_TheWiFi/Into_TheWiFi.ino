@@ -226,6 +226,8 @@ void handle_404(){
 void handle_marco()
 {
   Serial.println("GPIO7 Status: ON");
+
+  server.sendHeader("Access-Control-Allow-Origin", "*");
   server.send(200, "text/html", SendHTML(true,true)); 
   // server.send(200, "application/json", "{\"a\":\"bc\"}");
   Serial.println("served /marco");

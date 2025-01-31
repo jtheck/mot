@@ -10,7 +10,7 @@
 //MM UNO [LED, SERIAL_MONITOR, SCREEN, BUZZER]
 //MM ESP32 [SERIAL_MONITOR, SCREEN]
 //MM ESP8266 [LED, SERIAL_MONITOR, SCREEN, BUZZER]
-//MM ESP01 [LED]
+//MM ESP01 [LED, SCREEN, SERIAL_MONITOR]
 //MM
 // #define MM_IS_UNO
 // #define MM_IS_ESP32
@@ -36,14 +36,16 @@
 #endif // MM_IS_UNO
 //MM
 #ifdef MM_IS_ESP32
-// ESP32 Pin Out
+// ESP32 Pin-Out
 //
 
 #endif // MM_IS_ESP32
 //MM
 #ifdef MM_IS_ESP8266
-// ESP8266 Pin Out
+////////////////////////////////////
+// ESP8266 Pin-Out
 // SCL D1, SDA D2
+////////////////////////////////////
 #define ON LOW
 #define OFF HIGH
 #ifdef MM_HAS_LED
@@ -55,7 +57,12 @@
 #endif // MM_IS_ESP8266
 //MM
 #ifdef MM_IS_ESP01
-// ESP01 Selected
+////////////////////////////////////
+// ESP01 Pin-Out
+// Serial Clock (SCL) - GPIO0
+// Serial Data (SDA) - GPIO2
+// Chip Enable/Chip Power Down (EN) - 3.3V+ 
+////////////////////////////////////
 #define ON LOW
 #define OFF HIGH
 #ifdef MM_HAS_LED
@@ -132,30 +139,35 @@ void setup() {
 #ifdef MM_HAS_LED
   pinMode(BOARD_LED, OUTPUT);
 #endif // MM_HAS_LED
+//MM
 #ifdef MM_HAS_BUZZER
   pinMode(BUZZER_PIN, OUTPUT);
 #endif // MM_HAS_BUZZER
+//MM
 #ifdef MM_HAS_SERIAL_MONITOR
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("Hello World!");
 #endif // MM_HAS_SERIAL_MONITOR
-
+//MM
 #ifdef MM_HAS_SCREEN
-  // init and make display
+#ifdef MM_IS_ESP01
+  Wire.begin(2,0);
+#endif // MM_IS_ESP01
+  // Init and make display
   display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
   display.clearDisplay();
   display.display();
-  // display a pixel in each corner of the screen
+  // Display a pixel in each corner of the screen
   display.drawPixel(0, 0, WHITE);
   display.drawPixel(SCREEN_WIDTH-1, 0, WHITE);
   display.drawPixel(0, SCREEN_HEIGHT-1, WHITE);
   display.drawPixel(SCREEN_WIDTH-1, SCREEN_HEIGHT-1, WHITE);
-  // display a line of text
+  // Display a line of text
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(27,30);
   display.print("Hello, world!");
-  // update display with all of the above graphics
+  // Present Display
   display.display();
 #endif // MM_HAS_SCREEN
 }

@@ -46,14 +46,14 @@ function scanMotes(){
 
 
   let sweepTill = 6 ;
-  for (var i = 2; i < sweepTill; i++){
+  for (var i = 1; i < sweepTill; i++){
     var ip = '192.168.2.'+i;
     var tar = 'http://'+ip+'/marco';
     
     fetch(tar)
     .then(respo => respo.text())
     .then(data => {
-      // console.log(data);
+      console.log(data);
       let tIp = ip;
       let mot = findMote(tIp);
       if (!mot){
