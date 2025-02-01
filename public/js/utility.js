@@ -9,3 +9,8 @@ function newDiv(div){
 
   return $div;
 };
+
+
+
+
+const log = console.log;

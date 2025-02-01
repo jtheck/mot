@@ -1,32 +1,33 @@
 /************************************
   Mot.moe's 'Into The Wifi' Starter Pack Example.
 
-  Featuring: Standalone Access Point, Dynamic WiFi Login, Static WiFi Credentials
+  Featuring: Standalone Access Point, Portable WiFi Login, Static WiFi Credentials
   Considerations: Network configuration for wireless feedback and monitoring.
 ************************************/
 //MM PROJECT Into the Wifi
 //MM BOARDS [ESP32, ESP8266, ESP01]
-//MM FEATURES [ACCESS_POINT, STATIC_STATION, PORTABLE_STATION]
-//MM ESP32 [PORTABLE_STATION]
-//MM ESP8266 [ACCESS_POINT, STATIC_STATION]
-//MM ESP01 [STATIC_STATION]
+//MM FEATURES [ACCESS_POINT, STATIC_WIFI, PORTABLE_WIFI]
+//MM ESP32 [ACCESS_POINT, STATIC_WIFI, PORTABLE_WIFI]
+//MM ESP8266 [ACCESS_POINT, STATIC_WIFI]
+//MM ESP01 [STATIC_WIFI]
 //MM
 // #define MM_IS_ESP32
 // #define MM_IS_ESP8266
 // #define MM_IS_ESP01
 //MM
 // #define MM_HAS_ACCESS_POINT
-// #define MM_HAS_STATIC_STATION
-// #define MM_HAS_PORTABLE_STATION
+// #define MM_HAS_STATIC_WIFI
+// #define MM_HAS_PORTABLE_WIFI
 //MM
 #ifdef MM_IS_ESP8266
 ////////////////////////////////////
-// ESP8266
+// ESP8266 & ESP01
 ////////////////////////////////////
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #ifdef MM_HAS_ACCESS_POINT
 // Access Point Credentials & IP
+const char* hostName = "Hello Wifi!";
 const char* ssid = "RB-NET-ESP8266-AP"; // Access point SSID
 const char* password = "12345678"; // WARN: Eight character minimum!
 IPAddress local_ip(192,168,2,1);
@@ -34,32 +35,47 @@ IPAddress gateway(192,168,2,1);
 IPAddress subnet(255,255,255,0);
 ESP8266WebServer server(80);
 #endif // MM_HAS_ACCESS_POINT
-#ifdef MM_HAS_STATIC_STATION
+//MM
+#ifdef MM_HAS_STATIC_WIFI
 // WiFi Credentials
 // WARNING: Protect your credentials!
 const char* hostName = "Hello Wifi!";
 const char* ssid = "RB-NET-0G";  // Network SSID
 const char* password = "12345678";  // Enter Password here!
 ESP8266WebServer server(80);
-#endif // MM_HAS_STATIC_STATION
+#endif // MM_HAS_STATIC_WIFI
 #endif // MM_IS_ESP8266
 //MM
 #ifdef MM_IS_ESP32
 ////////////////////////////////////
 // ESP32
 ////////////////////////////////////
-#ifdef MM_HAS_STATIC_STATION
 #include <WiFi.h>
-#include <ESPAsyncWebServer.h>
+#include <WebServer.h>
+// #include <ESPAsyncWebServer.h>
+#ifdef MM_HAS_ACCESS_POINT
+// Access Point Credentials & IP
+const char* hostName = "Hello Wifi!";
+const char* ssid = "RB-NET-ESP32-AP"; // Access point SSID
+const char* password = "12345678"; // WARN: Eight character minimum!
+IPAddress local_ip(192,168,2,1);
+IPAddress gateway(192,168,2,1);
+IPAddress subnet(255,255,255,0);
+WebServer server(80);
+#endif // MM_HAS_ACCESS_POINT
+//MM
+#ifdef MM_HAS_STATIC_WIFI
+// WiFi Credentials
+// WARNING: Protect your credentials!
+const char* hostName = "Hello Wifi!";
 const char* ssid     = "RB-NET-0G";
 const char* password = "12345678";
-// WiFiServer server(80);
-AsyncWebServer server(80);
-#endif // MM_HAS_STATIC_STATION
+WebServer server(80);
+#endif // MM_HAS_STATIC_WIFI
 //MM
-#ifdef MM_HAS_PORTABLE_STATION
+#ifdef MM_HAS_PORTABLE_WIFI
 #include <WiFiManager.h> // https://github.com/tzapu/WiFiManager
-#endif // MM_HAS_PORTABLE_STATION
+#endif // MM_HAS_PORTABLE_WIFI
 #endif // MM_IS_ESP32
 //MM
 
@@ -76,9 +92,12 @@ void setup()
   WiFi.softAP(ssid, password);
   delay(100);
 
+  server.onNotFound(handle_404);
   server.on("/", handle_connect);
   server.on("/marco", handle_marco);
-  server.onNotFound(handle_404);
+  server.on("/boop", h_boop);
+  server.on("/poll", h_poll);
+  server.on("/log", h_log);
 
   server.begin();
   
@@ -86,7 +105,7 @@ void setup()
   Serial.println(WiFi.softAPIP());
 #endif // MM_HAS_ACCESS_POINT
 //MM
-#ifdef MM_HAS_PORTABLE_STATION
+#ifdef MM_HAS_PORTABLE_WIFI
   // WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
   // it is a good practice to make sure your code sets wifi mode how you want it.
   // WiFiManager, Local intialization. Once its business is done, there is no need to keep it around
@@ -112,32 +131,13 @@ void setup()
     // if you get here you have connected to the WiFi
     Serial.println("connected...yeey :)");
   }
-#endif // MM_HAS_PORTABLE_STATION
+#endif // MM_HAS_PORTABLE_WIFI
 //MM
-#ifdef MM_HAS_STATIC_STATION
-  // // WIFI
-  // WiFi.hostname(hostName);
-  // WiFi.begin(ssid, password);
-  // Serial.print("connecting");
-  // while (WiFi.status() != WL_CONNECTED)
-  // {
-  //   delay(1000);
-  //   Serial.print(".");
-  // }
-  // Serial.println(" ");
-  // Serial.print("IP: ");
-  // Serial.println(WiFi.localIP());
-
+#ifdef MM_HAS_STATIC_WIFI
 #ifdef MM_IS_ESP32
-  server.on("/", [](AsyncWebServerRequest *request){
-    request->send(200, "text/plain", "HIHIHIHHOHOHO");
-  });
-#endif
-//MM
-#ifdef MM_IS_ESP8266
+
   Serial.println("Connecting to ");
   Serial.println(ssid);
-
   //connect to your local wi-fi network
   WiFi.begin(ssid, password);
   //check wi-fi is connected to wi-fi network
@@ -150,19 +150,50 @@ void setup()
   Serial.println("WiFi connected..!");
   Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
 
-//   server.on("/", []()
-//             { server.send(200, "text/plain", "HIHIHOHO");
-//             Serial.println("GAH"); });
-//   // server.on("/boop", h_boop);
-//   // server.on("/poll", h_poll);
-//   server.on("/marco", h_marco);
-//   // server.on("/log", h_log);
-//   server.enableCORS(true);
-//   server.begin();
+  server.onNotFound(handle_404);
+  server.on("/", handle_connect);
+  server.on("/marco", handle_marco);
+  server.on("/boop", h_boop);
+  server.on("/poll", h_poll);
+  server.on("/log", h_log);
 
-//   Serial.println("listening");
-#endif //MM_IS_ESP8266
-#endif // MM_HAS_STATIC_STATION
+  server.begin();
+  Serial.println("listening");
+
+
+  // server.on("/", [](AsyncWebServerRequest *request){
+  //   request->send(200, "text/plain", "HIHIHIHHOHOHO");
+  // });
+
+#endif // MM_IS_ESP32
+//MM
+#ifdef MM_IS_ESP8266
+  Serial.println("Connecting to ");
+  Serial.println(ssid);
+  //connect to your local wi-fi network
+  WiFi.begin(ssid, password);
+  //check wi-fi is connected to wi-fi network
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.print(".");
+  }
+  WiFi.hostname(hostName);
+  Serial.println("");
+  Serial.println("WiFi connected..!");
+  Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
+
+  server.onNotFound(handle_404);
+  server.on("/", handle_connect);
+  server.on("/marco", handle_marco);
+  server.on("/boop", h_boop);
+  server.on("/poll", h_poll);
+  server.on("/log", h_log);
+
+  server.begin();
+  Serial.println("listening");
+
+#endif // MM_IS_ESP8266
+#endif // MM_HAS_STATIC_WIFI
 } // END setup()
 
 
@@ -170,78 +201,74 @@ void loop()
 {
   // put your main code here, to run repeatedly:
 
-
-  server.handleClient();
+server.handleClient();
 
   // up and at them
-#ifdef MM_HAS_STATIC_STATION
-// server.handleClient();
-#endif // MM_HAS_STATIC_STATION
+#ifdef MM_HAS_STATIC_WIFI
+server.handleClient();
+#endif // MM_HAS_STATIC_WIFI
 //MM
-#ifdef MM_HAS_PORTABLE_STATION
+#ifdef MM_HAS_PORTABLE_WIFI
+server.handleClient();
   // get put
   if (0)
    true;
-#endif // MM_HAS_PORTABLE_STATION
+
+#endif // MM_HAS_PORTABLE_WIFI
 
 } // END loop()
 
 
-// void h_poll(){
-//   server.send(200, "text/plain", String(millis()));
 
-//   // server.send(200, "application/json", {millis());
-//   Serial.println("served /poll");
 
-// }
 
-// void h_log(){
-//   server.send(200, "application/json", "{\"recent\":[\"bc\"]}");
-//   Serial.println("served /log");
 
-// }
 
-// // void h_index()
-// // {
-// //   server.send(200, "text/plain", "HELLO MOMO");
-// //   Serial.println("served /");
-// // }
-// void h_boop()
-// {
-//   // server.enableCORS(true);
-//   server.send(200, "application/json", "{\"a\":\"bc\"}");
-//   Serial.println("served /boop");
 
-//   // StaticJsonDocument<200> doc;
-//   // deserializeJson(doc, server.arg("plain"));
-//   // JsonObject obj = doc.as<JsonObject>();
-//   const char *boop = "IT IS WHAT IT IS"; // doc["x"];
-//   Serial.println(boop);
-// }
-void handle_connect(){
-    Serial.println("GPIO7 Status: OFF | GPIO6 Status: OFF");
-  server.send(200, "text/html", SendHTML(true,true)); 
-}
+
 
 void handle_404(){
-    server.send(404, "text/plain", "Not found");
+  server.send(404, "text/plain", "Not found");
+}
 
+void handle_connect(){
+  server.send(200, "text/html", SendHTML(true,true)); 
+  Serial.println("Served /");
+}
+
+void h_poll(){
+  server.send(200, "text/plain", String(millis()));
+  // server.send(200, "application/json", {millis());
+  Serial.println("served /poll");
+}
+
+void h_log(){
+  server.sendHeader("Access-Control-Allow-Origin", "*"); // Allow CORS
+  server.send(200, "application/json", "{\"recent\":[\"bc\"]}");
+  Serial.println("served /log");
+}
+
+void h_boop()
+{
+  server.send(200, "application/json", "{\"a\":\"bc\"}");
+  Serial.println("served /boop");
+  // StaticJsonDocument<200> doc;
+  // deserializeJson(doc, server.arg("plain"));
+  // JsonObject obj = doc.as<JsonObject>();
+  const char *boop = "IT IS WHAT IT IS"; // doc["x"];
+  Serial.println(boop);
 }
 
 void handle_marco()
 {
-  Serial.println("GPIO7 Status: ON");
-
-  server.sendHeader("Access-Control-Allow-Origin", "*");
-  server.send(200, "text/html", SendHTML(true,true)); 
+  server.sendHeader("Access-Control-Allow-Origin", "*"); // Allow CORS
+  // server.send(200, "text/html", SendHTML(true,true)); 
   // server.send(200, "application/json", "{\"a\":\"bc\"}");
+  server.send(200, "text/plain", hostName); 
   Serial.println("served /marco");
-
-  // server.send(200, "text/plain", "HELLO MOMO");
-  // Serial.println("served /");
-
-//  server.send(200, "text/plain", hostName); 
 }
+
+
 
 String SendHTML(uint8_t led1stat,uint8_t led2stat){
 String ptr = "<!DOCTYPE html> <html>\n";
@@ -280,7 +307,5 @@ String ptr = "<!DOCTYPE html> <html>\n";
 
 // void log(){
 //   Serial.println("serve");
-
 //  server.send(200, "text/plain", "USA"); 
-
 // }

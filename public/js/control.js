@@ -45,15 +45,15 @@ function scanMotes(){
   document.querySelector("#available_mobs").innerHTML="...";
 
 
-  let sweepTill = 6 ;
+  let sweepTill = 9 ;
   for (var i = 1; i < sweepTill; i++){
-    var ip = '192.168.2.'+i;
-    var tar = 'http://'+ip+'/marco';
+    let ip = '192.168.2.'+i;
+    let tar = 'http://'+ip+'/marco';
     
     fetch(tar)
     .then(respo => respo.text())
     .then(data => {
-      console.log(data);
+      // console.log(data);
       let tIp = ip;
       let mot = findMote(tIp);
       if (!mot){
