@@ -1,12 +1,12 @@
 /**************************************************************************
 
-  Mot.moe's Battle Brobot - The Untrained Underdog
+  Mot.moe's Battle Brobots - Untrained Uncontested
 
   
   Featuring: Walker TX Ranger
-  Considerations: Good Sportsmanship.
+  Considerations: Sportsmanship.
  **************************************************************************/
-//MM PROJECT Battle Brobot
+//MM PROJECT Battle Brobots
 //MM BOARDS [NANO33BLE, 8266]
 //MM FEATURES [IMU, 2NCONTROL]
 //MM NANO33BLE [IMU, 2NCONTROL]

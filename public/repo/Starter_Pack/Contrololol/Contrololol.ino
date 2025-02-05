@@ -1,13 +1,13 @@
 /************************************
   Mot.moe's 'Radio Control (lolol)' Starter Pack Example.
   
-  Featuring: iBus(RC), bluetooth, RF(~400Mhz) Transmit and Receive, IR
+  Featuring: iBus(RC), bluetooth, RF(~400Mhz) Transmit and Receive, IR, IMU
   Considerations: Variety of application.
 ************************************/
 //MM PROJECT Control
 //MM BOARDS [ESP32]
-//MM FEATURES [IBUS, BT, RF_TX, RF_RX, IR]
-//MM ESP32 [IBUS, BT, RF_TX, RF_RX, IR]
+//MM FEATURES [IBUS, BT, RF_TX, RF_RX, IR, IMU]
+//MM ESP32 [IBUS, BT, RF_TX, RF_RX, IR, IMU]
 //MM
 // #define MM_IS_ESP32
 //MM
@@ -16,6 +16,7 @@
 // #define MM_HAS_RF_TX
 // #define MM_HAS_RF_RX
 // #define MM_HAS_IR
+// #define MM_HAS_IMU
 //MM
 
 
