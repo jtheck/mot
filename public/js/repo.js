@@ -37,14 +37,17 @@ let directory = [
     group:'Misc',
     projects:[
         'Car',
-        'Eyes'
+        'Eyes',
+        // 'Glass',
+        // 'LiDAR'
     ]
   },
   {
     group:'Mot_Moe',
     projects:[
         'Tamago',
-        'Battle_Brobots'
+        'Battle_Brobots',
+        // 'Solid_IO'
     ]
   }
 ];

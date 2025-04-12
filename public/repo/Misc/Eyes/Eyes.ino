@@ -7,14 +7,11 @@
 
 ******/
 //MM PROJECT Eyeballs
+//MM BOARDS [ALL]
+//MM FEATURES [2ND_SCREEN]
 
-
-
-
-
-//#define MM_IS_UNO
-//#define MM_HAS_1SCREEN
 #define MM_HAS_2SCREENS
+
 
 
 #include <SPI.h>

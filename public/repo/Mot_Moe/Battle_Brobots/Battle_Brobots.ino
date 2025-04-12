@@ -7,7 +7,7 @@
   Considerations: Sportsmanship.
  **************************************************************************/
 //MM PROJECT Battle Brobots
-//MM BOARDS [NANO33BLE, 8266]
+//MM BOARDS [NANO33BLE, ESP8266]
 //MM FEATURES [IMU, 2NCONTROL]
 //MM NANO33BLE [IMU, 2NCONTROL]
 //MM 8266 [IMU, 2NCONTROL]

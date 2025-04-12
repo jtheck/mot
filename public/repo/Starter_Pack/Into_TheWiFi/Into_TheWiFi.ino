@@ -6,8 +6,8 @@
 ************************************/
 //MM PROJECT Into the Wifi
 //MM BOARDS [ESP32, ESP8266, ESP01]
-//MM FEATURES [ACCESS_POINT, STATIC_WIFI, PORTABLE_WIFI]
-//MM ESP32 [ACCESS_POINT, STATIC_WIFI, PORTABLE_WIFI]
+//MM FEATURES [ACCESS_POINT, STATIC_WIFI, PORTABLE_WIFI, BLUETOOTH]
+//MM ESP32 [ACCESS_POINT, STATIC_WIFI, PORTABLE_WIFI, BLUETOOTH]
 //MM ESP8266 [ACCESS_POINT, STATIC_WIFI]
 //MM ESP01 [STATIC_WIFI]
 //MM
@@ -18,11 +18,13 @@
 // #define MM_HAS_ACCESS_POINT
 // #define MM_HAS_STATIC_WIFI
 // #define MM_HAS_PORTABLE_WIFI
+// #define MM_HAS_BLUETOOTH
 //MM
 #ifdef MM_IS_ESP8266
 ////////////////////////////////////
 // ESP8266 & ESP01
 ////////////////////////////////////
+
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #ifdef MM_HAS_ACCESS_POINT
@@ -202,6 +204,13 @@ void loop()
   // put your main code here, to run repeatedly:
 
 server.handleClient();
+
+  // Use WiFiClient class to create TCP connections
+  WiFiClientSecure client;
+  const int httpPort = 443; // 80 is for HTTP / 443 is for HTTPS!
+  
+  client.setInsecure(); // this is the magical line that makes everything work
+  
 
   // up and at them
 #ifdef MM_HAS_STATIC_WIFI

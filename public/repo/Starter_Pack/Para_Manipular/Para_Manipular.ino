@@ -1,33 +1,45 @@
 /************************************
   Mot.moe's 'Para Manipular Ejemplar' Starter Pack Example.
 
-  Featuring: Motor Control, Sensory Feedback
+  Featuring: Single Servos, PCA9685 Controller, Potentiometer Controls, Button Inputs
   Considerations: Motor calibration, Power consumption.
 ************************************/
 //MM PROJECT Manipular
-//MM BOARDS [UNO, ESP8266]
-//MM FEATURES [moto]
-//MM UNO [moto]
+//MM BOARDS [UNO, ESP32, ESP8266]
+//MM FEATURES [SINGLES, PCA9685, POTENTIOMETERS, BUTTONS]
 //MM
-// #define MM_IS_UNO
+//MM UNO []
+//MM ESP32 [SINGLES, PCA9685, POTENTIOMETERS, BUTTONS]
+//MM ESP8266 [SINGLES, PCA9685, POTENTIOMETERS, BUTTONS]
+//MM
+// #define MM_IS_ESP32
 // #define MM_IS_ESP8266
 //MM
-// #define MM_HAS_MOTO
+// #define MM_HAS_SINGLES
+// #define MM_HAS_PCA9685
 //MM
-
+#ifdef MM_IS_ESP32
+////////////////////////////////////
+// ESP32 Pin Out
+// Serial Clock (SCL) - D22- GPIO22
+// Serial Data (SDA) - D21 - GPIO21
+////////////////////////////////////
+#ifdef MM_HAS_SINGLES
+#include <ESP32Servo.h> 
+#endif // MM_HAS_SINGLES
+#ifdef MM_HAS_PCA9685
 #include <Wire.h> // I2C serial bus
 #include <Adafruit_PWMServoDriver.h> // Servos 
-// #include <Adafruit_SSD1306.h> // OLED Screen
-#include <ESP8266WiFi.h>  // WiFi
-#include <ESP8266WebServer.h> // WiFi web server
-// #include <ArduinoJson.h>  // JSON Parsing
-
-// WARNING: Protect your credentials!
-const char* hostName = "momo";
-const char* ssid = "RB-NET-0G";  // Network SSID
-const char* password = "12345678";  // Enter Password here!
-ESP8266WebServer server(80);
-
+#endif // MM_HAS_PCA9685
+#endif // MM_IS_ESP32
+//MM
+#ifdef MM_IS_ESP8266
+////////////////////////////////////
+// ESP8266 Pin-Out
+// Serial Clock (SCL) - D1 - GPIO5
+// Serial Data (SDA) - D2 - GPIO4
+////////////////////////////////////
+#endif // MM_IS_ESP8266
 
 
 // SERVOS
@@ -50,23 +62,13 @@ struct Pot p1 = {1024, 0, 0, 100, 100.0};
 
 
 
+
+
 void setup() {
   // put your setup code here, to run once:
 
 
   Serial.begin(115200);
-  //connect to your local wi-fi network
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.print(".");
-  }
-  WiFi.hostname(hostName);
-  Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
-  server.onNotFound(handle_404);
-  server.on("/", handle_connect);
-  server.on("/marco", handle_marco);
-  server.begin();
   
 
     // SERVOS
@@ -87,7 +89,6 @@ void loop() {
   // put your main code here, to run repeatedly:
 
 
-  server.handleClient();
 
 
 
@@ -112,60 +113,4 @@ void loop() {
     servoMotors.setPWM(servo, 0, servoPos);
     Serial.println(servoPos);
   }
-}
-
-
-
-
-
-
-
-
-
-
-
-void handle_404(){
-  server.send(404, "text/plain", "Not found");
-}
-
-void handle_connect(){
-//  server.send(200, "text/plain", hostName); 
-  server.send(200, "text/html", SendHTML(true,true)); 
-  Serial.println("Served /");
-}
-void handle_marco()
-{
-  server.sendHeader("Access-Control-Allow-Origin", "*"); // Allow CORS
-  // server.send(200, "text/html", SendHTML(true,true)); 
-  // server.send(200, "application/json", "{\"a\":\"bc\"}");
-  server.send(200, "text/plain", hostName); 
-  Serial.println("served /marco");
-}
-void h_poll(){
-  server.send(200, "text/plain", String(millis()));
-  // server.send(200, "application/json", {millis());
-  Serial.println("served /poll");
-}
-
-
-
-
-
-String SendHTML(uint8_t led1stat,uint8_t led2stat){
-String ptr = "<!DOCTYPE html> <html>\n";
-  ptr +="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
-  ptr +="<title>WiFi Control</title>\n";
-  ptr +="<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
-  ptr +="body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n";
-  ptr +="</style>\n";
-  ptr +="</head>\n";
-  ptr +="<body>\n";
-  ptr +="<h1>ESP8266 Web Server</h1>\n";
-  ptr +="<h3>Using Access Point(AP) Mode</h3>\n";
-
-  ptr +="</body>\n";
-  ptr +="</html>\n";
-  return ptr;
-
-
 }

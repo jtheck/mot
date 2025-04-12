@@ -6,7 +6,9 @@
   Featuring: Pocket size compatible!
   Considerations: The burdens of responsibility.
  **************************************************************************/
-
+//MM PROJECT TamagoMoMo
+//MM BOARDS [ALL]
+//MM FEATURES [NONE]
 
 void setup() {
   // put your setup code here, to run once:
